@@ -80,8 +80,7 @@ objects:
         - name: mongodb
           port: 27017
       selector:
-        app: rocket-chat-mongodb
-        name: "${MONGODB_SERVICE_NAME}"
+        statefulset: "${MONGODB_SERVICE_NAME}"
   - kind: Service
     apiVersion: v1
     metadata:
@@ -96,8 +95,7 @@ objects:
         - name: mongodb
           port: 27017
       selector:
-        app: rocket-chat-mongodb
-        name: "${MONGODB_SERVICE_NAME}"
+        statefulset: "${MONGODB_SERVICE_NAME}"
   - kind: StatefulSet
     apiVersion: apps/v1
     metadata:
