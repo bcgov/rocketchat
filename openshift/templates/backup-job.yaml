@@ -1,0 +1,113 @@
+---
+kind: 'Template'
+apiVersion: 'v1'
+metadata:
+  name: 'cronjob-${JOB_NAME}'
+  annotations:
+    description: 'Cronjob prune files older than n days from minio.'
+    iconClass: 'icon-shadowman'
+    tags: 'management,cronjob,prune'
+objects:
+  - kind: 'CronJob'
+    apiVersion: 'batch/v1beta1'
+    metadata:
+      name: '${JOB_NAME}'
+      namespace: ${NAMESPACE}
+      labels:
+        template: 'devhub-cronjob'
+        cronjob: '${JOB_NAME}'
+    spec:
+      schedule: '${SCHEDULE}'
+      concurrencyPolicy: 'Forbid'
+      successfulJobsHistoryLimit: ${{SUCCESS_JOBS_HISTORY_LIMIT}}
+      failedJobsHistoryLimit: ${{FAILED_JOBS_HISTORY_LIMIT}}
+      jobTemplate:
+        metadata:
+          labels:
+            template: 'devhub-cronjob'
+            cronjob: '${JOB_NAME}'
+        spec:
+          backoffLimit: ${{JOB_BACKOFF_LIMIT}}
+          template:
+            spec:
+              containers:
+                - name: '${JOB_NAME}'
+                  image: "${MONGODB_IMAGE}:${MONGODB_IMAGE_TAG}"
+                  command:
+                    - '/bin/bash'
+                    - '-c' 
+                    - '"$(curl -fsSL ${SCRIPT_URL})"'
+                  env:
+                    - name: PATH
+                      value: /opt/rh/rh-mongodb36/root/usr/bin:/opt/rh/rh-mongodb36/root/usr/sbin:/opt/app-root/src/bin:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+                    - name: MONGODB_DATABASE
+                      valueFrom:
+                        secretKeyRef:
+                          key: database
+                          name: "${MONGODB_SECRET_NAME}"
+                    - name: MONGODB_ADMIN_USERNAME
+                      valueFrom:
+                        secretKeyRef:
+                          key: admin-username
+                          name: "${MONGODB_SECRET_NAME}"
+                    - name: MONGODB_ADMIN_PASSWORD
+                      valueFrom:
+                        secretKeyRef:
+                          key: admin-password
+                          name: "${MONGODB_SECRET_NAME}"
+              restartPolicy: 'Never'
+              terminationGracePeriodSeconds: 30
+              activeDeadlineSeconds: 90
+              dnsPolicy: 'ClusterFirst'
+              # serviceAccountName: '${JOB_SERVICE_ACCOUNT}'
+              # serviceAccount: '${JOB_SERVICE_ACCOUNT}'
+parameters:
+  - name: 'NAMESPACE'
+    displayName: 'Namespace'
+    description: 'Name of the Namespace where to deploy the Scheduled Job'
+    required: true
+  - name: 'JOB_NAME'
+    displayName: 'Job Name'
+    description: 'Name of the Scheduled Job to Create.'
+    value: 'mongodb-backup'
+    required: true
+  - name: 'SCHEDULE'
+    displayName: 'Cron Schedule'
+    description: 'Cron Schedule to Execute the Job (in UTC)'
+    # Currently targeting 4:00 AM weekley
+    value: '0 14 * * 0'
+    required: true
+  - name: 'SUCCESS_JOBS_HISTORY_LIMIT'
+    displayName: 'Successful Job History Limit'
+    description: 'The number of successful jobs that will be retained'
+    value: '3'
+    required: true
+  - name: 'FAILED_JOBS_HISTORY_LIMIT'
+    displayName: 'Failed Job History Limit'
+    description: 'The number of failed jobs that will be retained'
+    value: '3'
+    required: true
+  - name: 'JOB_BACKOFF_LIMIT'
+    displayName: 'Job Backoff Limit'
+    description: 'The number of attempts to try for a successful job outcome (default: 6)'
+    value: '0'
+    required: false
+  - name: MONGODB_SECRET_NAME
+    displayName: MongoDB Secret.
+    description: Name of the Secret containing MongoDB Assets
+    value: "mongodb-creds"
+    required: true
+  - name: MONGODB_IMAGE
+    displayName: "MongoDB Docker Image"
+    description: "A reference to a supported MongoDB Docker image."
+    value: registry.redhat.io/rhscl/mongodb-36-rhel7
+    required: true
+  - name: MONGODB_IMAGE_TAG
+    description: Name of the MongoDB tag that should be used
+    displayName: MongoDB Tag
+    value: "1"
+    required: true
+  - name: SCRIPT_URL
+    description: test
+    displayName: Backup Script Name
+    value: https://example.com/scrpt/xxx.sh
