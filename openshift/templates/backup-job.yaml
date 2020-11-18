@@ -110,4 +110,4 @@ parameters:
   - name: SCRIPT_URL
     description: test
     displayName: Backup Script Name
-    value: https://example.com/scrpt/xxx.sh
+    value: https://raw.githubusercontent.com/fullboar/rocketchat/master/scripts/backup.sh
