@@ -6,7 +6,7 @@ logs
 build/
 dist/
 *.pem
-*.env
+# *.env
 data/
 pg_data
 node_modules
