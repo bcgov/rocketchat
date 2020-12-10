@@ -1,0 +1,50 @@
+---
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  annotations:
+    description: |
+      This configmap is used internally by the API
+      to store user configurable parameters.
+  name: registry-api-config
+objects:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      creationTimestamp: "2020-02-04T21:10:28Z"
+      name: rocketchat-config
+      namespace: e5imao-dev
+      resourceVersion: "1476448863"
+      selfLink: /api/v1/namespaces/e5imao-dev/configmaps/rocketchat-config
+      uid: c538be78-4792-11ea-afd1-005056832285
+    data:
+      ADMIN_PASS: B4mnwMoSjMX67cKy
+      ADMIN_USERNAME: admin
+      OVERWRITE_SETTING_Accounts_AllowPasswordChange: "False"
+      OVERWRITE_SETTING_Accounts_AllowRealNameChange: "False"
+      OVERWRITE_SETTING_Accounts_RegistrationForm: Disabled
+      OVERWRITE_SETTING_Accounts_Send_Email_When_Activating: ""
+      OVERWRITE_SETTING_Accounts_Send_Email_When_Deactivating: ""
+      OVERWRITE_SETTING_Accounts_ShowFormLogin: "True"
+      OVERWRITE_SETTING_Accounts_TwoFactorAuthentication_Enabled: "False"
+      OVERWRITE_SETTING_FileUpload_Enabled: "True"
+      OVERWRITE_SETTING_FileUpload_FileSystemPath: /app/uploads
+      OVERWRITE_SETTING_FileUpload_MaxFileSize: "5000000"
+      OVERWRITE_SETTING_FileUpload_MediaTypeWhiteList: image/*,audio/*,video/*,application/zip,application/x-rar-compressed,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/csv
+      OVERWRITE_SETTING_FileUpload_ProtectFiles: "False"
+      OVERWRITE_SETTING_FileUpload_Storage_Type: FileSystem
+      OVERWRITE_SETTING_Layout_Login_Terms: By proceeding you are agreeing to our <a href=https://www2.gov.bc.ca/gov/content/home/disclaimer>disclaimer</a>
+        and <a href=https://www2.gov.bc.ca/gov/content/home/privacy>privacy policy</a>.
+        <br /> for rocket.chat instructions and conventions, see <a href=https://developer.gov.bc.ca/>devhub</a>
+      OVERWRITE_SETTING_Message_AllowSnippeting: "True"
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToChannels: "True"
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToDMs: "True"
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToGroups: "True"
+      OVERWRITE_SETTING_RetentionPolicy_Enabled: "True"
+      OVERWRITE_SETTING_RetentionPolicy_FilesOnly: "True"
+      OVERWRITE_SETTING_RetentionPolicy_MaxAge_Channels: "365"
+      OVERWRITE_SETTING_RetentionPolicy_MaxAge_DMs: "365"
+      OVERWRITE_SETTING_RetentionPolicy_MaxAge_Groups: "365"
+      OVERWRITE_SETTING_Show_Setup_Wizard: Completed
+      OVERWRITE_SETTING_Site_Name: chat-dev.pathfinder.gov.bc.ca
+      OVERWRITE_SETTING_Site_Url: https://chat-dev.pathfinder.gov.bc.ca

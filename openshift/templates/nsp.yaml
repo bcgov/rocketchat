@@ -38,6 +38,22 @@ objects:
       destination:
         - - '$namespace=${NAMESPACE}'
           - '${DB_APO_IDENTIFIER}'
+  - apiVersion: security.devops.gov.bc.ca/v1alpha1
+    kind: NetworkSecurityPolicy
+    metadata:
+      name: server-to-db
+      labels:
+        app: rocket-chat
+    spec:
+      description: |
+        allow rocket chat server to talk to the mongo
+        db instances.
+      source:
+        - - '$namespace=${NAMESPACE}'
+          - 'role=server'
+      destination:
+        - - '$namespace=${NAMESPACE}'
+          - '${DB_APO_IDENTIFIER}'
 parameters:
   - name: NAMESPACE
     description: |
