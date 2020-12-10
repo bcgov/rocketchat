@@ -69,8 +69,6 @@ objects:
             value: ${MONTHLY_BACKUPS}
           - name: BACKUP_PERIOD
             value: ${BACKUP_PERIOD}
-          - name: DATABASE_SERVICE_NAME
-            value: ${DATABASE_SERVICE_NAME}
           - name: DATABASE_NAME
             value: ${DATABASE_NAME}
           - name: MONGODB_AUTHENTICATION_DATABASE
@@ -132,19 +130,22 @@ objects:
           namespace: ${IMAGE_NAMESPACE}
       type: ImageChange
 parameters:
-- description: The name assigned to all of the resources.  Use 'backup-{database name}'
+- description: >
+    The name assigned to all of the resources.  Use 'backup-{database name}'
     depending on your database provider
   displayName: Name
   name: NAME
   required: true
   value: mongodb-backup
-- description: The name of the image to use for this resource.  Use 'backup-{database
+- description: >
+    The name of the image to use for this resource. Use 'backup-{database
     name}' depending on your database provider
   displayName: Source Image Name
   name: SOURCE_IMAGE_NAME
   required: true
   value: backup-container
-- description: The namespace of the OpenShift project containing the imagestream for
+- description: >
+    The namespace of the OpenShift project containing the imagestream for
     the application.
   displayName: Image Namespace
   name: IMAGE_NAMESPACE
@@ -155,95 +156,98 @@ parameters:
   name: TAG_NAME
   required: true
   value: latest
-- description: Used for backward compatibility only. Not needed when using the recommended
-    'backup.conf' configuration.  The name of the database service.
-  displayName: Database Service Name
-  name: DATABASE_SERVICE_NAME
-  required: false
-  value: ""
-- description: Used for backward compatibility only. Not needed when using the recommended
-    'backup.conf' configuration.  The name of the database.
+- description: >
+    Used for backward compatibility only. Not needed when using the
+    recommended 'backup.conf' configuration.  The name of the database.
   displayName: Database Name
   name: DATABASE_NAME
   required: false
   value: ""
-- description: This is only required if you are backing up mongo database with a separate
-    authentication database.
+- description: >
+    This is only required if you are backing up mongo database with a
+    separate authentication database.
   displayName: MongoDB Authentication Database
   name: MONGODB_AUTHENTICATION_DATABASE
   required: false
   value: ""
-- description: The name associated to the database deployment resources.  In particular,
-    this is used to wire up the credentials associated to the database.
-  displayName: Database Deployment Name
-  name: DATABASE_DEPLOYMENT_NAME
-  required: true
-  value: postgresql
-- description: The datbase user key name stoed in database deployment resources specified
-    by DATABASE_DEPLOYMENT_NAME.
+- description: >
+    The datbase user key name stoed in database deployment resources
+    specified by DATABASE_DEPLOYMENT_NAME.
   displayName: Database User Key Name
   name: DATABASE_USER_KEY_NAME
   required: true
   value: username
-- description: The database password key name stored in database deployment resources
+- description: >
+    The database password key name stored in database deployment resources
     specified by DATABASE_DEPLOYMENT_NAME.
   displayName: Database Password Key Name
   name: DATABASE_PASSWORD_KEY_NAME
   required: true
   value: password
-- description: The strategy to use for backups; for example daily, or rolling.
+- description: >
+    The strategy to use for backups; for example daily, or rolling.
   displayName: Backup Strategy
   name: BACKUP_STRATEGY
   required: true
   value: rolling
-- description: The human readable name of the environment.  This variable is used
-    by the webhook integration to identify the environment in which the backup notifications
-    originate.
+- description: >
+    The human readable name of the environment.  This variable is used
+    by the webhook integration to identify the environment in which the
+    backup notifications originate.
   displayName: Friendly Environment Name
   name: ENVIRONMENT_FRIENDLY_NAME
   required: false
   value: ""
-- description: The name or Id of the environment.  This variable is used by the webhook
-    integration to identify the environment in which the backup notifications originate.
+- description: >
+    The name or Id of the environment.  This variable is used by the webhook
+    integration to identify the environment in which the backup
+    notifications originate.
   displayName: Environment Name (Environment Id)
   name: ENVIRONMENT_NAME
   required: false
   value: ""
-- description: The name of the root backup directory.  The backup volume will be mounted
+- description: >
+    The name of the root backup directory. The backup volume will be mounted
     to this directory.
   displayName: The root backup directory
   name: BACKUP_DIR
   required: true
   value: /backups/
-- description: Used for backward compatibility only.  Ignored when using the recommended
-    `rolling` backup strategy.  The number of backup files to be retained.  Used for
-    the `daily` backup strategy.
+- description: >
+    Used for backward compatibility only.  Ignored when using the recommended
+    `rolling` backup strategy.  The number of backup files to be retained.
+    Used for the `daily` backup strategy.
   displayName: The number of backup files to be retained
   name: NUM_BACKUPS
   required: false
   value: ""
-- description: The number of daily backup files to be retained.  Used for the `rolling`
+- description: >
+    The number of daily backup files to be retained. Used for the `rolling`
     backup strategy.
   displayName: Number of Daily Backups to Retain
   name: DAILY_BACKUPS
   required: false
   value: ""
-- description: The number of weekly backup files to be retained.  Used for the `rolling`
+- description: >
+    The number of weekly backup files to be retained. Used for the `rolling`
     backup strategy.
   displayName: Number of Weekly Backups to Retain
   name: WEEKLY_BACKUPS
   required: false
   value: ""
-- description: The number of monthly backup files to be retained.  Used for the `rolling`
+- description: >
+    The number of monthly backup files to be retained. Used for the `rolling`
     backup strategy.
   displayName: Number of Monthly Backups to Retain
   name: MONTHLY_BACKUPS
   required: false
   value: ""
-- description: Used for backward compatibility only.  Ignored when using the recommended
-    `backup.conf` and cron backup strategy.  Period (d,m,s) between backups in a format
-    used by the sleep command
-  displayName: Period (d,m,s) between backups in a format used by the sleep command
+- description: >
+    Used for backward compatibility only. Ignored when using the recommended
+    `backup.conf` and cron backup strategy. Period (d,m,s) between backups
+    in a format used by the sleep command
+  displayName: >
+    Period (d,m,s) between backups in a format used by the sleep command
   name: BACKUP_PERIOD
   required: false
   value: ""
@@ -262,59 +266,69 @@ parameters:
   name: CONFIG_MOUNT_PATH
   required: true
   value: /
-- description: The name of the persistent volume used to store the backups.  Please
-    note, when using the recommended nfs-backup storage class the name of the pvc
-    MUST be taken from the manually provisioned claim; nfs-backup storage MUST be
-    provisioned manually.
+- description: >
+    The name of the persistent volume used to store the backups.  Please
+    note, when using the recommended nfs-backup storage class the name of 
+    the pvc MUST be taken from the manually provisioned claim; nfs-backup
+    storage MUST be provisioned manually.
   displayName: Backup Volume Name
   name: BACKUP_VOLUME_NAME
   required: true
   value: backup
-- description: The size of the persistent volume used to store the backups, e.g. 512Mi,
-    1Gi, 2Gi.  Ensure this is sized correctly.  Refer to the container documentation
-    for details.
+- description: >
+    The size of the persistent volume used to store the backups, e.g. 512Mi,
+    1Gi, 2Gi.  Ensure this is sized correctly. Refer to the container
+    documentation for details.
   displayName: Backup Volume Size
   name: BACKUP_VOLUME_SIZE
   required: true
   value: 5Gi
-- description: The class of the persistent volume used to store the backups; netapp-block-standard,
-    netapp-file-standard, nfs-backup.  Please note, nfs-backup storage is the recommended
-    storage type for backups.  It MUST be provisioned manually through the OCP catalog
-    via the 'BC Gov NFS Storage' template.  nfs-backup storage CANNOT be automatically
+- description: >
+    The class of the persistent volume used to store the backups;
+    netapp-block-standard, netapp-file-standard, nfs-backup. Please note,
+    nfs-backup storage is the recommended storage type for backups. It MUST
+    be provisioned manually through the OCP catalog via the 'BC Gov NFS
+    Storage' template. nfs-backup storage CANNOT be automatically
     provisioned by this template.
   displayName: Backup Volume Class
   name: BACKUP_VOLUME_CLASS
   required: true
   value: netapp-file-backup
-- description: The name for the verification volume, used for restoring and verifying
-    backups.  When using the recommend nfs-backup storage class for backups, this
-    volume MUST be either netapp-file-standard or netapp-block-standard storage; netapp-block-standard
-    is recommended (it has far better performance).
+- description: >
+    The name for the verification volume, used for restoring and verifying
+    backups.  When using the recommend nfs-backup storage class for backups,
+    this volume MUST be either netapp-file-standard or netapp-block-standard
+    storage; netapp-block-standard is recommended (it has far better
+    performance).
   displayName: Verification Volume Name
   name: VERIFICATION_VOLUME_NAME
   required: false
   value: backup-verification
-- description: The size of the persistent volume used for restoring and verifying
-    backups, e.g. 512Mi, 1Gi, 2Gi.  Ensure this is sized correctly.  It should be
-    large enough to contain your largest database.
+- description: >
+    The size of the persistent volume used for restoring and verifying
+    backups, e.g. 512Mi, 1Gi, 2Gi.  Ensure this is sized correctly.
+    It should be large enough to contain your largest database.
   displayName: Backup Volume Size
   name: VERIFICATION_VOLUME_SIZE
   required: true
   value: 1Gi
-- description: The class of the persistent volume used for restoring and verifying
-    backups; should be one of netapp-block-standard or netapp-file-standard.  netapp-block-standard
-    performs better.
+- description: >
+    The class of the persistent volume used for restoring and verifying
+    backups; should be one of netapp-block-standard or netapp-file-standard.
+    netapp-block-standard performs better.
   displayName: Backup Volume Class
   name: VERIFICATION_VOLUME_CLASS
   required: true
   value: netapp-file-standard
-- description: The path on which to mount the verification volume.  This is used by
-    the database server to contain the database configuration and data files. For
-    Mongo, please use /var/lib/mongodb/data . For MSSQL, please use /var/opt/mssql/data
+- description: >
+    The path on which to mount the verification volume.  This is used by
+    the database server to contain the database configuration and data files.
+    For Mongo, please use /var/lib/mongodb/data. For MSSQL, please use 
+    /var/opt/mssql/data
   displayName: Verification Volume Mount Path
   name: VERIFICATION_VOLUME_MOUNT_PATH
   required: true
-  value: /var/lib/pgsql/data
+  value: /var/lib/mongodb/data
 - description: The resources CPU request (in cores) for this build.
   displayName: Resources CPU Request
   name: CPU_REQUEST
