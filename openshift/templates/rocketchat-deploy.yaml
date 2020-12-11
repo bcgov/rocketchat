@@ -93,16 +93,14 @@ objects:
         #       kind: ImageStreamTag
         #       name: ${APPLICATION_NAME}:${SOURCE_IMAGE_TAG}
         #       namespace: ${SOURCE_IMAGE_NAMESPACE}
-      replicas: 1
+      replicas: ${{ROCKETCHAT_REPLICAS}}
       selector:
         app: "${APPLICATION_NAME}"
-        # deploymentConfig: "${APPLICATION_NAME}"
       template:
         metadata:
           labels:
             app: "${APPLICATION_NAME}"
             role: server
-            # deploymentConfig: "${APPLICATION_NAME}"
         spec:
           affinity:
             podAntiAffinity:
@@ -144,9 +142,8 @@ objects:
                   path: /api/info
                   port: server-port
                   scheme: HTTP
-                initialDelaySeconds: 180
-                failureThreshold: 18
-                periodSeconds: 10
+                failureThreshold: 3
+                periodSeconds: 3
               resources:
                 limits:
                   cpu: "${CPU_LIMIT}"
@@ -184,20 +181,26 @@ objects:
           terminationMessagePath: /dev/termination-log
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
-  # - apiVersion: autoscaling/v1
-  #   kind: HorizontalPodAutoscaler
-  #   metadata:
-  #     name: rocketchat-hpa
-  #   spec:
-  #     scaleTargetRef:
-  #       kind: DeploymentConfig 
-  #       name: ${APPLICATION_NAME}
-  #       apiVersion: apps.openshift.io/v1
-  #       subresource: scale
-  #     minReplicas: ${ROCKETCHAT_MIN_HPA}
-  #     maxReplicas: ${ROCKETCHAT_MAX_HPA}
-  #     cpuUtilization:
-  #       targetCPUUtilizationPercentage: 80
+  - apiVersion: autoscaling/v1
+    kind: HorizontalPodAutoscaler
+    metadata:
+      labels:
+        app: ${APPLICATION_NAME}
+      name: ${APPLICATION_NAME}
+    spec:
+      scaleTargetRef:
+        apiVersion: apps/v1
+        kind: DeploymentConfig 
+        name: ${APPLICATION_NAME}
+      minReplicas: ${{ROCKETCHAT_MIN_HPA}}
+      maxReplicas: ${{ROCKETCHAT_MAX_HPA}}
+      metrics:
+      - type: Resource
+        resource:
+          name: cpu
+          target:
+            type: Utilization
+            averageUtilization: 80
 parameters:
   - name: APPLICATION_NAME
     description: The name assigned to the application
@@ -272,27 +275,3 @@ parameters:
     displayName: RocketChat Server Secret
     description: Name of the Secret containing RocketChat Assets
     value: "rocketchat-server-creds"
-# # Rocket Chat Environment Variables
-#   - name: FILEUPLOAD_ENABLED
-#   - name: FILEUPLOAD_STORAGE_TYPE
-#   - name: FILEUPLOAD_PROTECTFILES
-#   - name: FILEUPLOAD_FILESYSTEMPATH
-#   - name: FILEUPLOAD_MAXFILESIZE
-#   - name: FILEUPLOAD_MEDIATYPEWHITELIST
-#   - name: SHOW_SETUP_WIZARD
-#   - name: LAYOUT_LOGIN_TERMS
-#   - name: RETENTIONPOLICY_ENABLED
-#   - name: RETENTIONPOLICY_APPLIESTOCHANNELS
-#   - name: RETENTIONPOLICY_MAXAGE_CHANNELS
-#   - name: RETENTIONPOLICY_APPLIESTOGROUPS
-#   - name: RETENTIONPOLICY_MAXAGE_GROUPS
-#   - name: RETENTIONPOLICY_APPLIESTODMS
-#   - name: RETENTIONPOLICY_MAXAGE_DMS
-#   - name: RETENTIONPOLICY_FILESONLY
-#   - name: ACCOUNTS_TWOFACTORAUTHENTICATION_ENABLED
-#   - name: ACCOUNTS_REGISTRATIONFORM
-#   - name: ACCOUNTS_ALLOWREALNAMECHANGE
-#   - name: ACCOUNTS_ALLOWPASSWORDCHANGE
-#   - name: ACCOUNTS_SHOWFORMLOGIN
-#   - name: ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING
-#   - name: ACCOUNTS_SEND_EMAIL_WHEN_DEACTIVATING
