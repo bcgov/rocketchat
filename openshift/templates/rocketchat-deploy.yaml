@@ -7,24 +7,6 @@ metadata:
     iconClass: "icon-nodejs"
     tags: "nodejs,mongodb,rocketchat"
 objects:
-  - apiVersion: image.openshift.io/v1
-    kind: ImageStream
-    metadata:
-      labels:
-        app: ${APPLICATION_NAME}
-      name: ${APPLICATION_NAME}
-    spec:
-      lookupPolicy:
-        local: false
-      tags:
-      - annotations: null
-        from:
-          kind: DockerImage
-          name: ${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}
-        importPolicy: {}
-        name: "${SOURCE_IMAGE_TAG}"
-        referencePolicy:
-          type: Source
   - apiVersion: v1
     kind: Service
     metadata:
@@ -118,7 +100,7 @@ objects:
                 claimName: "rocketchat-uploads"
           containers:
             - name: ${APPLICATION_NAME}
-              image: "rocket.chat:2.4.13"
+              image: "image-registry.openshift-image-registry.svc:5000/${SOURCE_IMAGE_NAMESPACE}/${APPLICATION_NAME}:${SOURCE_IMAGE_TAG}"
               ports:
                 - name: server-port
                   containerPort: 3000
@@ -207,24 +189,13 @@ parameters:
     displayName: Application Name
     required: true
     value: rocketchat-server
-  - name: ROCKETCHAT_IMAGE
-    description: Location of the RocketChat Image
-    displayName: RocketChat Image
-    value: registry.hub.docker.com/library/rocket.chat
-    required: true
   - name: SOURCE_IMAGE_NAMESPACE
-    description: xx
-    displayName: xxx
-    required: true 
-  - name: SOURCE_IMAGE_NAME
-    description: Location of the RocketChat Image
-    displayName: RocketChat Image
-    value: "rocket.chat"
+    description: The namespace where the image is pulled from
+    displayName: Source Image Namespace
     required: true
   - name: SOURCE_IMAGE_TAG
     description: Name of the RocketChat tag that should be used
     displayName: RocketChat Tag
-    value: "2.4.13"
     required: true
   - name: FILE_UPLOAD_STORAGE_SIZE
     description: The size of storage to allocate for file uploads to RocketChat

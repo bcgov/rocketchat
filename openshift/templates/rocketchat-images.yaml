@@ -1,0 +1,51 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: ${APPLICATION_NAME}
+  annotations:
+    description: "Rocket.Chat Deployment"
+    tags: "rocketchat"
+objects:
+  - apiVersion: image.openshift.io/v1
+    kind: ImageStream
+    metadata:
+      labels:
+        app: ${APPLICATION_NAME}
+      name: ${APPLICATION_NAME}
+    spec:
+      lookupPolicy:
+        local: false
+      tags:
+        - name: "${SOURCE_IMAGE_TAG_HOTFIX}"
+          from:
+            kind: DockerImage
+            name: docker-remote.artifacts.developer.gov.bc.ca/${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG_HOTFIX}
+          referencePolicy:
+            type: Source
+        - name: "${SOURCE_IMAGE_TAG_MINOR}"
+          from:
+            kind: DockerImage
+            name: docker-remote.artifacts.developer.gov.bc.ca/${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG_MINOR}
+          referencePolicy:
+            type: Source
+          importPolicy:
+            scheduled: true
+      pullSecret:
+        name: artifactory-dockercfg
+parameters:
+  - name: APPLICATION_NAME
+    description: The name assigned to the application
+    displayName: Application Name
+    value: rocketchat-server
+  - name: SOURCE_IMAGE_NAME
+    description: Location of the RocketChat Image
+    displayName: RocketChat Image
+    value: "rocket.chat"
+  - name: SOURCE_IMAGE_TAG_HOTFIX
+    description: Name of the RocketChat tag that should be used
+    displayName: RocketChat Hotfix Tag
+    value: "2.4.13"
+  - name: SOURCE_IMAGE_TAG_MINOR
+    description: Name of the RocketChat tag that should be used
+    displayName: RocketChat Minor Tag
+    value: "2.4"
