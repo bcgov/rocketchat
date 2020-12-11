@@ -4,19 +4,15 @@ kind: Template
 metadata:
   annotations:
     description: |
-      This configmap is used internally by the API
-      to store user configurable parameters.
-  name: registry-api-config
+      This configmap is used internally by the server to override
+      settings.
+  name: rocketchat-config
 objects:
   - apiVersion: v1
     kind: ConfigMap
     metadata:
-      creationTimestamp: "2020-02-04T21:10:28Z"
       name: rocketchat-config
-      namespace: e5imao-dev
-      resourceVersion: "1476448863"
-      selfLink: /api/v1/namespaces/e5imao-dev/configmaps/rocketchat-config
-      uid: c538be78-4792-11ea-afd1-005056832285
+      app: rocketchat-server
     data:
       OVERWRITE_SETTING_Accounts_AllowPasswordChange: "False"
       OVERWRITE_SETTING_Accounts_AllowRealNameChange: "False"
