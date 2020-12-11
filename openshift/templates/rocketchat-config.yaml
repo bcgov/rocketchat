@@ -18,8 +18,6 @@ objects:
       selfLink: /api/v1/namespaces/e5imao-dev/configmaps/rocketchat-config
       uid: c538be78-4792-11ea-afd1-005056832285
     data:
-      ADMIN_PASS: B4mnwMoSjMX67cKy
-      ADMIN_USERNAME: admin
       OVERWRITE_SETTING_Accounts_AllowPasswordChange: "False"
       OVERWRITE_SETTING_Accounts_AllowRealNameChange: "False"
       OVERWRITE_SETTING_Accounts_RegistrationForm: Disabled
@@ -46,5 +44,5 @@ objects:
       OVERWRITE_SETTING_RetentionPolicy_MaxAge_DMs: "365"
       OVERWRITE_SETTING_RetentionPolicy_MaxAge_Groups: "365"
       OVERWRITE_SETTING_Show_Setup_Wizard: Completed
-      OVERWRITE_SETTING_Site_Name: chat-dev.pathfinder.gov.bc.ca
-      OVERWRITE_SETTING_Site_Url: https://chat-dev.pathfinder.gov.bc.ca
+      OVERWRITE_SETTING_Site_Name: rocketchat-server-6e2f55-dev.apps.silver.devops.gov.bc.ca
+      OVERWRITE_SETTING_Site_Url: https://rocketchat-server-6e2f55-dev.apps.silver.devops.gov.bc.ca

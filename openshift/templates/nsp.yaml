@@ -20,14 +20,32 @@ metadata:
     description: |
       The Network Security Policies (NSP) for the associated
       Platform Services RocketChat application.
-  name: rocket-chat-nsp
+  name: ${APP_NAME}-nsp
 objects:
+  - apiVersion: security.devops.gov.bc.ca/v1alpha1
+    kind: ExternalNetwork
+    metadata:
+      name: all-things-external
+      labels:
+        app: ${APP_NAME}
+    spec:
+      # This name will be used internally by Aporeto; it should match
+      # the `name` field in metadata above.
+      description: |
+        specify a custom external network that can be
+        referenced by name.
+      entries:
+        - 192.0.73.2
+        - 51.81.11.198
+      servicePorts:
+        - "tcp/80"
+        - "tcp/443"
   - apiVersion: security.devops.gov.bc.ca/v1alpha1
     kind: NetworkSecurityPolicy
     metadata:
       name: db-to-db
       labels:
-        app: rocket-chat
+        app: ${APP_NAME}
     spec:
       description: |
         allow mongodb pods to talk to one another for
@@ -43,7 +61,7 @@ objects:
     metadata:
       name: server-to-db
       labels:
-        app: rocket-chat
+        app: ${APP_NAME}
     spec:
       description: |
         allow rocket chat server to talk to the mongo
@@ -54,7 +72,28 @@ objects:
       destination:
         - - '$namespace=${NAMESPACE}'
           - '${DB_APO_IDENTIFIER}'
+  - apiVersion: security.devops.gov.bc.ca/v1alpha1
+    kind: NetworkSecurityPolicy
+    metadata:
+      name: server-to-external
+      labels:
+        app: ${APP_NAME}
+    spec:
+      description: |
+        allow rocket chat server to talk to external
+        services
+      source:
+        - - '$namespace=${NAMESPACE}'
+          - 'role=server'
+      destination:
+        - - '$namespace=${NAMESPACE}'
+          - 'ext:name=all-things-external'
 parameters:
+  - name: APP_NAME
+    description: |
+      The application name this NSP is assocated with.
+    required: true
+    value: rocketchat-nsp
   - name: NAMESPACE
     description: |
       The the name of the namespace the policy is being
