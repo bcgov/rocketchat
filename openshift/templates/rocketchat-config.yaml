@@ -40,5 +40,5 @@ objects:
       OVERWRITE_SETTING_RetentionPolicy_MaxAge_DMs: "365"
       OVERWRITE_SETTING_RetentionPolicy_MaxAge_Groups: "365"
       OVERWRITE_SETTING_Show_Setup_Wizard: Completed
-      OVERWRITE_SETTING_Site_Name: rocketchat-server-6e2f55-dev.apps.silver.devops.gov.bc.ca
+      OVERWRITE_SETTING_Site_Name: BCDevXHQ
       OVERWRITE_SETTING_Site_Url: https://rocketchat-server-6e2f55-dev.apps.silver.devops.gov.bc.ca

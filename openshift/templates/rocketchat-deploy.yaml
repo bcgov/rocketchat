@@ -232,10 +232,10 @@ parameters:
     displayName: File Uploads Storage Class 
     required: true
     value: netapp-file-standard
-  - name: HOSTNAME_HTTPS
-    description: Hostname serving the application
-    displayName: Route Name
-    required: true
+  # - name: HOSTNAME_HTTPS
+  #   description: Hostname serving the application
+  #   displayName: Route Name
+  #   required: true
   - name: ROCKETCHAT_REPLICAS
     description: Number of RocketChat replica pods
     displayName: RocketChat Replicas
