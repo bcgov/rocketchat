@@ -16,12 +16,12 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: rocket-chat-mongodb
+  name: rocketchat-db
   labels:
-    app: rocket-chat-mongodb
+    app: rocketchat-db
   annotations:
     description: "MongoDB database running as replicate set"
-    tags: "nodejs,mongodb,replication,instant-app"
+    tags: "mongodb,replication"
 parameters:
   - name: MEMORY_REQUEST
     description: Amount of Memory to Request.
@@ -89,7 +89,7 @@ objects:
     metadata:
       name: "${MONGODB_SERVICE_NAME}"
       labels:
-        app: rocket-chat-mongodb
+        app: rocketchat-db
     spec:
       ports:
         - name: mongodb
@@ -101,7 +101,7 @@ objects:
     metadata:
       name: "${MONGODB_SERVICE_NAME}-internal"
       labels:
-        app: rocket-chat-mongodb
+        app: rocketchat-db
       annotations:
         service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
     spec:    
@@ -116,7 +116,7 @@ objects:
     metadata:
       name: "${MONGODB_SERVICE_NAME}"
       labels:
-        app: rocket-chat-mongodb
+        app: rocketchat-db
     spec:
       selector:
         matchLabels:
@@ -126,7 +126,7 @@ objects:
       template:
         metadata:
           labels:
-            app: rocket-chat-mongodb
+            app: rocketchat-db
             statefulset: ${MONGODB_SERVICE_NAME}
         spec:
           affinity:
@@ -198,7 +198,7 @@ objects:
             name: mongo-data
             labels:
               name: "${MONGODB_SERVICE_NAME}"
-              app: rocket-chat-mongodb
+              app: rocketchat-db
           spec:
             accessModes: [ ReadWriteOnce ]
             storageClassName: "${VOLUME_STORAGE_CLASS}"
