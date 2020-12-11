@@ -11,6 +11,8 @@ in tools
 oc process -f https://raw.githubusercontent.com/BCDevOps/backup-container/master/openshift/templates/backup/backup-build.json -p NAME=backup-container | oc create -f -
 
 in dev
+ oc process -f openshift/templates/mongodb-deploy.yaml --param-file=openshift/mongo-dev-params.env| oc apply -f -
+
 
 oc process -f openshift/templates/backup-nsp.yaml -p NAMESPACE=$(oc project --short) | oc create -f -
 
@@ -18,6 +20,7 @@ oc process -f openshift/templates/backup-config.yaml| oc create -f -
 
 oc process -f openshift/templates/backup-deploy.yaml| oc apply -f -
 
+oc process -f openshift/templates/rocketchat-deploy.yaml --param-file=openshift/rocketchat-dev-params.env -p SOURCE_IMAGE_NAMESPACE=$(oc project --short) | oc apply -f -
 
 # RocketChat
 
