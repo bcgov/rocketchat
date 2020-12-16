@@ -35,9 +35,9 @@ objects:
         specify a custom external network that can be
         referenced by name.
       entries:
-        - 192.0.73.2
-        - 142.34.208.210
-        - 142.34.213.59
+        - 192.0.73.2          # ? Located in S.F area
+        - 142.34.208.210      # console.pathfinder.gov.bc.ca
+        - 142.34.213.59       # BCGov
         - apps.smtp.gov.bc.ca # SMTP
         - rocket.chat         # RC HQ
       servicePorts:
