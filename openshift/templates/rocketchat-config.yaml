@@ -22,7 +22,7 @@ objects:
       OVERWRITE_SETTING_Accounts_ShowFormLogin: "True"
       OVERWRITE_SETTING_Accounts_TwoFactorAuthentication_Enabled: "False"
       OVERWRITE_SETTING_FileUpload_Enabled: "True"
-      OVERWRITE_SETTING_FileUpload_FileSystemPath: /app/uploads
+      OVERWRITE_SETTING_FileUpload_FileSystemPath: "/app/uploads"
       OVERWRITE_SETTING_FileUpload_MaxFileSize: "5000000"
       OVERWRITE_SETTING_FileUpload_MediaTypeWhiteList: image/*,audio/*,video/*,application/zip,application/x-rar-compressed,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/csv
       OVERWRITE_SETTING_FileUpload_ProtectFiles: "False"
@@ -40,5 +40,5 @@ objects:
       OVERWRITE_SETTING_RetentionPolicy_MaxAge_DMs: "365"
       OVERWRITE_SETTING_RetentionPolicy_MaxAge_Groups: "365"
       OVERWRITE_SETTING_Show_Setup_Wizard: Completed
-      OVERWRITE_SETTING_Site_Name: BCDevXHQ
+      OVERWRITE_SETTING_Site_Name: BCDevXHQ-DEV
       OVERWRITE_SETTING_Site_Url: https://rocketchat-server-6e2f55-dev.apps.silver.devops.gov.bc.ca

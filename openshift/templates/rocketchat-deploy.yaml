@@ -1,7 +1,7 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: rocket-chat
+  name: ${APPLICATION_NAME}
   annotations:
     description: "Rocket.Chat Deployment"
     iconClass: "icon-nodejs"
@@ -32,7 +32,6 @@ objects:
       labels:
         app: ${APPLICATION_NAME}
     spec:
-      # host: "${HOSTNAME_HTTPS}"
       port:
         targetPort: 3000-tcp
       to:
@@ -110,7 +109,7 @@ objects:
                   path: /api/info
                   port: server-port
                   scheme: HTTP
-                failureThreshold: 36
+                failureThreshold: 54
                 periodSeconds: 10
               livenessProbe:
                 httpGet:
@@ -206,10 +205,10 @@ parameters:
     displayName: File Uploads Storage Class 
     required: true
     value: netapp-file-standard
-  # - name: HOSTNAME_HTTPS
-  #   description: Hostname serving the application
-  #   displayName: Route Name
-  #   required: true
+  - name: HOSTNAME_HTTPS
+    description: Hostname serving the application
+    displayName: Route Name
+    required: true
   - name: ROCKETCHAT_REPLICAS
     description: Number of RocketChat replica pods
     displayName: RocketChat Replicas

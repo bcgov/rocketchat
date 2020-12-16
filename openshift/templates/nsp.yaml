@@ -36,10 +36,14 @@ objects:
         referenced by name.
       entries:
         - 192.0.73.2
-        - 51.81.11.198
+        - 142.34.208.210
+        - 142.34.213.59
+        - apps.smtp.gov.bc.ca # SMTP
+        - rocket.chat         # RC HQ
       servicePorts:
         - "tcp/80"
         - "tcp/443"
+        - "tcp/25"
   - apiVersion: security.devops.gov.bc.ca/v1alpha1
     kind: NetworkSecurityPolicy
     metadata:
@@ -53,6 +57,8 @@ objects:
       source:
         - - '$namespace=${NAMESPACE}'
           - '${DB_APO_IDENTIFIER}'
+        - - '$namespace=${NAMESPACE}'
+          - 'run=data-pump' 
       destination:
         - - '$namespace=${NAMESPACE}'
           - '${DB_APO_IDENTIFIER}'
@@ -85,6 +91,22 @@ objects:
       source:
         - - '$namespace=${NAMESPACE}'
           - 'role=server'
+      destination:
+        - - '$namespace=${NAMESPACE}'
+          - 'ext:name=all-things-external'
+  - apiVersion: security.devops.gov.bc.ca/v1alpha1
+    kind: NetworkSecurityPolicy
+    metadata:
+      name: datapump-to-external
+      labels:
+        app: ${APP_NAME}
+    spec:
+      description: |
+        allow my data pump pot to talk to external
+        services
+      source:
+        - - '$namespace=${NAMESPACE}'
+          - 'debug.openshift.io/source-container=data-pump'
       destination:
         - - '$namespace=${NAMESPACE}'
           - 'ext:name=all-things-external'
