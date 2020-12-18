@@ -77,6 +77,7 @@ objects:
       replicas: ${{ROCKETCHAT_REPLICAS}}
       selector:
         app: "${APPLICATION_NAME}"
+        role: server
       template:
         metadata:
           labels:
