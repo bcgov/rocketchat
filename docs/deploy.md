@@ -33,6 +33,12 @@ Watch that all tree pods in the `statefullset` start and verify in the Aporeto c
 
 ### Database Backup
 
+Don't leave backups to an afterthough. Set them up as soon as your database is deployed and verified. 
+
+**ProTip 🤓**
+
+Check backups regularity and from time to time practice a restore. Often backups can appear to be running but they're not; they just don't case errors which can be misleading.
+
 ### Server
 
 The deployment parameters that vary across environments are stored in a properties file; pass this file to the command below varying the environment name as needed.
