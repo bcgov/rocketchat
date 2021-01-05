@@ -32,6 +32,7 @@ objects:
       labels:
         app: ${APPLICATION_NAME}
     spec:
+      host: "${HOSTNAME_HTTPS}"
       port:
         targetPort: 3000-tcp
       to:
@@ -40,6 +41,12 @@ objects:
       tls:
         termination: edge
         insecureEdgeTerminationPolicy: Redirect
+        certificate: |-
+          ${TLS_CERT_PEM}
+        key: |-
+          ${TLS_KEY_PEM}
+        caCertificate: |-
+          ${TLS_CACERT_PEM}
   - kind: PersistentVolumeClaim
     apiVersion: v1
     metadata:
@@ -246,3 +253,17 @@ parameters:
     displayName: RocketChat Server Secret
     description: Name of the Secret containing RocketChat Assets
     value: "rocketchat-server-creds"
+  - name: TLS_CERT_PEM
+    description: TLS certificate data in PEM format.
+    displayName: TLS Certificate
+    required: true
+  - name: TLS_KEY_PEM
+    description: TLS certificate private key data in PEM format.
+    displayName: TLS Private Key
+    required: true
+  - name: TLS_CACERT_PEM
+    description: |
+      TLS certificate cuthority certificate data in PEM format.
+    displayName: TLS Certificate Authority Certificate
+    required: true
+    
