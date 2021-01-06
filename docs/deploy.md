@@ -49,12 +49,11 @@ oc process -f openshift/templates/backup-deploy.yaml| oc apply -f -
 
 The backup container will immediately run when deployed. Verify in the Aporeto console that the cluster can communicate amongst itself.
 
+![Mongo Backup Communications](mongo-backup-comm.png "Backup Comms")
 
 **ProTip 🤓**
 
 Check backups regularity and from time to time practice a restore. Often backups can appear to be running but they're not; they just don't case errors which can be misleading.
-
-
 
 ### Server
 
