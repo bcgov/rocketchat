@@ -26,9 +26,48 @@ objects:
     kind: ConfigMap
     metadata:
       name: rocketchat-config
-      app: ${APPLICATION_NAME}
-    data: |-
-      ${ROCKETCHAT_OVERWRITE_PROPERTIES}
+      labels:
+        app: ${APPLICATION_NAME}
+    data:
+      Accounts_ShowFormLogin: 'True'
+      FileUpload_MaxFileSize: '5000000'
+      OVERWRITE_Layout_Login_Terms: >-
+        By proceeding you are agreeing to our <a
+        href="https://www2.gov.bc.ca/gov/content/home/disclaimer">Disclaimer</a> and
+        <a href="https://www2.gov.bc.ca/gov/content/home/privacy">Privacy
+        Policy</a>. <br /> For Rocket.Chat instructions and conventions, see <a
+        href="https://developer.gov.bc.ca/">DevHub</a>.
+      OVERWRITE_SETTING_Accounts_AllowPasswordChange: 'False'
+      OVERWRITE_SETTING_Accounts_AllowRealNameChange: 'False'
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak: 'True'
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-authorize_path: /realms/devhub/protocol/openid-connect/auth
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-button_label_text: Login
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-id: rocketchat
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_path: /realms/devhub/protocol/openid-connect/userinfo
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_token_sent_via: Header
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-login_style: Redirect
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-secret: ${SSO_SHARED_SECRET}
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_path: /realms/devhub/protocol/openid-connect/token
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_sent_via: Header
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-url: '${SSO_URL}'
+      OVERWRITE_SETTING_Accounts_RegistrationForm: Disabled
+      OVERWRITE_SETTING_Accounts_TwoFactorAuthentication_Enabled: 'False'
+      OVERWRITE_SETTING_FileUpload_Enabled: 'True'
+      OVERWRITE_SETTING_FileUpload_FileSystemPath: /app/uploads
+      OVERWRITE_SETTING_FileUpload_ProtectFiles: 'False'
+      OVERWRITE_SETTING_FileUpload_Storage_Type: FileSystem
+      OVERWRITE_SETTING_Message_AllowSnippeting: 'True'
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToChannels: 'True'
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToDMs: 'True'
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToGroups: 'True'
+      OVERWRITE_SETTING_RetentionPolicy_Enabled: 'True'
+      OVERWRITE_SETTING_RetentionPolicy_FilesOnly: 'True'
+      OVERWRITE_SETTING_RetentionPolicy_MaxAge_Channels: '365'
+      OVERWRITE_SETTING_RetentionPolicy_MaxAge_DMs: '365'
+      OVERWRITE_SETTING_RetentionPolicy_MaxAge_Groups: '365'
+      OVERWRITE_SETTING_Show_Setup_Wizard: Completed
+      OVERWRITE_SETTING_Site_Name: BCDevXHQ
+      OVERWRITE_SETTING_Site_Url: https://chat.developer.gov.bc.ca
 parameters:
   - name: APPLICATION_NAME
     description: |
@@ -36,9 +75,24 @@ parameters:
     displayName: Application Name
     required: true
     value: rocketchat-server
-  - name: ROCKETCHAT_OVERWRITE_PROPERTIES
+  - name: SSO_SHARED_SECRET
     description: |
-      These properties will override any configuration stored internally
-      in RocketChat's database.
-    displayName: Server Override Properties
+      The SSO shared secret for the realm RC will use.
+    displayName: SSO Shared Secret
+    required: true
+  - name: SSO_URL
+    description: |
+      The SSO URL RC will use for oAuth.
+    displayName: SSO URL
+    required: true
+  - name: SITE_NAME
+    description: |
+      The name that will appear to all clients who use this chat
+      service.
+    displayName: Site Name
+    required: true
+  - name: SITE_URL
+    description: |
+      The URL that clients use to access this RC instance.
+    displayName: Site Name
     required: true

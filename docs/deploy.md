@@ -53,11 +53,24 @@ The backup container will immediately run when deployed. Verify in the Aporeto c
 
 **ProTip 🤓**
 
-Check backups regularity and from time to time practice a restore. Often backups can appear to be running but they're not; they just don't case errors which can be misleading.
+Check backups regularity and from time to time practice a restore. Often backups can appear to be running but they're not; they just don't cause errors, which can be misleading.
 
 ### Server
 
 The deployment parameters that vary across environments are stored in a properties file; pass this file to the command below varying the environment name as needed.
+
+```console
+oc process -f openshift/templates/rocketchat-config.yaml \
+  --param-file=openshift/rocketchat-config-dev.properties \
+  -p SSO_SHARED_SECRET=$SSO_SECRET | \
+  oc apply -f -
+```
+
+When creating the administrator account, if you have a username and password in mind you may supply them as parameters to the following command. Otherwise, a password and default username will be assigned.
+
+```console
+oc process -f openshift/templates/rocketchat-secrets.yaml| oc create -f -
+```
 
 ```console
  oc process -f openshift/templates/rocketchat-deploy.yaml \
