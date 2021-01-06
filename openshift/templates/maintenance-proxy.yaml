@@ -45,18 +45,37 @@ objects:
         app: ${NAME}
     data:
       Caddyfile: |
-        # Where caddy should listen
-        :2015
-        
-        redir ${REDIR_DESTINATION_URL} 301
+        ${SOURCE_URL}:2015  {
+          reverse_proxy * ${DESTINATION_URL}  {
+            header_up Host {http.reverse_proxy.upstream.hostport}
+            header_up Sec-WebSocket-Protocol {>Sec-WebSocket-Protocol}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto {scheme}
+            #header_up Connection {>Connection}
+            #header_up Upgrade {>Upgrade}
+            flush_interval -1
+          }
+          
+          respond /ehlo 200
 
-        # On OCP we should log to stdout so Prometheus can
-        # slurp up the logs for human consumption.
-        log {
-          # errors stdout
-          output stdout 
-          format single_field common_log
-          level info
+          log {
+            # errors stdout
+            output stdout 
+            #format single_field common_log
+            level DEBUG
+          }
+        }
+
+        :2015 {
+          respond /ehlo 200
+            
+          log {
+            # errors stdout
+            output stdout 
+            #format single_field common_log
+            level DEBUG
+          }
         }
   - apiVersion: v1
     kind: Service
@@ -139,12 +158,13 @@ parameters:
     name: NAME
     required: true
     value: rocketchat-proxy
-  - description:
+  - name: DESTINATION_URL
+    description:
       The destination address that is being proxied.
     displayName: Redirect Destination
-    name: REDIR_DESTINATION_URL
     required: true
-  - name: REDIR_SOURCE_HOST
-    description: The route that will be redirected.
+  - name: SOURCE_URL
+    description: |
+      The route that will be redirected to the destination URL.
     displayName: Front Door Route
     required: true
