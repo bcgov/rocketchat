@@ -33,11 +33,28 @@ Watch that all tree pods in the `statefullset` start and verify in the Aporeto c
 
 ### Database Backup
 
-Don't leave backups to an afterthough. Set them up as soon as your database is deployed and verified. 
+Don't leave backups to an afterthought. Set them up as soon as your database is deployed and verified. The backup container project, along with detailed instructions, can be found [here](https://github.com/BCDevOps/backup-container).
+
+Deploy the configuration file that tells the backup container how frequently to backup:
+
+```console
+oc process -f openshift/templates/backup-config.yaml| oc apply -f -
+```
+
+Deploy the actual backup container:
+
+```console
+oc process -f openshift/templates/backup-deploy.yaml| oc apply -f -
+```
+
+The backup container will immediately run when deployed. Verify in the Aporeto console that the cluster can communicate amongst itself.
+
 
 **ProTip 🤓**
 
 Check backups regularity and from time to time practice a restore. Often backups can appear to be running but they're not; they just don't case errors which can be misleading.
+
+
 
 ### Server
 

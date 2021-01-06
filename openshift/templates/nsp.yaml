@@ -113,6 +113,23 @@ objects:
       destination:
         - - '$namespace=${NAMESPACE}'
           - 'ext:name=all-things-external'
+  - apiVersion: security.devops.gov.bc.ca/v1alpha1
+    kind: NetworkSecurityPolicy
+    metadata:
+      name: backup-to-patroni
+      labels:
+        app: platsrv-registry
+    spec:
+      description: |
+        allow the API to communicate with the NATS pod. This may not be
+        required if you are using the production environment or, at the
+        verry least, it will require modification.
+      source:
+        - - '$namespace=${NAMESPACE}'
+          - 'role=backup'
+      destination:
+        - - '$namespace=${NAMESPACE}'
+          - '${DB_APO_IDENTIFIER}'
 parameters:
   - name: APP_NAME
     description: |
@@ -130,3 +147,9 @@ parameters:
       service.
     required: true
     value: "statefulset=mongodb"
+  - name: BACKUP_CONTAINER_IDENTIFIER
+    description: |
+      The the name of the identifier used by Aporeto to
+      isolate and identify the backup container pod(s).
+    required: true
+    value: "role=backup"
