@@ -28,7 +28,7 @@ objects:
         app: ${NAME}
       name: ${NAME}
     spec:
-      host: ${REDIR_SOURCE_HOST}
+      host: ${SOURCE_HOST_NAME}
       port:
         targetPort: 2015-tcp
       tls:
@@ -45,36 +45,35 @@ objects:
         app: ${NAME}
     data:
       Caddyfile: |
-        ${SOURCE_URL}:2015  {
-          reverse_proxy * ${DESTINATION_URL}  {
-            header_up Host {http.reverse_proxy.upstream.hostport}
-            header_up Sec-WebSocket-Protocol {>Sec-WebSocket-Protocol}
-            header_up X-Real-IP {remote_host}
-            header_up X-Forwarded-For {remote_host}
-            header_up X-Forwarded-Proto {scheme}
-            #header_up Connection {>Connection}
-            #header_up Upgrade {>Upgrade}
-            flush_interval -1
-          }
-          
-          respond /ehlo 200
+        http://${SOURCE_HOST_NAME}:2015 {
+            reverse_proxy * https://${DESTINATION_HOST_NAME} {
+                header_up Host {http.reverse_proxy.upstream.hostport}
+                header_up Sec-WebSocket-Protocol {>Sec-WebSocket-Protocol}
+                header_up X-Real-IP {remote_host}
+                header_up X-Forwarded-For {remote_host}
+                header_up X-Forwarded-Proto {scheme}
+                #header_up Connection {>Connection}
+                #header_up Upgrade {>Upgrade}
+                flush_interval -1
+            }
+            respond /ehlo 200
 
-          log {
-            # errors stdout
-            output stdout 
-            #format single_field common_log
-            level DEBUG
+            log {
+                # errors stdout
+                output stdout 
+                #format single_field common_log
+                level DEBUG
           }
         }
 
         :2015 {
-          respond /ehlo 200
+            respond /ehlo 200
             
-          log {
-            # errors stdout
-            output stdout 
-            #format single_field common_log
-            level DEBUG
+            log {
+              # errors stdout
+              output stdout 
+              #format single_field common_log
+              level DEBUG
           }
         }
   - apiVersion: v1
@@ -121,14 +120,14 @@ objects:
                   value: /tmp
               startupProbe:
                 httpGet:
-                  path: /
+                  path: /ehlo
                   port: 2015
                   scheme: HTTP
                 failureThreshold: 5
                 periodSeconds: 3
               readinessProbe:
                 httpGet:
-                  path: /
+                  path: /ehlo
                   port: 2015
                 timeoutSeconds: 10
               ports:
@@ -158,12 +157,12 @@ parameters:
     name: NAME
     required: true
     value: rocketchat-proxy
-  - name: DESTINATION_URL
+  - name: DESTINATION_HOST_NAME
     description:
       The destination address that is being proxied.
     displayName: Redirect Destination
     required: true
-  - name: SOURCE_URL
+  - name: SOURCE_HOST_NAME
     description: |
       The route that will be redirected to the destination URL.
     displayName: Front Door Route
