@@ -38,11 +38,14 @@ objects:
         - 192.0.73.2          # ? Located in S.F area
         - 142.34.208.210      # console.pathfinder.gov.bc.ca
         - 142.34.213.59       # BCGov
-        - smtp.gov.bc.ca      # SMTP - apps.smtp.gov.bc.ca
+        - 51.81.0.0/16        # RC HQ
+        - smtp.gov.bc.ca      # SMTP
+        - apps.smtp.gov.bc.ca # SMTP
         - oidc.gov.bc.ca      # OIDC
-        - rocket.chat         # RC HQ
-        - 51.81.11.138        # RC HQ
-        - 142.34.208.209      # OIDC
+        - dev.oidc.gov.bc.ca  # OIDC
+        - test.oidc.gov.bc.ca # OIDC
+        # - '*.svc.cloud.rocket.chat' # RC HQ
+        # - 142.34.208.209      # OIDC
       servicePorts:
         - "tcp/80"
         - "tcp/443"
@@ -116,7 +119,7 @@ objects:
   - apiVersion: security.devops.gov.bc.ca/v1alpha1
     kind: NetworkSecurityPolicy
     metadata:
-      name: backup-to-patroni
+      name: backup-to-mongodb
       labels:
         app: platsrv-registry
     spec:
