@@ -90,6 +90,7 @@ jspm_packages
 *-secret.properties
 old_tests
 backup/
+mongo-rocketdb-bak/
 
 *.pem
 *.key
