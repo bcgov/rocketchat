@@ -26,9 +26,10 @@ objects:
   - apiVersion: v1
     kind: ConfigMap
     metadata:
-      name: reggie-config
+      name: reggie-api-config
       labels:
         app: ${APPLICATION_NAME}
+        component: api
     data:
       SSO_HOST_URL: ${SSO_HOST_URL}
       SSO_REALM: ${SSO_REALM}
@@ -44,11 +45,12 @@ objects:
   - apiVersion: v1
     kind: Route
     metadata:
-      name: ${APPLICATION_NAME}
+      name: ${APPLICATION_NAME}-api
       annotations:
         description: Route for reggies API services
       labels:
         app: ${APPLICATION_NAME}
+        component: api
     spec:
       host: "${HOSTNAME_HTTPS}"
       path: /reggie/api
@@ -56,7 +58,7 @@ objects:
         targetPort: 8000-tcp
       to:
         kind: Service 
-        name: ${APPLICATION_NAME}
+        name: ${APPLICATION_NAME}-api
       tls:
         termination: edge
         insecureEdgeTerminationPolicy: Redirect
@@ -71,10 +73,12 @@ objects:
     metadata:
       labels:
         app: ${APPLICATION_NAME}
-      name: ${APPLICATION_NAME}
+        component: api
+      name: ${APPLICATION_NAME}-api
     spec:
       selector:
-        deploymentconfig: ${APPLICATION_NAME}
+        app: ${APPLICATION_NAME}
+        component: api
       ports:
         - name: 8000-tcp
           port: 8000
@@ -85,7 +89,8 @@ objects:
     metadata:
       labels:
         app: ${APPLICATION_NAME}
-      name: ${APPLICATION_NAME}
+        component: api
+      name: ${APPLICATION_NAME}-api
     spec:
       strategy:
         type: Rolling
@@ -108,6 +113,7 @@ objects:
         metadata:
           labels:
             app: ${APPLICATION_NAME}
+            component: api
             role: api
           name: ${APPLICATION_NAME}
         spec:
@@ -131,7 +137,7 @@ objects:
                 - secretRef:
                     name: reggie-creds
                 - configMapRef:
-                    name: reggie-config
+                    name: reggie-api-config
               resources:
                 limits:
                   cpu: 50m
@@ -154,7 +160,7 @@ parameters:
     displayName: APPLICATION_NAME
     name: APPLICATION_NAME
     required: true
-    value: reggie-api
+    value: reggie
   - description:
       The namespace of the OpenShift project containing the
       imagestream for the application.
@@ -210,3 +216,18 @@ parameters:
     description: Hostname serving the application
     displayName: Route Name
     required: true
+  - name: REACT_APP_API_BASE_URL
+    description:
+    requred: true
+  - name: REACT_APP_SSO_BASE_URL
+    description:
+    requred: true
+  - name: REACT_APP_SSO_REALM_NAME
+    description:
+    requred: true
+  - name: REACT_APP_ROCKETCHAT_URL
+    description:
+    requred: true
+  - name: REACT_APP_SSO_CLIENT_ID
+    description:
+    requred: true
