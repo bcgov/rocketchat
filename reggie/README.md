@@ -37,7 +37,7 @@ OpenShift configuration/templates [here](openshift)
 
 ## Getting Help or Reporting an Issue
 
-To report bugs/issues/feature requests, please file an [issue](https://github.com/bcgov/reggie/issues/).
+To report bugs/issues/feature requests, please file an [issue](https://github.com/bcgov/rocketchat/issues/).
 
 ## How to Contribute
 
@@ -47,7 +47,7 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 By participating in this project you agree to abide by its terms.
 
 ## Issues/Suggestions
-Make Suggestions/Issues [here!](https://github.com/bcgov/reggie/issues/new)
+Make Suggestions/Issues [here!](https://github.com/bcgov/rocketchat/issues/new)
 Issues are [markdown supported](https://guides.github.com/features/mastering-markdown/).
 
 ## License
