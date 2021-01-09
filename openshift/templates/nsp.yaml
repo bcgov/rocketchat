@@ -25,7 +25,7 @@ objects:
   - apiVersion: security.devops.gov.bc.ca/v1alpha1
     kind: ExternalNetwork
     metadata:
-      name: all-things-external
+      name: rocketchat-external
       labels:
         app: ${APP_NAME}
     spec:
@@ -99,7 +99,7 @@ objects:
           - 'role=server'
       destination:
         - - '$namespace=${NAMESPACE}'
-          - 'ext:name=all-things-external'
+          - 'ext:name=rocketchat-external'
   - apiVersion: security.devops.gov.bc.ca/v1alpha1
     kind: NetworkSecurityPolicy
     metadata:
@@ -115,13 +115,13 @@ objects:
           - 'debug.openshift.io/source-container=data-pump'
       destination:
         - - '$namespace=${NAMESPACE}'
-          - 'ext:name=all-things-external'
+          - 'ext:name=rocketchat-external'
   - apiVersion: security.devops.gov.bc.ca/v1alpha1
     kind: NetworkSecurityPolicy
     metadata:
       name: backup-to-mongodb
       labels:
-        app: platsrv-registry
+        app: ${APP_NAME}
     spec:
       description: |
         allow the API to communicate with the NATS pod. This may not be
