@@ -1,17 +1,19 @@
-FROM node:10.10
+FROM caddy:2.1.1-alpine
 
-RUN apt-get update && \
-  yes | apt-get upgrade
+ENV INSTALL_PATH /srv
+ENV SUMMARY="Reggie Web ${APP_VERSION}"  \
+    DESCRIPTION="Reggie Web ${APP_VERSION} served from Caddy"
+ENV LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8
 
-RUN mkdir /usr/src/app
-WORKDIR /usr/src/app
+LABEL summary="$SUMMARY" \
+    description="$DESCRIPTION"
 
-COPY package*.json /usr/src/app/
+RUN mkdir -p $INSTALL_PATH
 
-RUN npm ci --silent
-RUN npm i react-scripts --silent
+WORKDIR $INSTALL_PATH
 
-COPY . .
+COPY build/ $INSTALL_PATH
 
-EXPOSE 3000
-CMD [ "npm", "start" ] 
+EXPOSE 2015
+
