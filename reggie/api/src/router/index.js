@@ -21,20 +21,34 @@
 'use strict';
 
 import cors from 'cors';
-// import config from '../config';
+import config from '../config';
 import ehlo from './routes/ehlo';
 import sso from './routes/ssoUsers';
 
-// TODO: specify the allowed origins instead of all
-const corsOptions = {
-  origin: '*',
+let allowlist = [];
+if (config.get('environment') === 'development') {
+  allowlist.push('*');
+} else {
+  allowlist.push(config.get('appUrl'));
+}
+
+console.log(`Allowed CORS: ${JSON.stringify(allowlist)}`);
+
+const options = {
+  origin: (origin, callback) => {
+    if (allowlist.indexOf('*') !== -1 || allowlist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
+    }
+  },
+  allowedHeaders: ['Accept', 'Content-Type', 'Authorization'],
   credentials: true,
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
 // eslint-disable-next-line import/prefer-default-export
 export const router = app => {
-  app.use(cors(corsOptions));
-  app.use('/api/v1/ehlo', ehlo); // probes
-  app.use('/api/v1/sso', sso); // SSO requests
+  app.use(cors(options));
+  app.use('/reggie/api/v1/ehlo', ehlo); // probes
+  app.use('/reggie/api/v1/sso', sso); // SSO requests
 };

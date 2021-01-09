@@ -1,15 +1,11 @@
-FROM node:10.10
+FROM node:12.16-alpine
 
-RUN apt-get update && \
-  yes | apt-get upgrade
+RUN mkdir /opt/app
+WORKDIR /opt/app
 
-RUN mkdir /usr/src/app
-WORKDIR /usr/src/app
-
-COPY package*.json /usr/src/app/
+COPY build/ .
 RUN npm ci --silent
 
-COPY . .
+EXPOSE 8000 9229
 
-EXPOSE 8089 9229
-CMD [ "npm", "run", "dev" ]
+CMD [ "npm", "start" ]

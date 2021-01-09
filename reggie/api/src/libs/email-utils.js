@@ -26,6 +26,7 @@ import ejs from 'ejs';
 import jwt from 'jsonwebtoken';
 import { EMAIL_REQUEST, EMAIL_CONTENT } from '../constants';
 import config from '../config';
+import path from 'path';
 
 export const setMailer = async (host, port) => {
   try {
@@ -84,13 +85,15 @@ export const sendConfirmationEmail = async (emailServerConfig, userInfo, refUrl)
       refUrl
     );
     const logoLink = `${config.get('apiUrl')}/gov-logo.png`;
-    const htmlPayload = await ejs.renderFile('public/emailConfirmation.ejs', {
+    const filePathEJS = path.join(__dirname, '../', 'public/emailConfirmation.ejs');
+    const htmlPayload = await ejs.renderFile(filePathEJS, {
       name: userInfo.firstName,
       confirmLink,
       logoLink,
     });
 
-    const textPayload = await ejs.renderFile('public/emailConfirmation.txt', {
+    const filePathTXT = path.join(__dirname, '../', 'public/emailConfirmation.txt');
+    const textPayload = await ejs.renderFile(filePathTXT, {
       name: userInfo.firstName,
       confirmLink,
     });
@@ -131,8 +134,9 @@ export const sendInvitationEmail = async (emailServerConfig, email, code, refUrl
       refUrl
     );
 
-    const logoLink = `${config.get('apiUrl')}/gov-logo.png`;
-    const htmlPayload = await ejs.renderFile('public/emailInvitation.ejs', {
+    const logoLink = `https://chat.developer.gov.bc.ca/reggie/api/pub/gov-logo.png`;
+    const filePath = path.join(__dirname, '../../', 'public/emailInvitation.ejs');
+    const htmlPayload = await ejs.renderFile(filePath, {
       invitationLink,
       logoLink,
     });

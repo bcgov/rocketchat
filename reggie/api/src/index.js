@@ -52,11 +52,11 @@ fs.access(docpath, fs.constants.R_OK, err => {
 
 fs.access(pubpath, fs.constants.R_OK, err => {
   if (err) {
-    logger.warn('Static assets location does not exist');
+    logger.warn(`Static assets location ${pubpath} does not exist`);
     return;
   }
 
-  app.use('/', express.static(pubpath));
+  app.use('/reggie/api/pub', express.static(pubpath));
 });
 
 app.use(cookieParser());
