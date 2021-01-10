@@ -120,6 +120,7 @@ objects:
             - name: rocketchat-uploads
               persistentVolumeClaim:
                 claimName: "rocketchat-uploads"
+                # defaultMode: 0744
           containers:
             - name: ${APPLICATION_NAME}
               image: "image-registry.openshift-image-registry.svc:5000/${SOURCE_IMAGE_NAMESPACE}/${APPLICATION_NAME}:${SOURCE_IMAGE_TAG}"

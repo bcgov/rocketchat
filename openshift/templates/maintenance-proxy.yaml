@@ -134,8 +134,8 @@ objects:
                 - containerPort: 2015
               resources:
                 limits:
-                  cpu: 60m
-                  memory: 64Mi
+                  cpu: 100m
+                  memory: 92Mi
                 requests:
                   cpu: 30m
                   memory: 36Mi
