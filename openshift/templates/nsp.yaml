@@ -35,17 +35,7 @@ objects:
         specify a custom external network that can be
         referenced by name.
       entries:
-        - 192.0.73.2          # ? Located in S.F area
-        - 142.34.208.210      # console.pathfinder.gov.bc.ca
-        - 142.34.213.59       # BCGov
-        - 51.81.0.0/16        # RC HQ
-        - smtp.gov.bc.ca      # SMTP
-        - apps.smtp.gov.bc.ca # SMTP
-        - oidc.gov.bc.ca      # OIDC
-        - dev.oidc.gov.bc.ca  # OIDC
-        - test.oidc.gov.bc.ca # OIDC
-        # - '*.svc.cloud.rocket.chat' # RC HQ
-        # - 142.34.208.209      # OIDC
+        - 0.0.0.0/0
       servicePorts:
         - "tcp/80"
         - "tcp/443"
