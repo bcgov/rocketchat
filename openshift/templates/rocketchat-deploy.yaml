@@ -142,13 +142,15 @@ objects:
                   scheme: HTTP
                 failureThreshold: 3
                 periodSeconds: 10
+                timeoutSeconds: 5
               readinessProbe:
                 httpGet:
                   path: /api/info
                   port: server-port
                   scheme: HTTP
                 failureThreshold: 3
-                periodSeconds: 3
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: "${CPU_LIMIT}"
