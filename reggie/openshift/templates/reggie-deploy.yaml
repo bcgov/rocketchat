@@ -41,40 +41,7 @@ objects:
       #EMAIL_CONFIRMATION_JWT_SECRET
       #EMAIL_INVITATION_JWT_SECRET
       #SSO_CLIENT_SECRET
-      APP_URL: ${APP_URL}
-  - apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: reggie-web-config
-      labels:
-        app: ${APPLICATION_NAME}
-        component: web
-    data:
-      REACT_APP_API_BASE_URL: "${HOSTNAME_HTTPS}/reggie"
-      REACT_APP_ROCKETCHAT_URL: ${REACT_APP_ROCKETCHAT_URL}
-      REACT_APP_SSO_CLIENT_ID: ${REACT_APP_SSO_CLIENT_ID}
-      REACT_APP_SSO_REALM_NAME: ${REACT_APP_SSO_REALM_NAME}
-      REACT_APP_SSO_BASE_URL: ${REACT_APP_SSO_BASE_URL}
-  - apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: reggie-web-caddy-config
-      labels:
-        app: ${APPLICATION_NAME}
-        component: web
-    data:
-      Caddyfile: |
-        0.0.0.0:2015
-        root /var/www/html/build
-        log stdout
-        errors stdout
-        rewrite {
-          if  {path} not_match ^\/0.0.0.0
-          to  {path} {path}/ /?_url={uri}
-        }
-        templates {
-          ext   .js
-        }
+      API_URL: ${HOST}
   - apiVersion: v1
     kind: Route
     metadata:
@@ -86,7 +53,7 @@ objects:
         component: api
     spec:
       host: "${HOSTNAME_HTTPS}"
-      path: /reggie/api
+      path: /api
       port:
         targetPort: 8000-tcp
       to:
@@ -106,27 +73,26 @@ objects:
     metadata:
       name: ${APPLICATION_NAME}-web
       annotations:
-        description: Route for reggies Web service
+        description: Route for reggies Web front end
       labels:
         app: ${APPLICATION_NAME}
         component: web
     spec:
-      # host: "${HOSTNAME_HTTPS}"
-      # path: /reggie
+      host: "${HOSTNAME_HTTPS}"
       port:
-        targetPort: 2015-tcp
+        targetPort: 8000-tcp
       to:
         kind: Service 
         name: ${APPLICATION_NAME}-web
       tls:
         termination: edge
         insecureEdgeTerminationPolicy: Redirect
-        # certificate: |-
-        #   ${TLS_CERT_PEM}
-        # key: |-
-        #   ${TLS_KEY_PEM}
-        # caCertificate: |-
-        #   ${TLS_CACERT_PEM}
+        certificate: |-
+          ${TLS_CERT_PEM}
+        key: |-
+          ${TLS_KEY_PEM}
+        caCertificate: |-
+          ${TLS_CACERT_PEM}
   - apiVersion: v1
     kind: Service
     metadata:
@@ -144,22 +110,6 @@ objects:
           protocol: TCP
           targetPort: 8000
   - apiVersion: v1
-    kind: Service
-    metadata:
-      labels:
-        app: ${APPLICATION_NAME}
-        component: web
-      name: ${APPLICATION_NAME}-web
-    spec:
-      selector:
-        app: ${APPLICATION_NAME}
-        component: web
-      ports:
-        - name: 2015-tcp
-          port: 2015
-          protocol: TCP
-          targetPort: 2015
-  - apiVersion: v1
     kind: DeploymentConfig
     metadata:
       labels:
@@ -175,7 +125,7 @@ objects:
           imageChangeParams:
             automatic: true
             containerNames:
-              - ${APPLICATION_NAME}-api
+              - ${APPLICATION_NAME}
             from:
               kind: ImageStreamTag
               name: "${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}"
@@ -190,20 +140,20 @@ objects:
             app: ${APPLICATION_NAME}
             component: api
             role: api
-          name: ${APPLICATION_NAME}-api
+          name: ${APPLICATION_NAME}
         spec:
           containers:
-            - name: ${APPLICATION_NAME}-api
+            - name: ${APPLICATION_NAME}
               image: " "
               startupProbe:
                 httpGet:
-                  path: /reggie/api/v1/ehlo
+                  path: /api/v1/ehlo
                   port: 8000
                 failureThreshold: 11
                 periodSeconds: 3
               readinessProbe:
                 httpGet:
-                  path: /reggie/api/v1/ehlo
+                  path: /api/v1/ehlo
                   port: 8000
                 timeoutSeconds: 3
               ports:
@@ -215,10 +165,10 @@ objects:
                     name: reggie-api-config
               resources:
                 limits:
-                  cpu: 100m
+                  cpu: 50m
                   memory: 256Mi
                 requests:
-                  cpu: 30m
+                  cpu: 20m
                   memory: 128Mi
           #     volumeMounts:
           #       - name: config-vol
@@ -228,79 +178,6 @@ objects:
           #   - name: config-vol
           #     configMap:
           #       name: ${APPLICATION_NAME}-config
-  - apiVersion: v1
-    kind: DeploymentConfig
-    metadata:
-      labels:
-        app: ${APPLICATION_NAME}
-        component: web
-      name: ${APPLICATION_NAME}-web
-    spec:
-      strategy:
-        type: Rolling
-      triggers:
-        - type: ConfigChange
-        - type: ImageChange
-          imageChangeParams:
-            automatic: true
-            containerNames:
-              - ${APPLICATION_NAME}-web
-            from:
-              kind: ImageStreamTag
-              name: "reggie-web:latest"
-              namespace: ${SOURCE_IMAGE_NAMESPACE}
-      replicas: 1
-      selector:
-        app: ${APPLICATION_NAME}
-        role: web
-      template:
-        metadata:
-          labels:
-            app: ${APPLICATION_NAME}
-            component: web
-            role: web
-          name: ${APPLICATION_NAME}-web
-        spec:
-          containers:
-            - name: ${APPLICATION_NAME}-web
-              image: " "
-              startupProbe:
-                httpGet:
-                  path: /
-                  port: 2015
-                failureThreshold: 11
-                periodSeconds: 3
-              readinessProbe:
-                httpGet:
-                  path: /
-                  port: 2015
-                timeoutSeconds: 3
-              ports:
-                - containerPort: 2015
-              command:
-               - /tmp/scripts/run
-              envFrom: 
-                # - secretRef:
-                #     name: reggie-creds
-                - configMapRef:
-                    name: reggie-web-config
-              resources:
-                limits:
-                  cpu: 50m
-                  memory: 92Mi
-                requests:
-                  cpu: 20m
-                  memory: 32Mi
-              volumeMounts:
-                - name: caddy-config-vol
-                  mountPath: /etc/Caddyfile
-                  readOnly: true
-                  subPath: Caddyfile
-          volumes:
-            - name: caddy-config-vol
-              configMap:
-                name: reggie-web-caddy-config
-                defaultMode: 420
 parameters:
   - description:
       The name assigned to all of the objects defined in this template.  You
@@ -364,9 +241,9 @@ parameters:
     description: Hostname serving the application
     displayName: Route Name
     required: true
-  # - name: REACT_APP_API_BASE_URL
-  #   description:
-  #   requred: true
+  - name: REACT_APP_API_BASE_URL
+    description:
+    requred: true
   - name: REACT_APP_SSO_BASE_URL
     description:
     requred: true
@@ -377,8 +254,5 @@ parameters:
     description:
     requred: true
   - name: REACT_APP_SSO_CLIENT_ID
-    description:
-    requred: true
-  - name: APP_URL
     description:
     requred: true
