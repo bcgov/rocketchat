@@ -134,7 +134,7 @@ export const sendInvitationEmail = async (emailServerConfig, email, code, refUrl
       refUrl
     );
 
-    const logoLink = `https://chat.developer.gov.bc.ca/reggie/api/pub/gov-logo.png`;
+    const logoLink = `https://reggie.developer.gov.bc.ca/api/pub/gov-logo.png`;
     const filePath = path.join(__dirname, '../../', 'public/emailInvitation.ejs');
     const htmlPayload = await ejs.renderFile(filePath, {
       invitationLink,
