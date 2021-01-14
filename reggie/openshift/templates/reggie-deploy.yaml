@@ -130,7 +130,7 @@ objects:
               kind: ImageStreamTag
               name: "${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}"
               namespace: ${SOURCE_IMAGE_NAMESPACE}
-      replicas: 1
+      replicas: 2
       selector:
         app: ${APPLICATION_NAME}
         role: api
