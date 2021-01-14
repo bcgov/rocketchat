@@ -348,7 +348,7 @@ parameters:
   displayName: Resources CPU Request
   name: CPU_REQUEST
   required: true
-  value: "20m"
+  value: "220m"
 - description: The resources CPU limit (in cores) for this build.
   displayName: Resources CPU Limit
   name: CPU_LIMIT
@@ -358,9 +358,9 @@ parameters:
   displayName: Resources Memory Request
   name: MEMORY_REQUEST
   required: true
-  value: 42Mi
+  value: 512Mi
 - description: The resources Memory limit (in Mi, Gi, etc) for this build.
   displayName: Resources Memory Limit
   name: MEMORY_LIMIT
   required: true
-  value: 64Mi
+  value: 1024Mi
