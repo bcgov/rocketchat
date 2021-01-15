@@ -147,14 +147,14 @@ router.put(
       if (tokenData.code !== verifyBody.code) {
         logger.info('- Invitation code not matching');
         return res.status(400).send('Invalid invitation link');
-      } else if (tokenData.email.toLowerCase() !== verifyBody.email.toLowerCase()) {
+      }
+      if (tokenData.email.toLowerCase() !== verifyBody.email.toLowerCase()) {
         logger.info('- User account email does not match the invitation');
         return res.status(400).send('Account email does not match the invitation');
-      } else {
-        // Assign SSO user to group:
-        await addUserToGroup(userId, SSO_GROUPS.INVITED);
-        return res.status(200).end();
       }
+      // Assign SSO user to group:
+      await addUserToGroup(userId, SSO_GROUPS.INVITED);
+      return res.status(200).end();
     } catch (error) {
       const message = `Unable to verify the invitation for ${userId}`;
       logger.error(`${message}, err = ${error.message}`);

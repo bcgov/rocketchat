@@ -25,7 +25,7 @@ import config from '../config';
 import ehlo from './routes/ehlo';
 import sso from './routes/ssoUsers';
 
-let allowlist = [];
+const allowlist = [];
 if (config.get('environment') === 'development') {
   allowlist.push('*');
 } else {

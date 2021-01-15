@@ -38,9 +38,7 @@ import shared from './shared';
  */
 export const requestBuilder = async (subUrl = null, httpMethod = 'GET', params = {}) => {
   try {
-    const baseUri = `${process.env.SSO_HOST_URL}/${SSO_SUB_URI.REALM_ADMIN}/${
-      process.env.SSO_REALM
-    }/`;
+    const baseUri = `${process.env.SSO_HOST_URL}/${SSO_SUB_URI.REALM_ADMIN}/${process.env.SSO_REALM}/`;
     const finalUri = subUrl ? url.resolve(baseUri, subUrl) : baseUri;
 
     return {
@@ -138,9 +136,7 @@ export const getUserRoles = async (userId, client) => {
     const clientId = await getClientId(client);
 
     const options = await requestBuilder(
-      `${SSO_SUB_URI.USER}/${userId}/${SSO_SUB_URI.ROLE}/${SSO_SUB_URI.CLIENT}/${clientId}/${
-        SSO_SUB_URI.COMPOSITE_ROLE
-      }`
+      `${SSO_SUB_URI.USER}/${userId}/${SSO_SUB_URI.ROLE}/${SSO_SUB_URI.CLIENT}/${clientId}/${SSO_SUB_URI.COMPOSITE_ROLE}`
     );
     const res = await request(options);
     const jsonRes = JSON.parse(res);

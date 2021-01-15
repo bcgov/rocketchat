@@ -24,9 +24,9 @@ import nodemailer from 'nodemailer';
 import { htmlToText } from 'nodemailer-html-to-text';
 import ejs from 'ejs';
 import jwt from 'jsonwebtoken';
+import path from 'path';
 import { EMAIL_REQUEST, EMAIL_CONTENT } from '../constants';
 import config from '../config';
-import path from 'path';
 
 export const setMailer = async (host, port) => {
   try {
