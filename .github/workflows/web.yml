@@ -7,6 +7,7 @@ on:
       - "reggie/web/src/package*.json"
       - "reggie/web/src/public/**/*"
       - "reggie/web/src/Caddyfile"
+  workflow_dispatch:
 defaults:
   run:
     working-directory: ./reggie/web

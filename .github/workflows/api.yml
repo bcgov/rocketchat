@@ -4,6 +4,7 @@ on:
     paths:
       - "reggie/api/src/**/*.js"
       - "reggie/package*.json"
+  workflow_dispatch:
 defaults:
   run:
     working-directory: ./reggie/api
