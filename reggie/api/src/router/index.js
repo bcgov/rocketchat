@@ -21,6 +21,7 @@
 'use strict';
 
 import cors from 'cors';
+import { logger } from '@bcgov/nodejs-common-utils';
 import config from '../config';
 import ehlo from './routes/ehlo';
 import sso from './routes/ssoUsers';
@@ -32,7 +33,7 @@ if (config.get('environment') === 'development') {
   allowlist.push(config.get('appUrl'));
 }
 
-console.log(`Allowed CORS: ${JSON.stringify(allowlist)}`);
+logger.info(`Allowed CORS: ${JSON.stringify(allowlist)}`);
 
 const options = {
   origin: (origin, callback) => {
