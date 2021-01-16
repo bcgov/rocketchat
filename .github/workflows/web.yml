@@ -65,7 +65,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test, build]
     steps:
-      - name: S2I Build
+      - name: Artifact Build
+        env:
+          NAMESPACE: 6e2f55-tools
+          BUILD_NAME: reggie-web-artifact-build
+          IMAGE_NAME: reggie-web-artifacts
         uses: redhat-developer/openshift-actions@v1.1
         with:
           version: "latest"
@@ -73,4 +77,17 @@ jobs:
           parameters: '{"apitoken": "${{ secrets.OpenShiftToken }}", "acceptUntrustedCerts": "true"}'
           cmd: |
             'version'
-            'start-build platsrv-registry-web-master-build --follow -n platform-registry-tools'
+            'start-build ${BUILD_NAME} -n ${NAMESPACE} --follow'
+      - name: Image Build
+        env:
+          NAMESPACE: 6e2f55-tools
+          BUILD_NAME: reggie-web-image-build 
+          IMAGE_NAME: reggie-web
+        uses: redhat-developer/openshift-actions@v1.1
+        with:
+          version: "latest"
+          openshift_server_url: ${{ secrets.OpenShiftServerURL}}
+          parameters: '{"apitoken": "${{ secrets.OpenShiftToken }}", "acceptUntrustedCerts": "true"}'
+          cmd: |
+            'version'
+            'start-build ${BUILD_NAME} -n ${NAMESPACE} --follow'
