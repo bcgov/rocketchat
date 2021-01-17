@@ -66,10 +66,7 @@ jobs:
     needs: [test]
     steps:
       - name: Make Destination Tag
-        run: echo "$(pwd)"
-      - name: xxx
-        run: echo "$(ls -lah)"
-      # echo $(cat package.json| jq '.version' | tr -d "\"") >> $DTAG
+        run: cat package.json| jq '.version' | tr -d "\"" >> $DTAG
       - name: Artifact Build
         env:
           NAMESPACE: 6e2f55-tools
