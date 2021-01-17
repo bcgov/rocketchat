@@ -67,7 +67,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Make Destination Tag
-        run: ls -lah 
+        run: echo "$(cat package.json| jq '.version' | tr -d "\"")" >> DTAG
       - name: Artifact Build
         env:
           NAMESPACE: 6e2f55-tools
