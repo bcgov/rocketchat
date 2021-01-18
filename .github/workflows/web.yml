@@ -67,7 +67,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Make Destination Tag
-        run: echo "$(cat package.json| jq '.version' | tr -d "\"")" >> DTAG
+        run: echo "DTAG=$(cat package.json| jq '.version' | tr -d "\"")" >> $GITHUB_ENV
       - name: Artifact Build
         env:
           NAMESPACE: 6e2f55-tools
@@ -88,7 +88,6 @@ jobs:
           IMAGE_NAME: reggie-web
         uses: redhat-developer/openshift-actions@v1.1
         with:
-          # 'tag -n ${NAMESPACE} ${IMAGE_NAME}:latest ${IMAGE_NAME}:$(`cat package.json| jq '.version' | tr -d "\""`)'
           version: "latest"
           openshift_server_url: ${{ secrets.OpenShiftServerURL}}
           parameters: '{"apitoken": "${{ secrets.OpenShiftToken }}", "acceptUntrustedCerts": "true"}'
