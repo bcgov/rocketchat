@@ -49,7 +49,7 @@ objects:
   - apiVersion: security.devops.gov.bc.ca/v1alpha1
     kind: NetworkSecurityPolicy
     metadata:
-      name: web-to-api
+      name: reggie-web-to-api
       labels:
         app: ${APP_NAME}
     spec:
@@ -64,7 +64,7 @@ objects:
   - apiVersion: security.devops.gov.bc.ca/v1alpha1
     kind: NetworkSecurityPolicy
     metadata:
-      name: api-to-external
+      name: reggie-api-to-external
       labels:
         app: ${APP_NAME}
     spec:
