@@ -1,6 +1,6 @@
 ## TL;DR
 
-The Rocket.Chat application is the primary communication tool for Platform Services and projects using either the (BCDevExchange Lab)[https://bcdevexchange.org] or OpenShift Container Platform.. This repo contains all the components for deploying the Rocket.Chat application and its helper application Reggie. See the following documents for more information:
+The Rocket.Chat application is the primary communication tool for Platform Services and projects using either the [BCDevExchange Lab](https://bcdevexchange.org) or OpenShift Container Platform.. This repo contains all the components for deploying the Rocket.Chat application and its helper application Reggie. See the following documents for more information:
 
 * [Rocket.Chat](./docs/rocketchat.md); and
 * [Reggie](./docs/reggie.md).
