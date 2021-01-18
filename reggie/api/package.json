@@ -1,6 +1,6 @@
 {
   "name": "reggie",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "This is a tool to register for and invite user to bcgov self-serve applications through keyCloak SSO",
   "engine": "node 8.4.0",
   "engines": {
