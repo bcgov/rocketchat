@@ -1,6 +1,6 @@
-
-
 ## Deploying RocketChat
+
+This document details the steps required to deploy Rocket.Chat.
 
 ### Network Security Policy
 
