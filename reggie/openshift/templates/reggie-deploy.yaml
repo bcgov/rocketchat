@@ -31,12 +31,13 @@ objects:
         app: ${APPLICATION_NAME}
         component: api
     data:
+      NODE_ENV: ${NODE_ENV}
       SSO_HOST_URL: ${SSO_HOST_URL}
       SSO_REALM: ${SSO_REALM}
       EMAIL_HOST: ${EMAIL_HOST}
       EMAIL_PORT: ${EMAIL_PORT}
       EMAIL_SENDER: ${EMAIL_SENDER}
-      API_URL: ${HOST}
+      API_URL: ${HOSTNAME_HTTPS}
   - apiVersion: v1
     kind: ConfigMap
     metadata:
@@ -199,7 +200,7 @@ objects:
               kind: ImageStreamTag
               name: "${APPLICATION_NAME}-api:${API_SOURCE_IMAGE_TAG}"
               namespace: ${SOURCE_IMAGE_NAMESPACE}
-      replicas: 1
+      replicas: ${{REPLICA_COUNT}}
       selector:
         app: ${APPLICATION_NAME}
         role: api
@@ -260,7 +261,7 @@ objects:
               kind: ImageStreamTag
               name: "${APPLICATION_NAME}-web:${WEB_SOURCE_IMAGE_TAG}"
               namespace: ${SOURCE_IMAGE_NAMESPACE}
-      replicas: 1
+      replicas: ${{REPLICA_COUNT}}
       selector:
         app: ${APPLICATION_NAME}
         role: web
@@ -324,20 +325,10 @@ parameters:
     displayName: Build Project
     name: SOURCE_IMAGE_NAMESPACE
     required: true
-  # - name: API_SOURCE_IMAGE_NAME
-  #   description: |
-  #     The name of the source image for the API component
-  #   displayName: API Source Image Name
-  #   value: reggie-api
   - name: API_SOURCE_IMAGE_TAG
     description: |
       The name of the source image for the API component
     displayName: API Source Image Tag
-  # - name: WEB_SOURCE_IMAGE_NAME
-  #   description: |
-  #     The name of the source image for the API component
-  #   displayName: Web Source Image Name
-  #   value: reggie-web
   - name: WEB_SOURCE_IMAGE_TAG
     description: |
       The name of the source image for the Web component
@@ -391,5 +382,11 @@ parameters:
     description:
     requred: true
   - name: REACT_APP_SSO_CLIENT_ID
+    description:
+    requred: true
+  - name: NODE_ENV
+    description:
+    requred: true
+  - name: REPLICA_COUNT
     description:
     requred: true
