@@ -3,7 +3,7 @@ on:
   push:
     paths:
       - "reggie/api/src/**/*.js"
-      - "reggie/package*.json"
+      - "reggie/api/package*.json"
   workflow_dispatch:
 defaults:
   run:
@@ -75,5 +75,5 @@ jobs:
           parameters: '{"apitoken": "${{ secrets.OpenShiftToken }}", "acceptUntrustedCerts": "true"}'
           cmd: |
             'version'
-            'start-build reggie-api-api-master-build --follow -n 6e2f55-tools'
+            'start-build reggie-api-master-build --follow -n 6e2f55-tools'
             'tag -n ${NAMESPACE} ${IMAGE_NAME}:latest ${IMAGE_NAME}:${{env.DES_TAG}}'
