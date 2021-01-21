@@ -220,7 +220,8 @@ objects:
                   path: /api/v1/ehlo
                   port: 8000
                 failureThreshold: 11
-                periodSeconds: 3
+                initialDelaySeconds: 30
+                periodSeconds: 10
               readinessProbe:
                 httpGet:
                   path: /api/v1/ehlo
@@ -235,10 +236,10 @@ objects:
                     name: reggie-api-config
               resources:
                 limits:
-                  cpu: 50m
+                  cpu: 100m
                   memory: 256Mi
                 requests:
-                  cpu: 20m
+                  cpu: 50m
                   memory: 128Mi
   - apiVersion: v1
     kind: DeploymentConfig
