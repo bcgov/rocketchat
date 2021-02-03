@@ -44,10 +44,9 @@ parameters:
     displayName: MongoDB Service Name
     value: "mongodb"
     required: true
-  - name: MONGODB_REPLICAS
+  - name: REPLICAS
     description: Number of MongoDB replica pods
     displayName: MongoDB Replicas
-    value: "3"
     required: true
   - name: MONGODB_SECRET_NAME
     displayName: MongoDB Secret.
@@ -122,7 +121,7 @@ objects:
         matchLabels:
           statefulset: ${MONGODB_SERVICE_NAME}
       serviceName: "${MONGODB_SERVICE_NAME}-internal"
-      replicas: ${{MONGODB_REPLICAS}}
+      replicas: ${{REPLICAS}}
       template:
         metadata:
           labels:

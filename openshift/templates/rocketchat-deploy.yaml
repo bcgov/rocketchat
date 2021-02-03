@@ -123,7 +123,7 @@ objects:
                 # defaultMode: 0744
           containers:
             - name: ${APPLICATION_NAME}
-              image: "image-registry.openshift-image-registry.svc:5000/${SOURCE_IMAGE_NAMESPACE}/${APPLICATION_NAME}:${SOURCE_IMAGE_TAG}"
+              image: "image-registry.openshift-image-registry.svc:5000/${SOURCE_IMAGE_NAMESPACE}/rocket.chat:${SOURCE_IMAGE_TAG}"
               ports:
                 - name: server-port
                   containerPort: 3000
