@@ -1,148 +1,108 @@
-# Copyright 2021 The Province of British Columbia
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
----
 apiVersion: template.openshift.io/v1
 kind: Template
+labels:
+  template: mobile-signing-service
 metadata:
-  annotations:
-    description: |
-      The Network Security Policies (NSP) for the associated
-      Platform Services RocketChat application.
-  name: ${APP_NAME}-nsp
+  name: mobile-signing-service
 objects:
   - apiVersion: security.devops.gov.bc.ca/v1alpha1
-    kind: ExternalNetwork
+    kind: NetworkSecurityPolicy
     metadata:
-      name: rocketchat-external
-      labels:
-        app: ${APP_NAME}
+      name: any-to-any
     spec:
-      # This name will be used internally by Aporeto; it should match
-      # the `name` field in metadata above.
       description: |
-        specify a custom external network that can be
-        referenced by name.
-      entries:
-        - 0.0.0.0/0
-      servicePorts:
-        - "tcp/80"
-        - "tcp/443"
-        - "tcp/25"
+        allow all pods to communicate
+      source:
+        - - "$namespace=${NAMESPACE}"
+      destination:
+        - - "$namespace=*"
   - apiVersion: security.devops.gov.bc.ca/v1alpha1
     kind: NetworkSecurityPolicy
     metadata:
-      name: db-to-db
-      labels:
-        app: ${APP_NAME}
+      name: any-to-external
     spec:
       description: |
-        allow mongodb pods to talk to one another for
-        replication etc.
+        Allow all pods to talk to external systems
       source:
-        - - '$namespace=${NAMESPACE}'
-          - '${DB_APO_IDENTIFIER}'
-        - - '$namespace=${NAMESPACE}'
-          - 'run=data-pump' 
+        - - "$namespace=${NAMESPACE}"
       destination:
-        - - '$namespace=${NAMESPACE}'
-          - '${DB_APO_IDENTIFIER}'
-  - apiVersion: security.devops.gov.bc.ca/v1alpha1
-    kind: NetworkSecurityPolicy
+        - - "ext:network=any"
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
     metadata:
-      name: server-to-db
-      labels:
-        app: ${APP_NAME}
+      name: deny-by-default
     spec:
-      description: |
-        allow rocket chat server to talk to the mongo
-        db instances.
-      source:
-        - - '$namespace=${NAMESPACE}'
-          - 'role=server'
-      destination:
-        - - '$namespace=${NAMESPACE}'
-          - '${DB_APO_IDENTIFIER}'
-  - apiVersion: security.devops.gov.bc.ca/v1alpha1
-    kind: NetworkSecurityPolicy
+      podSelector: {}
+      ingress: []
+  - apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
     metadata:
-      name: server-to-external
-      labels:
-        app: ${APP_NAME}
+      name: allow-from-openshift-ingress
     spec:
-      description: |
-        allow rocket chat server to talk to external
-        services
-      source:
-        - - '$namespace=${NAMESPACE}'
-          - 'role=server'
-      destination:
-        - - '$namespace=${NAMESPACE}'
-          - 'ext:name=rocketchat-external'
-  - apiVersion: security.devops.gov.bc.ca/v1alpha1
-    kind: NetworkSecurityPolicy
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  network.openshift.io/policy-group: ingress
+      podSelector: {}
+      policyTypes:
+        - Ingress
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
     metadata:
-      name: datapump-to-external
-      labels:
-        app: ${APP_NAME}
+      name: allow-server-to-mongo
     spec:
-      description: |
-        allow my data pump pot to talk to external
-        services
-      source:
-        - - '$namespace=${NAMESPACE}'
-          - 'debug.openshift.io/source-container=data-pump'
-      destination:
-        - - '$namespace=${NAMESPACE}'
-          - 'ext:name=rocketchat-external'
-  - apiVersion: security.devops.gov.bc.ca/v1alpha1
-    kind: NetworkSecurityPolicy
+      # Allow the server to talk to the mongo
+      # database cluster on the given port.
+      podSelector:
+        matchLabels:
+          statefulset: mongodb
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  role: server
+          ports:
+            - protocol: TCP
+              port: 27017
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
     metadata:
-      name: backup-to-mongodb
-      labels:
-        app: ${APP_NAME}
+      name: allow-backup-to-mongo
     spec:
-      description: |
-        allow the API to communicate with the NATS pod. This may not be
-        required if you are using the production environment or, at the
-        verry least, it will require modification.
-      source:
-        - - '$namespace=${NAMESPACE}'
-          - 'role=backup'
-      destination:
-        - - '$namespace=${NAMESPACE}'
-          - '${DB_APO_IDENTIFIER}'
+      # Allow the backup pod to talk to the mongo
+      # database cluster on the given port.
+      podSelector:
+        matchLabels:
+          statefulset: mongodb
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  role: backup
+          ports:
+            - protocol: TCP
+              port: 27017
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: allow-mongo-replication
+    spec:
+      # Allow the mongo pods to replicate
+      podSelector:
+        matchLabels:
+          statefulset: mongodb
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  statefulset: mongodb
+          ports:
+            - protocol: TCP
+              port: 27017
 parameters:
-  - name: APP_NAME
-    description: |
-      The application name this NSP is assocated with.
-    required: true
-    value: rocketchat-nsp
   - name: NAMESPACE
+    displayName: Namespace
     description: |
-      The the name of the namespace the policy is being
-      deployed to.
+      The namespace this policy is being deployed to;
     required: true
-  - name: DB_APO_IDENTIFIER
-    description: |
-      The Aporeto identifier used by Aporeto to identify the DB
-      service.
-    required: true
-    value: "statefulset=mongodb"
-  - name: BACKUP_CONTAINER_IDENTIFIER
-    description: |
-      The the name of the identifier used by Aporeto to
-      isolate and identify the backup container pod(s).
-    required: true
-    value: "role=backup"
