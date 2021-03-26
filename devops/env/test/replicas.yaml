@@ -13,19 +13,11 @@
 # limitations under the License.
 #
 ---
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-namespace: 6e2f55-dev
-bases:
-  - ../../base/mongo
-configMapGenerator:
-  - name: mongodb-env
-    env: mongodb.properties
-secretGenerator:
-  - name: mongodb-creds
-    behavior: create
-    type: Opaque
-    env: secret.properties
-images:
-  - name: registry.redhat.io/rhscl/mongodb-36-rhel7
-    newTag: "1"
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: mongodb
+  labels:
+    app: rocketchat-db
+spec:
+  replicas: 2

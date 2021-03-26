@@ -15,9 +15,11 @@
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: 6e2f55-dev
+namespace: 6e2f55-test
 bases:
   - ../../base/mongo
+patches:
+  - replicas.yaml
 configMapGenerator:
   - name: mongodb-env
     env: mongodb.properties
