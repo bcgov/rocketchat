@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: test
+bases:
+  - ../../base/mongo
+# resources:
+#   - namespace.yaml
+# patches:
+#   - keycloak_ingress_host.yaml
+configMapGenerator:
+  - name: mongodb-env
+    env: mongodb.properties
+secretGenerator:
+  - name: mongodb-creds
+    behavior: create
+    type: Opaque
+    env: secret.properties
+images:
+  - name: registry.redhat.io/rhscl/mongodb-36-rhel7
+    newTag: "1"

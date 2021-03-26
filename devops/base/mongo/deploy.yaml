@@ -1,0 +1,111 @@
+# Copyright 2021 The Province of British Columbia
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mongodb
+  labels:
+    app: rocketchat-db
+spec:
+  ports:
+    - name: mongodb
+      port: 27017
+  selector:
+    statefulset: mongodb
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mongodb-internal
+  labels:
+    app: rocketchat-db
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:    
+  clusterIP: None
+  ports:
+    - name: mongodb
+      port: 27017
+  selector:
+    statefulset: mongodb
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: mongodb
+  labels:
+    app: rocketchat-db
+spec:
+  selector:
+    matchLabels:
+      statefulset: mongodb
+  serviceName: mongodb-internal
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: rocketchat-db
+        statefulset: mongodb
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: name
+                operator: In
+                values: 
+                - mongodb
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: mongo-container
+          image: registry.redhat.io/rhscl/mongodb-36-rhel7:1
+          ports:
+            - containerPort: 27017
+          args:
+            - run-mongod-replication
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /var/lib/mongodb/data
+          envFrom: 
+            - configMapRef:
+                name: mongodb-env
+            - secretRef:
+                name: mongodb-creds
+          resources:
+            limits:
+              memory: 384Mi
+              cpu: 100m
+            requests:
+              memory: 128Mi
+              cpu: 80m
+          readinessProbe:
+            exec:
+              command:
+                - stat
+                - /tmp/initialized
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-data
+        labels:
+          name: mongodb
+          app: rocketchat-db
+      spec:
+        accessModes: [ ReadWriteOnce ]
+        storageClassName: netapp-block-standard
+        resources:
+          requests:
+            storage: 3G

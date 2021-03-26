@@ -95,3 +95,5 @@ mongo-rocketdb-bak/
 *.pem
 *.key
 *.csr
+secrets.properties
+secret.properties
