@@ -15,23 +15,6 @@
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: 6e2f55-dev
-bases:
-  - ../../base/mongo
-  - ../../base/backup
-configMapGenerator:
-  - name: mongodb-env
-    env: mongodb.properties
-  - name: rocketchat-backup-config
-    files:
-      - backup.conf
-secretGenerator:
-  - name: mongodb-creds
-    behavior: create
-    type: Opaque
-    env: secret.properties
-images:
-  - name: registry.redhat.io/rhscl/mongodb-36-rhel7
-    newTag: "1"
-  - name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/backup-container
-    newTag: latest
+resources:
+  - deploy.yaml
+  - policy.yaml
