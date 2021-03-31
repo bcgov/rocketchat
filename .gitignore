@@ -89,7 +89,7 @@ jspm_packages
 *-secret.json
 *-secret.properties
 old_tests
-backup/
+/backup/
 mongo-rocketdb-bak/
 
 *.pem
