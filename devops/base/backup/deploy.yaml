@@ -43,7 +43,7 @@ spec:
       storage: 1Gi
   storageClassName: netapp-file-standard
 ---
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
@@ -56,7 +56,9 @@ metadata:
 spec:
   replicas: 1
   selector:
-    name: mongodb-backup
+    matchLabels:
+      name: mongodb-backup
+      role: backup
   strategy:
     type: Recreate
   template:
@@ -69,7 +71,6 @@ spec:
       containers:
         - name: mongodb-backup
           image: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/backup-container:latest
-          ports: []
           envFrom: 
             - configMapRef:
                 name: backup-env
@@ -77,12 +78,12 @@ spec:
             - name: DATABASE_USER
               valueFrom:
                 secretKeyRef:
-                  key: username
+                  key: MONGODB_USER
                   name: mongodb-creds
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: password
+                  key: MONGODB_PASSWORD
                   name: mongodb-creds
           resources:
             limits:

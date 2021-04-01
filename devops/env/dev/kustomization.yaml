@@ -19,19 +19,37 @@ namespace: 6e2f55-dev
 bases:
   - ../../base/mongo
   - ../../base/backup
+  - ../../base/policy
+  - ../../base/server
+generatorOptions:
+  labels:
+    app: rocketchat
+    type: generated
 configMapGenerator:
   - name: mongodb-env
     env: mongodb.properties
   - name: rocketchat-backup-config
     files:
       - backup.conf
+  - name: backup-env
+    files:
+      - backup.properties
+  - name: rocketchat-config
+    files:
+      - data=server.conf
 secretGenerator:
   - name: mongodb-creds
     behavior: create
     type: Opaque
-    env: secret.properties
+    env: mongodb-secret.properties
+  - name: rocketchat-creds
+    behavior: create
+    type: Opaque
+    env: rocketchat-secret.properties
 images:
   - name: registry.redhat.io/rhscl/mongodb-36-rhel7
     newTag: "1"
   - name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/backup-container
-    newTag: latest
+    newTag: "latest"
+  - name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/rocket.chat
+    newTag: "2.4"
