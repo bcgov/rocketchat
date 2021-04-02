@@ -97,3 +97,5 @@ mongo-rocketdb-bak/
 *.csr
 secrets.properties
 secret.properties
+*secret*
+*secrets*
