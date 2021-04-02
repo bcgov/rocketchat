@@ -56,7 +56,6 @@ kind: Deployment
 metadata:
   labels:
     app: reggie
-    component: api
   name: reggie-api
 spec:
   strategy:
@@ -65,12 +64,13 @@ spec:
   selector:
     matchLabels:
       app: reggie
-      role: server
+      component: api
   template:
     metadata:
       labels:
         app: reggie
         role: server
+        component: api
       name: reggie
     spec:
       containers:
