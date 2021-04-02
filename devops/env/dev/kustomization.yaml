@@ -21,6 +21,8 @@ bases:
   - ../../base/backup
   - ../../base/policy
   - ../../base/server
+resources:
+  - route-secret.yaml
 generatorOptions:
   labels:
     app: rocketchat
@@ -33,10 +35,9 @@ configMapGenerator:
       - backup.conf
   - name: backup-env
     files:
-      - backup.properties
+      - backup-env.properties
   - name: rocketchat-config
-    files:
-      - data=server.conf
+    env: server.properties
 secretGenerator:
   - name: mongodb-creds
     behavior: create
@@ -46,6 +47,8 @@ secretGenerator:
     behavior: create
     type: Opaque
     env: rocketchat-secret.properties
+  - name: sso-creds
+    env: sso-secret.properties
 images:
   - name: registry.redhat.io/rhscl/mongodb-36-rhel7
     newTag: "1"

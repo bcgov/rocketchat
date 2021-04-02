@@ -114,7 +114,7 @@ spec:
             timeoutSeconds: 5
           resources:
             limits:
-              cpu: 90m
+              cpu: 100m
               memory: 896Mi
             requests:
               memory: 512Mi
@@ -126,30 +126,11 @@ spec:
                 name: mongodb-creds
             - secretRef:
                 name: rocketchat-creds
+            - secretRef:
+                name: sso-creds
           volumeMounts:
             - name: rocketchat-uploads
               mountPath: /app/uploads
       terminationMessagePath: /dev/termination-log
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
----
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  labels:
-    app: rocketchat-server
-  name: rocketchat-server
-spec:
-  scaleTargetRef:
-    apiVersion: v1
-    kind: Deployment 
-    name: rocketchat-server
-  minReplicas: 1
-  maxReplicas: 1
-  metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 80
