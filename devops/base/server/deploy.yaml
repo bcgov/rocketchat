@@ -17,8 +17,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: rocketchat-server
-  name: rocketchat-server
+    app: rocketchat
+  name: rocketchat
 spec:
   ports:
   - name: 3000-tcp
@@ -26,24 +26,24 @@ spec:
     protocol: TCP
     targetPort: 3000
   selector:
-    app: rocketchat-server
+    app: rocketchat
   type: ClusterIP
   SessionAffinity: None
 ---
 apiVersion: v1
 kind: Route
 metadata:
-  name: rocketchat-server
+  name: rocketchat
   annotations:
     description: Route for application's http service.
   labels:
-    app: rocketchat-server
+    app: rocketchat
 spec:
   port:
     targetPort: 3000-tcp
   to:
     kind: Service 
-    name: rocketchat-server
+    name: rocketchat
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
@@ -53,7 +53,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   labels:
-    app: rocketchat-server
+    app: rocketchat
   name: rocketchat-uploads
 spec:
   storageClassName: netapp-file-standard
@@ -68,8 +68,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: rocketchat-server
-  name: rocketchat-server
+    app: rocketchat
+  name: rocketchat
 spec:
   strategy:
     type: Recreate
@@ -78,12 +78,12 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: rocketchat-server
+      app: rocketchat
       role: server
   template:
     metadata:
       labels:
-        app: rocketchat-server
+        app: rocketchat
         role: server
     spec:
       affinity:
@@ -94,7 +94,7 @@ spec:
               - key: app
                 operator: In
                 values: 
-                - rocketchat-server
+                - rocketchat
             topologyKey: kubernetes.io/hostname
       volumes:
         - name: rocketchat-uploads
@@ -102,7 +102,7 @@ spec:
             claimName: rocketchat-uploads
             # defaultMode: 0744
       containers:
-        - name: rocketchat-server
+        - name: rocketchat
           image: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/rocket.chat:2.4
           ports:
             - name: server-port
@@ -146,7 +146,7 @@ spec:
             - secretRef:
                 name: rocketchat-creds
             - secretRef:
-                name: sso-creds
+                name: rocketchat-sso-creds
           volumeMounts:
             - name: rocketchat-uploads
               mountPath: /app/uploads

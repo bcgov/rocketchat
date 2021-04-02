@@ -13,21 +13,6 @@
 # limitations under the License.
 #
 ---
-# apiVersion: v1
-# kind: ConfigMap
-# metadata:
-#   name: reggie-api-config
-#   labels:
-#     app: reggie
-#     component: api
-# data:
-#   NODE_ENV: ${NODE_ENV}
-#   SSO_HOST_URL: ${SSO_HOST_URL}
-#   SSO_REALM: ${SSO_REALM}
-#   EMAIL_HOST: ${EMAIL_HOST}
-#   EMAIL_PORT: ${EMAIL_PORT}
-#   EMAIL_SENDER: ${EMAIL_SENDER}
-#   API_URL: ${HOSTNAME_HTTPS}
 apiVersion: v1
 kind: Route
 metadata:
@@ -80,13 +65,12 @@ spec:
   selector:
     matchLabels:
       app: reggie
-      role: api
+      role: server
   template:
     metadata:
       labels:
         app: reggie
-        component: api
-        role: api
+        role: server
       name: reggie
     spec:
       containers:
@@ -109,7 +93,7 @@ spec:
             - secretRef:
                 name: reggie-creds
             - configMapRef:
-                name: reggie-api-config
+                name: reggie-api-env
           resources:
             limits:
               cpu: 50m

@@ -82,60 +82,59 @@ spec:
       protocol: TCP
       targetPort: 2015
 ---
-    apiVersion: apps/v1
-    kind: Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: reggie
+    component: web
+  name: reggie-web
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reggie
+      role: server
+  template:
     metadata:
       labels:
         app: reggie
-        component: web
-      name: reggie-web
+        role: server
+      name: reggie
     spec:
-      strategy:
-        type: RollingUpdate
-      replicas: 1
-      selector:
-        matchLabels:
-          app: reggie
-          role: web
-      template:
-        metadata:
-          labels:
-            app: reggie
-            component: web
-            role: web
-          name: reggie
-        spec:
-          containers:
-            - name: reggie-web
-              image: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-web:latest
-              startupProbe:
-                httpGet:
-                  path: /
-                  port: 2015
-                failureThreshold: 11
-                periodSeconds: 3
-              readinessProbe:
-                httpGet:
-                  path: /
-                  port: 2015
-                timeoutSeconds: 3
-              ports:
-                - containerPort: 2015
-              envFrom: 
-                - configMapRef:
-                    name: reggie-web-env
-              resources:
-                limits:
-                  cpu: 50m
-                  memory: 128Mi
-                requests:
-                  cpu: 20m
-                  memory: 64Mi
-              volumeMounts:
-                - name: config-vol
-                  mountPath: /opt/app-root/etc/Caddyfile
-                  subPath: Caddyfile
-          volumes:
+      containers:
+        - name: reggie-web
+          image: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-web:latest
+          startupProbe:
+            httpGet:
+              path: /
+              port: 2015
+            failureThreshold: 11
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 2015
+            timeoutSeconds: 3
+          ports:
+            - containerPort: 2015
+          envFrom: 
+            - configMapRef:
+                name: reggie-web-env
+          resources:
+            limits:
+              cpu: 50m
+              memory: 128Mi
+            requests:
+              cpu: 20m
+              memory: 64Mi
+          volumeMounts:
             - name: config-vol
-              configMap:
-                name: reggie-web-caddy-config
+              mountPath: /opt/app-root/etc/Caddyfile
+              subPath: Caddyfile
+      volumes:
+        - name: config-vol
+          configMap:
+            name: reggie-web-caddy-config

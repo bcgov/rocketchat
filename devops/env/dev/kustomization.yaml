@@ -43,6 +43,8 @@ configMapGenerator:
     env: rocketchat.properties
   - name: reggie-web-env
     env: reggie-web.properties
+  - name: reggie-api-env
+    env: reggie-api.properties
 secretGenerator:
   - name: mongodb-creds
     behavior: create
@@ -52,8 +54,8 @@ secretGenerator:
     behavior: create
     type: Opaque
     env: rocketchat-secret.properties
-  - name: sso-creds
-    env: sso-secret.properties
+  - name: rocketchat-sso-creds
+    env: rocketchat-sso-secret.properties
   - name: reggie-creds
     env: reggie-secret.properties
 images:
@@ -63,3 +65,7 @@ images:
     newTag: "latest"
   - name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/rocket.chat
     newTag: "2.4"
+  - name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-web
+    newTag: "latest"
+  - name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-api
+    newTag: "latest"
