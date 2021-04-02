@@ -37,7 +37,7 @@ configMapGenerator:
     files:
       - backup-env.properties
   - name: rocketchat-config
-    env: server.properties
+    env: rocketchat.properties
 secretGenerator:
   - name: mongodb-creds
     behavior: create
