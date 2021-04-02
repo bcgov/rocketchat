@@ -1,0 +1,119 @@
+# Copyright 2020 The Province of British Columbia
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+---
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: reggie-api-config
+#   labels:
+#     app: reggie
+#     component: api
+# data:
+#   NODE_ENV: ${NODE_ENV}
+#   SSO_HOST_URL: ${SSO_HOST_URL}
+#   SSO_REALM: ${SSO_REALM}
+#   EMAIL_HOST: ${EMAIL_HOST}
+#   EMAIL_PORT: ${EMAIL_PORT}
+#   EMAIL_SENDER: ${EMAIL_SENDER}
+#   API_URL: ${HOSTNAME_HTTPS}
+apiVersion: v1
+kind: Route
+metadata:
+  name: reggie-api
+  annotations:
+    description: Route for reggies API services
+  labels:
+    app: reggie
+    component: api
+spec:
+  path: /api
+  port:
+    targetPort: 8000-tcp
+  to:
+    kind: Service 
+    name: reggie-api
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: reggie
+    component: api
+  name: reggie-api
+spec:
+  selector:
+    app: reggie
+    component: api
+  ports:
+    - name: 8000-tcp
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: reggie
+    component: api
+  name: reggie-api
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reggie
+      role: api
+  template:
+    metadata:
+      labels:
+        app: reggie
+        component: api
+        role: api
+      name: reggie
+    spec:
+      containers:
+        - name: reggie-api
+          image: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-api:latest
+          startupProbe:
+            httpGet:
+              path: /api/v1/ehlo
+              port: 8000
+            failureThreshold: 11
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /api/v1/ehlo
+              port: 8000
+            timeoutSeconds: 3
+          ports:
+            - containerPort: 8000
+          envFrom: 
+            - secretRef:
+                name: reggie-creds
+            - configMapRef:
+                name: reggie-api-config
+          resources:
+            limits:
+              cpu: 50m
+              memory: 256Mi
+            requests:
+              cpu: 20m
+              memory: 128Mi

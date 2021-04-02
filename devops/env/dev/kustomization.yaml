@@ -21,8 +21,11 @@ bases:
   - ../../base/backup
   - ../../base/policy
   - ../../base/server
+  - ../../base/reggie
 patches:
-  - route-secret.yaml
+  - rocketchat-route-secret.yaml
+  - reggie-api-route-secret.yaml
+  - reggie-web-route-secret.yaml
 generatorOptions:
   labels:
     app: rocketchat
@@ -38,6 +41,8 @@ configMapGenerator:
       - backup-env.properties
   - name: rocketchat-config
     env: rocketchat.properties
+  - name: reggie-web-env
+    env: reggie-web.properties
 secretGenerator:
   - name: mongodb-creds
     behavior: create
@@ -49,6 +54,8 @@ secretGenerator:
     env: rocketchat-secret.properties
   - name: sso-creds
     env: sso-secret.properties
+  - name: reggie-creds
+    env: reggie-secret.properties
 images:
   - name: registry.redhat.io/rhscl/mongodb-36-rhel7
     newTag: "1"
