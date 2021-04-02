@@ -21,7 +21,7 @@ bases:
   - ../../base/backup
   - ../../base/policy
   - ../../base/server
-resources:
+patches:
   - route-secret.yaml
 generatorOptions:
   labels:
