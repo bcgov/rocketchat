@@ -80,8 +80,8 @@ spec:
             httpGet:
               path: /api/v1/ehlo
               port: 8000
-            failureThreshold: 11
-            periodSeconds: 3
+            failureThreshold: 16
+            periodSeconds: 5
           readinessProbe:
             httpGet:
               path: /api/v1/ehlo
