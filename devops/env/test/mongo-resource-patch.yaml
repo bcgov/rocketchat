@@ -18,6 +18,16 @@ apiVersion: apps/v1
 metadata:
   name: mongodb
   labels:
-    app: rocketchat-db
+    app: rocketchat
 spec:
-  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: mongo-container
+          resources:
+            limits:
+              cpu: 512m
+              memory: 3G
+            requests:
+              cpu: 512m
+              memory: 1G
