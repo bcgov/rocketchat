@@ -46,26 +46,6 @@ data:
     }
 ---
 apiVersion: v1
-kind: Route
-metadata:
-  name: reggie-web
-  annotations:
-    description: Route for reggies Web front end
-  labels:
-    app: reggie
-    component: web
-spec:
-  port:
-    targetPort: 2015-tcp
-  to:
-    kind: Service 
-    name: reggie-web
-  tls:
-    termination: edge
-    insecureEdgeTerminationPolicy: Redirect
-  wildcardPolicy: None
----
-apiVersion: v1
 kind: Service
 metadata:
   labels:

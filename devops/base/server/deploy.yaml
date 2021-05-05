@@ -30,25 +30,6 @@ spec:
   type: ClusterIP
   SessionAffinity: None
 ---
-apiVersion: v1
-kind: Route
-metadata:
-  name: rocketchat
-  annotations:
-    description: Route for application's http service.
-  labels:
-    app: rocketchat
-spec:
-  port:
-    targetPort: 3000-tcp
-  to:
-    kind: Service 
-    name: rocketchat
-  tls:
-    termination: edge
-    insecureEdgeTerminationPolicy: Redirect
-  wildcardPolicy: None
----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
