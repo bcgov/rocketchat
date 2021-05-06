@@ -18,15 +18,10 @@ kind: Kustomization
 namespace: 6e2f55-test
 bases:
   - ../../base/mongo
-  - ../../base/backup
   - ../../base/policy
   - ../../base/server
   - ../../base/reggie
 patches:
-  - rocketchat-route-secret.yaml
-  - reggie-api-route-secret.yaml
-  - reggie-web-route-secret.yaml
-  - backup-pvc-patch.yaml
   - mongo-replica-patch.yaml
   - mongo-pvc-patch.yaml
   - mongo-resource-patch.yaml
@@ -37,31 +32,12 @@ generatorOptions:
 configMapGenerator:
   - name: mongodb-env
     env: mongodb.properties
-  - name: rocketchat-backup-config
-    files:
-      - backup.conf
-  - name: backup-env
-    files:
-      - backup-env.properties
   - name: rocketchat-config
     env: rocketchat.properties
   - name: reggie-web-env
     env: reggie-web.properties
   - name: reggie-api-env
     env: reggie-api.properties
-secretGenerator:
-  - name: mongodb-creds
-    behavior: create
-    type: Opaque
-    env: mongodb-secret.properties
-  - name: rocketchat-creds
-    behavior: create
-    type: Opaque
-    env: rocketchat-secret.properties
-  - name: rocketchat-sso-creds
-    env: rocketchat-sso-secret.properties
-  - name: reggie-creds
-    env: reggie-secret.properties
 images:
   - name: registry.redhat.io/rhscl/mongodb-36-rhel7
     newTag: "1"
