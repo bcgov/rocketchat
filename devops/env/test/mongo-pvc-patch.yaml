@@ -24,6 +24,8 @@ spec:
     - metadata:
         name: mongo-data
       spec:
+        accessModes: [ ReadWriteOnce ]
+        storageClassName: netapp-block-standard
         resources:
           requests:
-            storage: 4G
+            storage: 3G
