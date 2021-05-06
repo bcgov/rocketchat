@@ -28,7 +28,6 @@ spec:
   selector:
     app: rocketchat
   type: ClusterIP
-  SessionAffinity: None
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
