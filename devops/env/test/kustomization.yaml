@@ -25,6 +25,8 @@ patches:
   - mongo-replica-patch.yaml
   - mongo-pvc-patch.yaml
   - mongo-resource-patch.yaml
+  - rocketchat-resource-patch.yaml
+  - rocketchat-probe-patch.yaml
 generatorOptions:
   labels:
     app: rocketchat
@@ -43,8 +45,8 @@ images:
     newTag: "1"
   - name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/backup-container
     newTag: "latest"
-  - name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/rocket.chat
-    newTag: "2.4"
+  - name: docker-remote.artifacts.developer.gov.bc.ca/rocket.chat
+    newTag: "3.14.0"
   - name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-web
     newTag: "latest"
   - name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-api

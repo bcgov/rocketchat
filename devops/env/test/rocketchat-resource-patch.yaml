@@ -26,8 +26,8 @@ spec:
         - name: rocketchat
           resources:
             limits:
-              cpu: 600m
-              memory: 2Gi
+              cpu: 450m
+              memory: 1280Mi
             requests:
               cpu: 300m
               memory: 1Gi

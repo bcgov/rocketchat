@@ -28,4 +28,4 @@ spec:
         storageClassName: netapp-block-standard
         resources:
           requests:
-            storage: 3G
+            storage: 4G
