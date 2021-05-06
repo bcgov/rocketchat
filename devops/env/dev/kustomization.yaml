@@ -18,7 +18,6 @@ kind: Kustomization
 namespace: 6e2f55-dev
 bases:
   - ../../base/mongo
-  - ../../base/backup
   - ../../base/policy
   - ../../base/server
   - ../../base/reggie
@@ -29,12 +28,6 @@ generatorOptions:
 configMapGenerator:
   - name: mongodb-env
     env: mongodb.properties
-  - name: rocketchat-backup-config
-    files:
-      - backup.conf
-  - name: backup-env
-    files:
-      - backup-env.properties
   - name: rocketchat-config
     env: rocketchat.properties
   - name: reggie-web-env
