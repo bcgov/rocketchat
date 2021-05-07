@@ -13,14 +13,11 @@
 # limitations under the License.
 #
 ---
-apiVersion: policy/v1beta1
-kind: PodDisruptionBudget
+kind: Deployment
+apiVersion: apps/v1
 metadata:
   labels:
     app: rocketchat
-  name: mongodb-pdb
+  name: rocketchat
 spec:
-  minAvailable: 2
-  selector:
-    matchLabels:
-      statefulset: mongodb
+  replicas: 3

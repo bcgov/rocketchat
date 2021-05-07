@@ -33,6 +33,7 @@ patches:
   - mongo-resource-patch.yaml
   - rocketchat-resource-patch.yaml
   - rocketchat-probe-patch.yaml
+  - rocketchat-replica-patch
 generatorOptions:
   labels:
     app: rocketchat

@@ -24,8 +24,8 @@ spec:
     apiVersion: v1
     kind: Deployment 
     name: rocketchat
-  minReplicas: 1
-  maxReplicas: 1
+  minReplicas: 3
+  maxReplicas: 5
   metrics:
   - type: Resource
     resource:
