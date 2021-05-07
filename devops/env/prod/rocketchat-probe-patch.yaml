@@ -29,5 +29,5 @@ spec:
               path: /api/info
               port: server-port
               scheme: HTTP
-            failureThreshold: 36
-            periodSeconds: 10
+            failureThreshold: 120
+            periodSeconds: 5

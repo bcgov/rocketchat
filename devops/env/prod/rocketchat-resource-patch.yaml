@@ -24,10 +24,10 @@ spec:
     spec:
       containers:
         - name: rocketchat
-          startupProbe:
-            httpGet:
-              path: /api/info
-              port: server-port
-              scheme: HTTP
-            failureThreshold: 36
-            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 700m
+              memory: 2560Mi
+            requests:
+              cpu: 400m
+              memory: 2Gi

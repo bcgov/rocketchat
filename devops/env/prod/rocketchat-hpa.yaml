@@ -17,13 +17,13 @@ apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
   labels:
-    app: rocketchat-server
-  name: rocketchat-server
+    app: rocketchat
+  name: rocketchat
 spec:
   scaleTargetRef:
     apiVersion: v1
     kind: Deployment 
-    name: rocketchat-server
+    name: rocketchat
   minReplicas: 1
   maxReplicas: 1
   metrics:

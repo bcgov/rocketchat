@@ -13,21 +13,20 @@
 # limitations under the License.
 #
 ---
-kind: Deployment
-apiVersion: apps/v1
+apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  labels:
-    app: rocketchat
-  name: rocketchat
+  name: backup
 spec:
-  template:
-    spec:
-      containers:
-        - name: rocketchat
-          startupProbe:
-            httpGet:
-              path: /api/info
-              port: server-port
-              scheme: HTTP
-            failureThreshold: 36
-            periodSeconds: 10
+  resources:
+    requests:
+      storage: 14Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backup-verification
+spec:
+  resources:
+    requests:
+      storage: 4Gi

@@ -13,21 +13,21 @@
 # limitations under the License.
 #
 ---
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
+  name: mongodb
   labels:
     app: rocketchat
-  name: rocketchat
 spec:
   template:
     spec:
       containers:
-        - name: rocketchat
-          startupProbe:
-            httpGet:
-              path: /api/info
-              port: server-port
-              scheme: HTTP
-            failureThreshold: 36
-            periodSeconds: 10
+        - name: mongo-container
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 5G
+            requests:
+              cpu: 500m
+              memory: 3G

@@ -83,7 +83,7 @@ spec:
             # defaultMode: 0744
       containers:
         - name: rocketchat
-          image: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/rocket.chat:2.4
+          image: docker-remote.artifacts.developer.gov.bc.ca/rocket.chat:2.4
           ports:
             - name: server-port
               containerPort: 3000
@@ -133,3 +133,5 @@ spec:
       terminationMessagePath: /dev/termination-log
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: artifactory-creds

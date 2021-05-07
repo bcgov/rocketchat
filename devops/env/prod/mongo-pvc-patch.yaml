@@ -13,21 +13,19 @@
 # limitations under the License.
 #
 ---
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
+  name: mongodb
   labels:
     app: rocketchat
-  name: rocketchat
 spec:
-  template:
-    spec:
-      containers:
-        - name: rocketchat
-          startupProbe:
-            httpGet:
-              path: /api/info
-              port: server-port
-              scheme: HTTP
-            failureThreshold: 36
-            periodSeconds: 10
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-data
+      spec:
+        accessModes: [ ReadWriteOnce ]
+        storageClassName: netapp-block-standard
+        resources:
+          requests:
+            storage: 6G

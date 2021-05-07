@@ -13,21 +13,9 @@
 # limitations under the License.
 #
 ---
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  labels:
-    app: rocketchat
-  name: rocketchat
+  name: mongodb
 spec:
-  template:
-    spec:
-      containers:
-        - name: rocketchat
-          startupProbe:
-            httpGet:
-              path: /api/info
-              port: server-port
-              scheme: HTTP
-            failureThreshold: 36
-            periodSeconds: 10
+  replicas: 3
