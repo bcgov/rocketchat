@@ -20,7 +20,7 @@ bases:
   - ./secrets
   # - ../../base/mongo
   - ../../base/backup
-  # - ../../base/policy
+  - ../../base/policy
   - ../../base/server
   # - ../../base/reggie
 resources:
