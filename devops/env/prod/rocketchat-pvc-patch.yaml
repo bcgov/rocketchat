@@ -13,21 +13,13 @@
 # limitations under the License.
 #
 ---
-kind: Deployment
-apiVersion: apps/v1
+kind: PersistentVolumeClaim
+apiVersion: v1
 metadata:
   labels:
     app: rocketchat
-  name: rocketchat
+  name: rocketchat-uploads
 spec:
-  template:
-    spec:
-      containers:
-        - name: rocketchat
-          resources:
-            limits:
-              cpu: 900m
-              memory: 2560Mi
-            requests:
-              cpu: 600m
-              memory: 2Gi
+  resources:
+    requests:
+      storage: 12Gi

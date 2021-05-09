@@ -15,25 +15,27 @@
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: 96fff4-prod
+namespace: 6e2f55-prod
 bases:
-  - ../../base/mongo
+  - ./secrets
+  # - ../../base/mongo
   - ../../base/backup
-  - ../../base/policy
+  # - ../../base/policy
   - ../../base/server
-  - ../../base/reggie
+  # - ../../base/reggie
 resources:
   - rocketchat-hpa.yaml
-  - rocketchat-pdb.yaml
-  - mongo-pdb.yaml
+#   - rocketchat-pdb.yaml
+#   - mongo-pdb.yaml
 patches:
   - backup-pvc-patch.yaml
-  - mongo-replica-patch.yaml
-  - mongo-pvc-patch.yaml
-  - mongo-resource-patch.yaml
+  # - mongo-replica-patch.yaml
+  # - mongo-pvc-patch.yaml
+  # - mongo-resource-patch.yaml
   - rocketchat-resource-patch.yaml
   - rocketchat-probe-patch.yaml
-  - rocketchat-replica-patch
+  - rocketchat-replica-patch.yaml
+  - rocketchat-pvc-patch.yaml
 generatorOptions:
   labels:
     app: rocketchat
