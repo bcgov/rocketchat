@@ -92,10 +92,13 @@ old_tests
 /backup/
 mongo-rocketdb-bak/
 
+# Where we hide things :)
 *.pem
 *.key
 *.csr
 secrets.properties
 secret.properties
-*secret*
-*secrets*
+*secret*.yaml
+*secrets*yaml
+*secret*.json
+*secrets*json
