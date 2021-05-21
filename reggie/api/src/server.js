@@ -34,6 +34,7 @@ app.listen(port, '0.0.0.0', err => {
   if (env !== 'production') {
     return started(port);
   }
+  logger.info('XXX 123');
   return logger.info(`Production server running on port: ${port}`);
 });
 
