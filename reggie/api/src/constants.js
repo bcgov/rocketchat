@@ -26,7 +26,7 @@ export const ENVIRONMENTS = {
 };
 
 export const SSO_SUB_URI = {
-  SA_AUTH_TOKEN: 'auth/realms/master/protocol/openid-connect/token',
+  SA_AUTH_TOKEN: 'auth/realms/devhub/protocol/openid-connect/token',
   REALM_ADMIN: 'auth/admin/realms',
   USER: 'users',
   GROUP: 'groups',
