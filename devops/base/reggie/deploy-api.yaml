@@ -68,6 +68,10 @@ spec:
             timeoutSeconds: 3
           ports:
             - containerPort: 8000
+          volumeMounts:
+            - name: config-vol
+              mountPath: /opt/app-root/src/build/src/config/config.json
+              subPath: config.json
           envFrom: 
             - secretRef:
                 name: reggie-creds
@@ -80,3 +84,7 @@ spec:
             requests:
               cpu: 20m
               memory: 128Mi
+      volumes:
+        - name: config-vol
+          configMap:
+            name: reggie-api-config
