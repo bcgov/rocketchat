@@ -27,6 +27,14 @@ const skey = Symbol.for('reggie-api.sso');
 const skeySA = Symbol.for('reggie-api.sa.sso');
 const gs = Object.getOwnPropertySymbols(global);
 
+const b = {
+  uri: config.get('sso:tokenUrl'),
+  grantType: config.get('sso:grantType'),
+  clientId: config.get('sso:clientId'),
+  clientSecret: config.get('sso:clientSecret'),
+};
+console.log(JSON.stringify(b));
+
 if (!(gs.indexOf(skey) > -1)) {
   global[skey] = new JWTServiceManager({
     uri: config.get('sso:tokenUrl'),
@@ -44,6 +52,14 @@ if (!(gs.indexOf(skeySA) > -1)) {
     clientSecret: config.get('ssoSA:password'),
   });
 }
+
+const a = {
+  uri: config.get('ssoSA:uri'),
+  grantType: config.get('ssoSA:grantType'),
+  clientId: config.get('ssoSA:username'),
+  clientSecret: config.get('ssoSA:password'),
+};
+console.log(JSON.stringify(a));
 
 const singleton = {};
 
