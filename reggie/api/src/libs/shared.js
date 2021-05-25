@@ -38,7 +38,7 @@ if (!(gs.indexOf(skey) > -1)) {
 
 if (!(gs.indexOf(skeySA) > -1)) {
   global[skeySA] = new JWTServiceManager({
-    uri: config.get('ssoSA:uri'),
+    uri: config.get('ssoSA:tokenUrl'),
     grantType: config.get('ssoSA:grantType'),
     clientId: config.get('ssoSA:username'),
     clientSecret: config.get('ssoSA:password'),

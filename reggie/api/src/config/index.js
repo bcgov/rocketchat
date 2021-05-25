@@ -25,7 +25,6 @@
 import dotenv from 'dotenv';
 import nconf from 'nconf';
 import path from 'path';
-import { SSO_SUB_URI, SSO_REQUEST } from '../constants';
 
 const env = process.env.NODE_ENV || 'development';
 const defaultPort = 8000;
@@ -47,10 +46,7 @@ nconf.overrides({
   host: process.env.HOST || '127.0.0.1',
   port: process.env.PORT || defaultPort,
   ssoSA: {
-    uri: `${process.env.SSO_HOST_URL}/${SSO_SUB_URI.SA_AUTH_TOKEN}`,
-    username: process.env.SSO_USERNAME,
     password: process.env.SSO_PASSWORD,
-    grantType: SSO_REQUEST.GRANT_TYPE,
   },
   sso: {
     clientSecret: process.env.SSO_CLIENT_SECRET,
