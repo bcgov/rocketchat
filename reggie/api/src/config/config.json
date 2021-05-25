@@ -6,5 +6,10 @@
     "authUrl": "https://dev.oidc.gov.bc.ca/auth/realms/devhub/protocol/openid-connect/auth",
     "tokenUrl": "https://dev.oidc.gov.bc.ca/auth/realms/devhub/protocol/openid-connect/token",
     "certsUrl": "https://dev.oidc.gov.bc.ca/auth/realms/devhub/protocol/openid-connect/certs"
+  },
+  "ssoSA": {
+    "grantType": "client_credentials",
+    "username": "reggie-sa",
+    "tokenUrl": "https://dev.oidc.gov.bc.ca/auth/realms/devhub/protocol/openid-connect/token"
   }
 }

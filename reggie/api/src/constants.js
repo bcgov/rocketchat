@@ -39,9 +39,6 @@ export const SSO_SUB_URI = {
 export const SSO_REQUEST = {
   CONTENT_TYPE_FORM: 'application/x-www-form-urlencoded',
   CONTENT_TYPE_JSON: 'application/json',
-  GRANT_TYPE: 'client_credentials',
-  CLIENT_ID: 'admin-cli',
-  SA_CREDENTIAL_NAME: 'ssoSA',
 };
 
 export const TARGET_GITHUB_ORGS = ['bcgov', 'bcgov-c', 'BCDevOps'];
