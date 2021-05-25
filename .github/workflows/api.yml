@@ -76,4 +76,4 @@ jobs:
           cmd: |
             'version'
             'start-build reggie-api-master-build --follow -n 6e2f55-tools'
-            'tag -n ${NAMESPACE} ${IMAGE_NAME}:latest ${IMAGE_NAME}:${{env.DES_TAG}}'
+            'tag -n 6e2f55-tools ${IMAGE_NAME}:latest ${IMAGE_NAME}:${{env.DES_TAG}}'
