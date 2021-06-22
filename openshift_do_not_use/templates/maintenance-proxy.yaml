@@ -190,7 +190,7 @@ parameters:
   - name: REPLICA_COUNT
     description: The number of PROXY pods to start
     displayName: Replica Count
-    value: 3
+    value: "1"
   # - name: PROXY_MIN_HPA
   #   description: Min Number of PROXY pods for HPA
   #   displayName: PROXY Min HPA
