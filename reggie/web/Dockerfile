@@ -1,4 +1,4 @@
-FROM caddy:2.1.1-alpine
+FROM image-registry.apps.klab.devops.gov.bc.ca/jason-dev/caddy:latest
 
 ENV INSTALL_PATH /srv
 ENV SUMMARY="Reggie Web ${APP_VERSION}"  \
