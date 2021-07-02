@@ -1,0 +1,181 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: do-stuff
+spec:
+  workspaces:
+    - name: source
+      mountPath: /workspace/source
+  # resources:
+  #   inputs:
+  #     - name: source
+  #       type: git
+  # params:
+  #   - name: BUILD_NAME
+  #     type: string
+  #     description: Name of the binary BuildConfig to start.
+  #   - name: BINARY_PATH
+  #     type: string
+  #     description: Path to binary, relative to workspace directory.
+  steps:
+    - name: where-am-i
+      image: registry.access.redhat.com/ubi8/nodejs-14:latest
+      workingDir: $(workspaces.source.path)
+      script: |
+        #!/usr/bin/env bash
+        pwd
+        ls -lah
+        ls -lah $(workspaces.source.path)/reggie/web
+    - name: npm-build
+      image: registry.access.redhat.com/ubi8/nodejs-14:latest
+      workingDir: $(workspaces.source.path)/reggie/web
+      script: |
+        #!/usr/bin/env bash
+        pwd
+        ls -lah
+        npm ci
+        npm run build
+# ---
+# apiVersion: tekton.dev/v1beta1
+# kind: Task
+# metadata:
+#   name: s2i-nodejs
+#   labels:
+#     app.kubernetes.io/version: "0.1"
+#   annotations:
+#     tekton.dev/pipelines.minVersion: "0.19"
+#     tekton.dev/tags: s2i, nodejs, workspace
+#     tekton.dev/displayName: "s2i nodejs"
+# spec:
+#   description: >-
+#     s2i-nodejs task clones a Git repository and builds and
+#     pushes a container image using S2I and a nodejs builder image.
+#   results:
+#     - name: IMAGE_DIGEST
+#       description: Digest of the image just built.
+#   params:
+#     - name: VERSION
+#       description: The tag of nodejs imagestream for nodejs version
+#       default: 'latest'
+#       type: string
+#     - name: PATH_CONTEXT
+#       description: The location of the path to run s2i from.
+#       default: .
+#       type: string
+#     - name: TLSVERIFY
+#       description: Verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
+#       default: "true"
+#       type: string
+#     - name: IMAGE
+#       description: Location of the repo where image has to be pushed
+#       type: string
+#     - name: BUILDER_IMAGE
+#       description: The location of the buildah builder image.
+#       default: quay.io/buildah/stable:v1.21.0
+#   workspaces:
+#     - name: source
+#       mountPath: /workspace/source
+#   steps:
+#     - name: generate
+#       image: quay.io/openshift-pipeline/s2i
+#       workingdir: $(workspaces.source.path)/reggie/web/build
+#       command: ['s2i', 'build', '$(params.PATH_CONTEXT)', 'registry.access.redhat.com/ubi8/nodejs-14:$(params.VERSION)', '--as-dockerfile', '/gen-source/Dockerfile.gen']
+#       volumeMounts:
+#         - name: gen-source
+#           mountPath: /gen-source
+#     - name: build
+#       image: $(params.BUILDER_IMAGE)
+#       workingdir: $(workspaces.source.path)/reggie/web
+#       command: ['buildah', 'bud', '--storage-driver=vfs', '--tls-verify=$(params.TLSVERIFY)', '--layers', '-f', 'Dockerfile', '-t', '$(params.IMAGE)', '.']
+#       volumeMounts:
+#         - name: varlibcontainers
+#           mountPath: /var/lib/containers
+        # - name: gen-source
+        #   mountPath: /gen-source
+    # - name: push
+    #   image: $(params.BUILDER_IMAGE)
+    #   workingDir: $(workspaces.source.path)
+    #   command: ['buildah', 'push', '--storage-driver=vfs', '--tls-verify=$(params.TLSVERIFY)', '--digestfile=$(workspaces.source.path)/image-digest', '$(params.IMAGE)', 'docker://$(params.IMAGE)']
+    #   volumeMounts:
+    #     - name: varlibcontainers
+    #       mountPath: /var/lib/containers
+    # - name: digest-to-results
+    #   image: $(params.BUILDER_IMAGE)
+    #   script: cat $(workspaces.source.path)/image-digest | tee /tekton/results/IMAGE_DIGEST
+  # volumes:
+  #   - name: varlibcontainers
+  #     emptyDir: {}
+    # - name: gen-source
+    #   emptyDir: {}
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: s2i-nodejs-pipeline
+spec:
+  params:
+    - name: IMAGE
+      description: Location of the repo where image has to be pushed
+      type: string
+  workspaces:
+    - name: shared-workspace
+  tasks:
+    - name: fetch-repository
+      taskRef:
+        name: git-clone
+        kind: ClusterTask
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+      params:
+        - name: url
+          value: https://github.com/bcgov/rocketchat
+        # - name: subdirectory
+        #   value: reggie/web
+        - name: deleteExisting
+          value: "true"
+    - name: build-artifacts
+      taskRef:
+        name: do-stuff
+      runAfter:
+        - fetch-repository
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+    - name: build-image
+      taskRef:
+        name: buildah
+        kind: ClusterTask
+      runAfter:
+        - build-artifacts
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+      params:
+        - name: IMAGE
+          value: $(params.IMAGE)
+        - name: CONTEXT
+          value: reggie/web/build
+---
+# apiVersion: tekton.dev/v1beta1
+# kind: PipelineRun
+# metadata:
+#   name: s2i-nodejs-pipelinerun
+# spec:
+#   # Use service account with git and image repo credentials
+#   # serviceAccountName: pipeline
+#   pipelineRunRef:
+#     name: s2i-nodejs-pipeline
+#   params:
+#   - name: IMAGE
+#     value: quay.io/my-repo/my-image-name
+#   workspaces:
+#   - name: shared-data
+#     volumeClaimTemplate:
+#       spec:
+#         accessModes:
+#         - ReadWriteOnce
+#         resources:
+#           requests:
+#             storage: 1Gi
