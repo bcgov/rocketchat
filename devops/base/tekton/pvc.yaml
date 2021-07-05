@@ -13,12 +13,14 @@
 # limitations under the License.
 #
 ---
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-  - pvc.yaml
-  - image-stream.yaml
-  - build-config.yaml
-  - task-binary-build.yaml
-  - task-build-artifacts.yaml
-  - image-build-pipeline.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: blarb-space
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: netapp-file-standard
