@@ -72,19 +72,20 @@ spec:
             topologyKey: "kubernetes.io/hostname"
       containers:
         - name: mongo-container
-          image: registry.redhat.io/rhscl/mongodb-36-rhel7:1
+          image: mongo:3.6
           ports:
             - containerPort: 27017
-          args:
-            - run-mongod-replication
           volumeMounts:
             - name: mongo-data
-              mountPath: /var/lib/mongodb/data
+              mountPath: /data/db
           envFrom: 
             - configMapRef:
                 name: mongodb-env
             - secretRef:
                 name: mongodb-creds
+          args:
+            - --replSet
+            - rs0
           resources:
             limits:
               memory: 384Mi
@@ -95,8 +96,18 @@ spec:
           readinessProbe:
             exec:
               command:
-                - stat
-                - /tmp/initialized
+                - /bin/bash
+                - -o 
+                - pipefail
+                - -ec
+                - >-
+                  mongo --quiet 
+                  -u $MONGO_INITDB_ROOT_USERNAME 
+                  -p $MONGO_INITDB_ROOT_PASSWORD 
+                  --eval "db.adminCommand('ping')" | 
+                  /bin/grep -Eq '\"ok\"[[:space:]]+:[[:space:]]+1'
+      imagePullSecrets:
+        - name: artifactory-creds
   volumeClaimTemplates:
     - metadata:
         name: mongo-data
