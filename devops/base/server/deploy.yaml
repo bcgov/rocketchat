@@ -83,7 +83,7 @@ spec:
             # defaultMode: 0744
       containers:
         - name: rocketchat
-          image: docker-remote.artifacts.developer.gov.bc.ca/rocket.chat:2.4
+          image: rocket.chat:2.4
           ports:
             - name: server-port
               containerPort: 3000
