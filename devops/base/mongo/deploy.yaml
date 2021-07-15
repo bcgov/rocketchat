@@ -73,19 +73,17 @@ spec:
       containers:
         - name: mongo-container
           image: mongo:3.6
+          imagePullPolicy: Always
           ports:
             - containerPort: 27017
           volumeMounts:
             - name: mongo-data
-              mountPath: /data/db
+              mountPath: /var/lib/mongodb/data
           envFrom: 
             - configMapRef:
                 name: mongodb-env
             - secretRef:
                 name: mongodb-creds
-          args:
-            - --replSet
-            - rs0
           resources:
             limits:
               memory: 384Mi
@@ -96,18 +94,22 @@ spec:
           readinessProbe:
             exec:
               command:
-                - /bin/bash
-                - -o 
-                - pipefail
-                - -ec
-                - >-
-                  mongo --quiet 
-                  -u $MONGO_INITDB_ROOT_USERNAME 
-                  -p $MONGO_INITDB_ROOT_PASSWORD 
-                  --eval "db.adminCommand('ping')" | 
-                  /bin/grep -Eq '\"ok\"[[:space:]]+:[[:space:]]+1'
-      imagePullSecrets:
-        - name: artifactory-creds
+                - stat
+                - /tmp/initialized
+            initialDelaySeconds: 10
+            periodSeconds: 3
+            failureThreshold: 10
+              # command:
+              #   - /bin/bash
+              #   - -o 
+              #   - pipefail
+              #   - -ec
+              #   - >-
+              #     mongo --quiet 
+              #     -u $MONGO_INITDB_ROOT_USERNAME 
+              #     -p $MONGO_INITDB_ROOT_PASSWORD 
+              #     --eval "db.adminCommand('ping')" | 
+              #     /bin/grep -Eq '\"ok\"[[:space:]]+:[[:space:]]+1'
   volumeClaimTemplates:
     - metadata:
         name: mongo-data
