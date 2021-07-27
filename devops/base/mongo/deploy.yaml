@@ -84,8 +84,6 @@ spec:
           envFrom: 
             - configMapRef:
                 name: mongodb-env
-            - secretRef:
-                name: mongodb-creds
           resources:
             limits:
               memory: 384Mi
