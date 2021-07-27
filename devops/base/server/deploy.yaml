@@ -121,12 +121,6 @@ spec:
           envFrom: 
             - configMapRef:
                 name: rocketchat-config
-            - secretRef:
-                name: mongodb-creds
-            - secretRef:
-                name: rocketchat-creds
-            - secretRef:
-                name: rocketchat-sso-creds
           volumeMounts:
             - name: rocketchat-uploads
               mountPath: /app/uploads

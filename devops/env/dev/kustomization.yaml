@@ -24,7 +24,8 @@ bases:
   - ../../base/reggie
   - ../../base/sa
 patches:
-  - vault-patch.yaml
+  - mongodb-vault-patch.yaml
+  - rocketchat-vault-patch.yaml
 generatorOptions:
   labels:
     app: rocketchat
