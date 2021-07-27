@@ -73,8 +73,6 @@ spec:
               mountPath: /opt/app-root/src/build/src/config/config.json
               subPath: config.json
           envFrom: 
-            - secretRef:
-                name: reggie-creds
             - configMapRef:
                 name: reggie-api-env
           resources:

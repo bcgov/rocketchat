@@ -1,0 +1,20 @@
+#!/bin/bash
+
+SECRETS_DIR=/vault/secrets
+
+echo "Looking for secrets ..."
+
+if [[ -d "$SECRETS_DIR" ]]; then
+  for f in $SECRETS_DIR/*; do
+    echo "sourcing $f"
+    source $f
+    echo
+  done
+else 
+  echo "No secrets found."
+fi
+
+echo "Continue with normal run."
+
+# trigger built in run workflow
+/usr/libexec/s2i/run

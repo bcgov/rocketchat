@@ -13,10 +13,10 @@
 # limitations under the License.
 #
 ---
-kind: StatefulSet
 apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: mongodb
+  name: reggie-api
 spec:
   template:
     metadata:
@@ -25,19 +25,14 @@ spec:
         vault.hashicorp.com/auth-path: auth/k8s-silver
         vault.hashicorp.com/namespace: platform-services
         vault.hashicorp.com/role: 6e2f55-nonprod
-        vault.hashicorp.com/agent-inject-secret-creds: 6e2f55-nonprod/mongodb-creds-dev
+        vault.hashicorp.com/agent-inject-secret-creds: 6e2f55-nonprod/reggie-creds-dev
         vault.hashicorp.com/agent-inject-template-creds: |
-          {{- with secret "6e2f55-nonprod/mongodb-creds-dev" }}
-          export MONGODB_ADMIN_PASSWORD="{{ .Data.data.MONGODB_ADMIN_PASSWORD }}"
-          export MONGODB_ADMIN_USERNAME="{{ .Data.data.MONGODB_ADMIN_USERNAME }}"
-          export MONGODB_PASSWORD="{{ .Data.data.MONGODB_PASSWORD }}"
-          export MONGODB_USER="{{ .Data.data.MONGODB_USER }}"
-          {{ end }}
+          {{ with secret "6e2f55-nonprod/reggie-creds-dev" -}}
+          export EMAIL_CONFIRMATION_JWT_SECRET="{{ .Data.data.EMAIL_CONFIRMATION_JWT_SECRET }}"
+          export EMAIL_INVITATION_JWT_SECRET="{{ .Data.data.EMAIL_INVITATION_JWT_SECRET }}"
+          export SSO_CLIENT_ID="{{ .Data.data.SSO_CLIENT_ID }}"
+          export SSO_CLIENT_SECRET="{{ .Data.data.SSO_CLIENT_SECRET }}"
+          export SSO_PASSWORD="{{ .Data.data.SSO_PASSWORD }}"
+          {{- end }}
     spec:
       serviceAccountName: 6e2f55-vault
-      containers:
-        - name: mongo-container
-          args:
-            - sh
-            - '-c'
-            - '. /vault/secrets/creds && run-mongod'
