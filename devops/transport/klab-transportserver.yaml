@@ -1,0 +1,21 @@
+apiVersion: cis.f5.com/v1
+kind: TransportServer
+metadata:
+  generation: 1
+  labels:
+    f5cr: "true"
+  name: mongodb-transport-server
+  namespace: jason-dev
+spec:
+  mode: performance
+  pool:
+    monitor:
+      interval: 10
+      timeout: 10
+      type: tcp
+    service: mongodb
+    servicePort: 27017
+  snat: auto
+  virtualServerAddress: xxx.xxx.xxx.xxx
+  virtualServerName: jason-dev-mongo-transport-server
+  virtualServerPort: 53135
