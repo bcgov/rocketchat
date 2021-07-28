@@ -32,6 +32,7 @@ spec:
           export MONGODB_ADMIN_USERNAME="{{ .Data.data.MONGODB_ADMIN_USERNAME }}"
           export MONGODB_PASSWORD="{{ .Data.data.MONGODB_PASSWORD }}"
           export MONGODB_USER="{{ .Data.data.MONGODB_USER }}"
+          export MONGODB_KEYFILE_VALUE="{{ .Data.data.MONGODB_KEYFILE_VALUE }}"
           {{ end }}
     spec:
       serviceAccountName: 6e2f55-vault
