@@ -17,16 +17,21 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: 6e2f55-test
 bases:
+  - ./routes
   - ../../base/mongo
   - ../../base/policy
   - ../../base/server
   - ../../base/reggie
+  - ../../base/sa
 patches:
   - mongo-replica-patch.yaml
   - mongo-pvc-patch.yaml
   - mongo-resource-patch.yaml
   - rocketchat-resource-patch.yaml
   - rocketchat-probe-patch.yaml
+  - mongodb-vault-patch.yaml
+  - rocketchat-vault-patch.yaml
+  - reggie-api-vault-patch.yaml
 generatorOptions:
   labels:
     app: rocketchat
