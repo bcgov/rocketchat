@@ -40,7 +40,6 @@ patches:
   - mongodb-vault-patch.yaml
   - rocketchat-vault-patch.yaml
   - reggie-api-vault-patch.yaml
-  - mongodb-args-patch.yaml
 generatorOptions:
   labels:
     app: rocketchat
