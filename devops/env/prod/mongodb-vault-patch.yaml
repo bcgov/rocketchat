@@ -41,4 +41,4 @@ spec:
           args:
             - sh
             - '-c'
-            - '. /vault/secrets/creds && run-mongod run-mongod-replication'
+            - '. /vault/secrets/creds && run-mongod-replication'
