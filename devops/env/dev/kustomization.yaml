@@ -45,8 +45,8 @@ configMapGenerator:
       -  config.json=reggie-api-config.json
 images:
   - name: mongo
-    newName: image-registry.openshift-image-registry.svc:5000/bcgov/mongodb-ha 
-    newTag: "3.6-beta"
+    newName: image-registry.openshift-image-registry.svc:5000/bcgov/mongodb-36-ha 
+    newTag: "1"
   - name: rocket.chat
     newName: artifacts.developer.gov.bc.ca/docker-remote/rocket.chat
     newTag: "3.16.2"
