@@ -38,4 +38,4 @@ spec:
           args:
             - sh
             - '-c'
-            - '. /vault/secrets/creds && backup.sh'
+            - '. /vault/secrets/creds && /backup.sh'
