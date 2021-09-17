@@ -50,8 +50,8 @@ class RocketChat extends Component {
     };
 
     const uiSchema = {
-      "ui:help": "Hint: Please make sure it is the GitHub Account Primary email!"
-    }
+      'ui:help': 'Hint: Please make sure it is the GitHub Account Primary email!'
+    };
 
     // TODO: disable button when in progress
     const onSubmit = ({ formData }) => {
