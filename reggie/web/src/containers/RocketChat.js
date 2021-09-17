@@ -49,6 +49,10 @@ class RocketChat extends Component {
       },
     };
 
+    const uiSchema = {
+      "ui:help": "Hint: Please make sure it is the GitHub Account Primary email!"
+    }
+
     // TODO: disable button when in progress
     const onSubmit = ({ formData }) => {
       this.props.inviteUser(this.props.userInfo.id, formData.email, window.location.origin);
@@ -97,6 +101,7 @@ class RocketChat extends Component {
         <Element name={SCROLLER.TARGET}>
           <BaseForm
             formSchema={schema}
+            formUISchema={uiSchema}
             toggled={this.state.toggled}
             onSubmit={onSubmit}
             status={formStatus}
