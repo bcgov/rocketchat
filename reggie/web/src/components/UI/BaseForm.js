@@ -31,6 +31,7 @@ import './BaseForm.css';
  * Json Schema Form
  *
  * @param {Object} formSchema The schema to pass into the form
+ * @param {Object} formUISchema The UI schema for extra form input, optional
  * @param {Function} formValidate Extra validation
  * @param {boolean} toggled Display the whole form or not
  * @param {Function} onSubmit The action upon clicking submit button
@@ -40,6 +41,7 @@ import './BaseForm.css';
  */
 export const BaseForm = ({
   formSchema,
+  formUISchema = {},
   formValidate = null,
   toggled,
   onSubmit,
@@ -69,6 +71,7 @@ export const BaseForm = ({
         <Form
           className="jsform-content"
           schema={formSchema}
+          uiSchema={formUISchema}
           onSubmit={onSubmit}
           validate={formValidate}
           showErrorList={false}
