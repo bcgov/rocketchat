@@ -1,7 +1,7 @@
 class Script {
   /**
-  * @params {object} request
-  */
+   * @params {object} request
+   */
   process_incoming_request({ request }) {
     let data = request.content;
     let attachmentColor = `#36A64F`;
@@ -12,20 +12,20 @@ class Script {
       attachmentColor = `#A63636`;
     }
 
-    let friendlyProjectName = ``;
-    if (data.projectFriendlyName) {
+    let friendlyProjectName=``;
+    if(data.projectFriendlyName) {
       friendlyProjectName = data.projectFriendlyName
     }
 
-    let projectName = ``;
+    let projectName=``;
     if (data.projectName) {
       projectName = data.projectName
-      if (!friendlyProjectName) {
+      if(!friendlyProjectName) {
         friendlyProjectName = projectName
       }
     }
 
-    if (projectName) {
+    if(projectName) {
       statusMsg += ` message received from [${friendlyProjectName}](https://console.pathfinder.gov.bc.ca:8443/console/project/${projectName}/overview):`;
     } else {
       statusMsg += ` message received:`;
@@ -36,7 +36,7 @@ class Script {
     }
 
     return {
-      content: {
+      content:{
         text: statusMsg,
         attachments: [
           {
