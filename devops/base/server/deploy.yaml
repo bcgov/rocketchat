@@ -27,6 +27,7 @@ spec:
     targetPort: 3000
   selector:
     app: rocketchat
+    role: server
   type: ClusterIP
 ---
 kind: PersistentVolumeClaim
