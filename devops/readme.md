@@ -8,6 +8,29 @@ We are using kustomize to template and config RocketChat and Reggie deployments.
 - There is the plan to move RocketChat and all relevant components to Gold and GoldDR clusters, thus there is also a folder for transportServer. This is work in progress at the moment.
 
 ## Run:
+
+1. Preparation:
+
+First of all, we need to setup artifactory image pull credential. Also refer to Artifactory docs described here: https://developer.gov.bc.ca/Artifact-Repositories-(Artifactory).
+
+```shell
+# get the artifactory secret from tools namespace:
+oc -n 6e2f55-tools get secret/artifacts-default-<suffix> -o json | jq '.data.username' | tr -d "\"" | base64 -d
+oc -n 6e2f55-tools get secret/artifacts-default-<suffix> -o json | jq '.data.password' | tr -d "\"" | base64 -d
+
+# Create the secret.
+# 1. Note that the secret name should match the one Rocketchat deployment is using in the imagePullSecrets
+# 2. Note that the docker server will need to match the one we are using!
+
+oc -n 6e2f55-<env_name> create secret docker-registry <pull-secret-name> \
+    --docker-server="docker-remote.artifacts.developer.gov.bc.ca" \
+    --docker-username=<username> \
+    --docker-password=<password> \
+    --docker-email=<username>@<namespace>.local
+```
+
+1. Create App Components:
+
 To manually deploy the app, provide the needed configurations in the ./env folder, and use kustomize to generate oc configurations.
 
 ```shell
