@@ -49,6 +49,9 @@ metadata:
   labels:
     app: rocketchat
 spec:
+  selector:
+    matchLabels:
+      statefulset: mongodb
   serviceName: mongodb-internal
   replicas: 1
   template:
