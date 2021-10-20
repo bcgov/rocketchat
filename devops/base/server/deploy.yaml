@@ -28,22 +28,22 @@ spec:
   selector:
     app: rocketchat
     role: server
-  type: ClusterIP
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  labels:
-    app: rocketchat
-  name: rocketchat-uploads
-spec:
-  storageClassName: netapp-file-standard
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 1Gi
-  volumeName: rocketchat-uploads
+#  type: ClusterIP
+#---
+#kind: PersistentVolumeClaim
+#apiVersion: v1
+#metadata:
+#  labels:
+#    app: rocketchat
+#  name: rocketchat-uploads
+#spec:
+#  storageClassName: netapp-file-standard
+#  accessModes:
+#    - ReadWriteMany
+#  resources:
+#    requests:
+#      storage: 1Gi
+#  volumeName: rocketchat-uploads
 ---
 apiVersion: apps/v1
 kind: Deployment

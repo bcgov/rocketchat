@@ -49,10 +49,6 @@ metadata:
   labels:
     app: rocketchat
 spec:
-  selector:
-    matchLabels:
-      statefulset: mongodb
-  serviceName: mongodb-internal
   replicas: 1
   template:
     metadata:
@@ -110,15 +106,3 @@ spec:
               #     -p $MONGO_INITDB_ROOT_PASSWORD 
               #     --eval "db.adminCommand('ping')" | 
               #     /bin/grep -Eq '\"ok\"[[:space:]]+:[[:space:]]+1'
-  volumeClaimTemplates:
-    - metadata:
-        name: mongo-data
-        labels:
-          name: mongodb
-          app: rocketchat
-      spec:
-        accessModes: [ ReadWriteOnce ]
-        storageClassName: netapp-block-standard
-        resources:
-          requests:
-            storage: 1G
