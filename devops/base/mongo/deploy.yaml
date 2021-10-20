@@ -49,6 +49,7 @@ metadata:
   labels:
     app: rocketchat
 spec:
+  serviceName: mongodb-internal
   replicas: 1
   template:
     metadata:
