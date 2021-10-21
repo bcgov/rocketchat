@@ -100,6 +100,7 @@ If you've received an invitation from an existing Rocket.Chat user, you can acce
 
 If you have recently changed your email for either IDIR account or Github account, or your IDIR account has been updated, you might encounter issues logging into Rocketchat. If this case, please reach out to out team email at PlatformServicesTeam@gov.bc.ca, and include the following information to speed up the troubleshooting process:
 - IDIR or Github username that you are using to login with
+- the email address that is associated with the account
 - if you are using Github, do you belong to `bcgov` or `BCDevops` Github organization?
 - which Rocketchat platform your are using: browser, desktop app or mobile app
 - have you tried to restart the browser and clear cache?
