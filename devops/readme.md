@@ -81,6 +81,8 @@ spec:
           export MONGODB_USER="{{ .Data.data.MONGODB_USER }}"
           export MONGODB_KEYFILE_VALUE="{{ .Data.data.MONGODB_KEYFILE_VALUE }}"
           {{ end }}
+        # optional, this will pull in the access token for debugging in pod
+        vault.hashicorp.com/agent-inject-token: 'true'
     spec:
       # make sure to use the Vault service account for proper access:
       serviceAccountName: 6e2f55-vault
