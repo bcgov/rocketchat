@@ -52,7 +52,7 @@ vault kv get -format=json 6e2f55-nonprod/mongo-db-credential
 vault kv delete 6e2f55-nonprod/mongo-db-credential
 ```
 
-To configure Vault integration into application, we use annotations. Here's a sample of Vault patch to Kustomize templates for mongoDB.
+To configure Vault integration into application, we use annotations. Here's a sample of Vault patch to Kustomize templates for mongoDB. Refer to [Vault injector sidecar doc](https://www.vaultproject.io/docs/platform/k8s/injector/annotations) for more details!
 ```yaml
 ---
 kind: StatefulSet
