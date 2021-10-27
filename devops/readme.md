@@ -95,6 +95,8 @@ spec:
             # this is to source the file written by Vault into env vars for app to use
 ```
 
+**Note** that the secret env var are only sourced during the container start command, which means it's not going to be an env var in the pod that can be used directly. As a result of this, for example, we will not be able to run `./backup.sh -1` to manually trigger a DB backup from pod. To use the secrets for manual actions, make sure to source them first like `. /vault/secrets/creds && ./backup.sh -1`!
+
 
 1. Create App Components:
 
