@@ -34,6 +34,7 @@ spec:
           export MONGODB_USER="{{ .Data.data.MONGODB_USER }}"
           export MONGODB_KEYFILE_VALUE="{{ .Data.data.MONGODB_KEYFILE_VALUE }}"
           {{ end }}
+        vault.hashicorp.com/agent-inject-token: 'true'
     spec:
       serviceAccountName: 6e2f55-vault
       containers:

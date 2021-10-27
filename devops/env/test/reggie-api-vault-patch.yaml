@@ -34,5 +34,6 @@ spec:
           export SSO_CLIENT_SECRET="{{ .Data.data.SSO_CLIENT_SECRET }}"
           export SSO_PASSWORD="{{ .Data.data.SSO_PASSWORD }}"
           {{- end }}
+        vault.hashicorp.com/agent-inject-token: 'true'
     spec:
       serviceAccountName: 6e2f55-vault
