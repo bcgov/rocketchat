@@ -22,7 +22,7 @@ oc -n 6e2f55-tools get secret/artifacts-default-<suffix> -o json | jq '.data.pas
 # 1. Note that the secret name should match the one Rocketchat deployment is using in the imagePullSecrets
 # 2. Note that the docker server will need to match the one we are using!
 
-oc -n 6e2f55-<env_name> create secret docker-registry <pull-secret-name> \
+oc -n 6e2f55-<env_name> create secret docker-registry artifactory-creds \
     --docker-server="docker-remote.artifacts.developer.gov.bc.ca" \
     --docker-username=<username> \
     --docker-password=<password> \
