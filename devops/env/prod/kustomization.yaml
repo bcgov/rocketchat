@@ -69,7 +69,7 @@ images:
     newTag: "1"
   - name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/backup-container
     newTag: "latest"
-  - name: rocket.chat:2.4
+  - name: rocket.chat
     newName: docker-remote.artifacts.developer.gov.bc.ca/rocket.chat
     newTag: "3.18.2"
   - name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-web

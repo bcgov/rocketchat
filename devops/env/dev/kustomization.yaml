@@ -19,12 +19,15 @@ namespace: 6e2f55-dev
 bases:
   - ./routes
   - ../../base/mongo
+  - ../../base/backup
   - ../../base/policy
   - ../../base/server
   - ../../base/reggie
   - ../../base/sa
 patches:
+  - backup-pvc-patch.yaml
   - mongodb-vault-patch.yaml
+  - backup-vault-patch.yaml
   - rocketchat-vault-patch.yaml
   - reggie-api-vault-patch.yaml
 generatorOptions:
@@ -34,6 +37,12 @@ generatorOptions:
 configMapGenerator:
   - name: mongodb-env
     env: mongodb.properties
+  - name: rocketchat-backup-config
+    files:
+      - backup.conf
+  - name: backup-env
+    files:
+      - backup-env.properties
   - name: rocketchat-config
     env: rocketchat.properties
   - name: reggie-web-env

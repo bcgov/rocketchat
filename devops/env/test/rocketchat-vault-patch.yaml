@@ -37,6 +37,7 @@ spec:
           export ADMIN_USERNAME="{{ .Data.data.ADMIN_USERNAME }}"
           export ADMIN_PASS="{{ .Data.data.ADMIN_PASS }}"
           {{- end }}
+        vault.hashicorp.com/agent-inject-token: 'true'
     spec:
       serviceAccountName: 6e2f55-vault
       containers:
