@@ -22,7 +22,7 @@ bases:
   - ../../base/policy
   - ../../base/server
   - ../../base/reggie
-  - ../../base/sa
+  # - ../../base/sa
 patches:
   - mongo-replica-patch.yaml
   - mongo-pvc-patch.yaml
