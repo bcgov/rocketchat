@@ -38,7 +38,7 @@ metadata:
   labels:
     app: rocketchat
   annotations:
-    argocd.argoproj.io/sync-wave: "0"
+    argocd.argoproj.io/sync-wave: "2"
   name: rocketchat-uploads
 spec:
   storageClassName: netapp-file-standard
