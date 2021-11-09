@@ -36,7 +36,7 @@ patches:
   - rocketchat-resource-patch.yaml
   - rocketchat-probe-patch.yaml
   - rocketchat-replica-patch.yaml
-  - rocketchat-pvc-patch.yaml
+#  - rocketchat-pvc-patch.yaml
   - mongodb-vault-patch.yaml
   - backup-vault-patch.yaml
   - rocketchat-vault-patch.yaml
