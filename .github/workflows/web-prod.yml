@@ -1,0 +1,29 @@
+name: Promote Web to Prod
+on:
+  workflow_dispatch:
+jobs:
+  set-image-id:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Log in to OpenShift
+        run: |
+          oc version
+          oc login --token=${{ secrets.OpenShiftToken }} --server=${{ secrets.OpenShiftServerURL }}
+          oc project 6e2f55-tools
+
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Get ID of image with 'latest' tag
+        id: get-image-id
+        run: |
+          export IMAGE_ID="$(oc -n 6e2f55-tools get imagestreamtag reggie-web:latest -o custom-columns=id:image.metadata.name --no-headers)"
+          echo "::set-output name=imagesha::$IMAGE_ID"
+
+      - name: Set image ID in kustomization.yaml
+        run: |
+          cd devops/env/prod
+          kustomize edit set image "reggie-web=image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-web@${{ steps.get-image-id.outputs.imagesha }}"
+          git commit -am "Update Web image ID for Prod"
+          git push origin

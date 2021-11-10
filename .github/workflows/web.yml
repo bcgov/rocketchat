@@ -111,3 +111,20 @@ jobs:
           cmd: |
             'version'
             'tag -n ${NAMESPACE} ${IMAGE_NAME}:latest ${IMAGE_NAME}:${{env.DES_TAG}}'
+
+      # Update Kustomize for image ID
+      # -----------------------------
+      - name: Get the latest image ID
+        id: get-image-id
+        run: |
+          export IMAGE_ID="$(oc -n 6e2f55-tools get imagestreamtag reggie-web:latest -o custom-columns=id:image.metadata.name --no-headers)"
+          echo "::set-output name=imagesha::$IMAGE_ID"
+      - name: Set image ID in kustomization.yaml
+        run: |
+          cd devops/env/dev
+          kustomize edit set image "reggie-web=image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-web@${{ steps.get-image-id.outputs.imagesha }}"
+          cd ../test
+          kustomize edit set image "reggie-web=image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-web@${{ steps.get-image-id.outputs.imagesha }}"
+          git commit -am "Update image IDs for Dev and Test"
+          git push origin
+
