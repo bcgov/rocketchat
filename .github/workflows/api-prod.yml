@@ -1,4 +1,4 @@
-name: Promote API to Prod
+name: Promote Reggie API to Prod
 on:
   workflow_dispatch:
 jobs:
