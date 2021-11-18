@@ -22,7 +22,6 @@ bases:
   - ../../base/policy
   - ../../base/server
   - ../../base/reggie
-#  - ../../base/sa
 patches:
   - mongo-replica-patch.yaml
   - mongo-pvc-patch.yaml
@@ -61,10 +60,6 @@ images:
     newTag: "3.18.2"
   - name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/backup-container
     newTag: "latest"
-  #- name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-web
-  #  newTag: "latest"
-  #- name: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-api
-  #  newTag: "latest"
   - name: reggie-web
     digest: sha256:e4c420c4d55e3c2f1f68d970d4c9e359ed0777bbc7abd707fde8a99fb6ed819f
     newName: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-web

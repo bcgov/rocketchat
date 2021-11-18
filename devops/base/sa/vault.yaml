@@ -20,4 +20,4 @@ metadata:
   labels:
     devops.gov.bc.ca/argocd-app: 6e2f55
 imagePullSecrets:
-  - name: dockerhub-creds
+  - name: artifactory-creds
