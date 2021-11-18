@@ -17,5 +17,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: 6e2f55-vault
+  labels:
+    devops.gov.bc.ca/argocd-app: 6e2f55
 imagePullSecrets:
   - name: artifactory-creds

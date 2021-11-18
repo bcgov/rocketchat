@@ -110,3 +110,4 @@ If you have recently changed your email for either IDIR account or Github accoun
 ## Rocket.Chat Desktop App Troubleshooting
 
 Please report any other problems by [opening an Issue](https://github.com/RocketChat/Rocket.Chat.Electron/issues/new).
+

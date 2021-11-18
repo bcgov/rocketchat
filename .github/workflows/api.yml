@@ -76,4 +76,21 @@ jobs:
           cmd: |
             'version'
             'start-build reggie-api-master-build --follow -n 6e2f55-tools'
-            'tag -n 6e2f55-tools reggie-api:latest reggie-api:${{env.DES_TAG}}'
+          # verify that the version is available via package.json before re-enabling this 
+          #  'tag -n 6e2f55-tools reggie-api:latest reggie-api:${{env.DES_TAG}}'
+
+      # Update Kustomize for image ID
+      # -----------------------------
+      - name: Get the latest image ID
+        id: get-image-id
+        run: |
+          export IMAGE_ID="$(oc -n 6e2f55-tools get imagestreamtag reggie-api:latest -o custom-columns=id:image.metadata.name --no-headers)"
+          echo "::set-output name=imagesha::$IMAGE_ID"
+      - name: Set image ID in kustomization.yaml
+        run: |
+          cd devops/env/dev
+          kustomize edit set image "reggie-api=image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-api@${{ steps.get-image-id.outputs.imagesha }}"
+          cd ../test
+          kustomize edit set image "reggie-api=image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-api@${{ steps.get-image-id.outputs.imagesha }}"
+          git commit -am "Update image IDs for Dev and Test"
+          git push origin

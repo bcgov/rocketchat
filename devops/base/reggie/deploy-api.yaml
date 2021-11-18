@@ -54,7 +54,8 @@ spec:
     spec:
       containers:
         - name: reggie-api
-          image: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-api:latest
+          #image: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/reggie-api:latest
+          image: reggie-api
           startupProbe:
             httpGet:
               path: /api/v1/ehlo
