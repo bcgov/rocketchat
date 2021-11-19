@@ -1,41 +1,73 @@
 # DevOps for RocketChat and Reggie
 
-## Structure:
-We are using Kustomize to template and config RocketChat and Reggie deployments.
-- the Kustomization templates are in ./base folder, sorted by the micro-services components.
-- also note that we have build templates in ./base/tekton folder. However, please notes that we are using GitHub workflows for CI at the moment, see ../.github/workflows for details.
-- the environment configurations are in ./env folder. Please note that all secrets are using Vault services, the only thing that would need a local secret file is the route certificates. They should be placed in the ./env/<env_name>/routes, please refer to the specific kustomization.yaml for details.
-- There is the plan to move RocketChat and all relevant components to Gold and GoldDR clusters, thus there is also a folder for transportServer. This is work in progress at the moment.
+This RocketChat suite uses Argo CD and Kustomize to manage deployments.  Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.  Kustomize is a tool for efficiently managing Kubernetes resource manifests for multiple environments.  GitHub Actions constitute the CI portion of the pipeline.
 
-## Run:
+The purpose of this document is to describe:
+* the 'devops' directory structure
+* the CI/CD pipelines
+* how to work with Argo CD for management of deployments
 
-1. Preparation:
+## Table of Contents
+1. [Prerequisites](#prerequisites)
+    1. [CLIs](#clis)
+    2. [Access](#access)
+2. [Kustomize](#kustomize)
+3. [Argo CD](#argocd)
+4. [Vault](#vault)
+5. [GitHub Actions](#github-actions)
 
-First of all, we need to setup artifactory image pull credential. Also refer to Artifactory docs described here: https://developer.gov.bc.ca/Artifact-Repositories-(Artifactory).
 
-```shell
-# get the artifactory secret from tools namespace:
-oc -n 6e2f55-tools get secret/artifacts-default-<suffix> -o json | jq '.data.username' | tr -d "\"" | base64 -d
-oc -n 6e2f55-tools get secret/artifacts-default-<suffix> -o json | jq '.data.password' | tr -d "\"" | base64 -d
+## Prerequisites <a name="prerequisites">
+If you intend to manage or extend the DevOps infrastructure described here, you will need some tools, as well as access to the systems in question.  If not, continue with the next section.
+* CLIs
+  * [kustomize](https://kubectl.docs.kubernetes.io/installation/kustomize/)
+  * [oc](https://access.redhat.com/documentation/en-us/openshift_container_platform/4.7/html-single/cli_tools/index#cli-getting-started)
+  * [vault](https://www.vaultproject.io/downloads)
+* Access
+  * OCP project - Access to the OpenShift console for the given namespace
+  * Argo CD UI - Access to the Argo CD Project containing the RocketChat Applications
+  * This repo
 
-# Create the secret.
-# 1. Note that the secret name should match the one Rocketchat deployment is using in the imagePullSecrets
-# 2. Note that the docker server will need to match the one we are using!
+## Kustomize
+All Kubernetes resources are represented by a YAML manifest, which can be stored as files in a Git repository and applied directly to the OpenShift cluster.  Kustomize is a system that provides an efficient way of managing a single set of manifests for your application for all of your non-prod and prod environments.  It does this by establishing a base set of manifests, as well as a set of "overlay" files that define any non-default settings or resources for each environment.
 
-oc -n 6e2f55-<env_name> create secret docker-registry artifactory-creds \
-    --docker-server="docker-remote.artifacts.developer.gov.bc.ca" \
-    --docker-username=<username> \
-    --docker-password=<password> \
-    --docker-email=<username>@<namespace>.local
+[https://kustomize.io/](https://kustomize.io/)
+[https://argo-cd.readthedocs.io/en/release-2.0/user-guide/kustomize/](https://argo-cd.readthedocs.io/en/release-2.0/user-guide/kustomize/)
+
+The base files are all managed in the `base` directory and are complete resource manifest files.  There is a `kustomization.yaml` file in the base directory, which lists the manifests that are to be included.  **Note:** Each manifest must be listed in the kustomization.yaml file or it will be ignored.
+
+Each environment's overlays are in the respective `env/*` directories.  Like the 'base' directory, each 'env/ENV' directory contains a 'kustomization.yaml' file.  This file contains multiple sections:
+* `bases` - a list of directories containing 'base' files
+* `resources` - a list of local (environment-specific) resource files that are not part of the base
+* `patches` - a list of patch files that modify a resource or resources defined in a base manifest
+* `configMapGenerator` - a list of files defining config maps
+* `images` - a list of images used by the application, which allows for simple setting of the image IDs for each environment
+* and there are more options - see [Kustomization](https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/)
+
+You can verify that your manifests will build, and review the result offline, by creating a manifest file using the CLI.
+```
+# Generate an all-inclusive manifest for review
+# ---------------------------------------------
+kustomize build devops/env/<env_name> > deployment.yaml
 ```
 
-1. Vault setup:
-We are using Vault to manage application secrets. First of all we need to make sure the secrets are existing in the corresponding Vault project. Following are some basic steps to create and check the secret key-value pairs.
+## Argo CD
+An application in Argo CD is configured to monitor the overlays path within this repository, such as `devops/env/prod`.  It compares the manifest files with the actual resources in the cluster and makes any changes necessary in order to make them the same.  If automatic synchronization is enabled, updates will be initiated within three minutes.  When automatic synchronization is not enabled, an update to the manifests will result in Argo CD showing the application as being "out of sync" and the app can be manually synchronized by clicking the Sync button in the Argo CD UI.  Note that Argo CD allows you to specify both a branch and a path for an application, so you may use an alternate branch to test changes to the Kustomize files.
 
-**Note** that following are just samples, refer to Vault documentation or do `vault -h`. It's recommeded to use Vault cli instead of the GUI as it offers way more options and documentation!
+For more infomation on Argo CD, see [the docs](https://argo-cd.readthedocs.io/en/release-2.0/).
+ 
+## Vault
+It is important to never include passwords, certificates, or other secret information in your manifests, for security reasons.  Therefor, we use Vault for management of secrets and can safely incorporate them into the app.
+
+[Vault Documentation](https://www.vaultproject.io/docs)
+
+1. Vault setup:
+First of all, we need to make sure the secrets are exist in the corresponding Vault project. The following are some basic steps to create and check the secret key-value pairs.
+
+**Note** that the following are just samples; refer to Vault documentation or run `vault -h` for more information. It's recommeded to use the Vault CLI instead of the GUI, as it offers more options and documentation.
 
 ```shell
-# Login to Vault
+# Log in to Vault
 export VAULT_ADDR=https://vault.developer.gov.bc.ca/
 export VAULT_NAMESPACE=platform-services
 vault login -method=oidc -namespace=platform-services role=6e2f55
@@ -97,27 +129,15 @@ spec:
 
 **Note** that the secret env var are only sourced during the container start command, which means it's not going to be an env var in the pod that can be used directly. As a result of this, for example, we will not be able to run `./backup.sh -1` to manually trigger a DB backup from pod. To use the secrets for manual actions, make sure to source them first like `. /vault/secrets/creds && ./backup.sh -1`!
 
-
-1. Create App Components:
-
-To manually deploy the app, provide the needed configurations in the ./env folder, and use Kustomize to generate oc configurations.
-
-```shell
-# generate configs:
-kustomize build devops/env/<env_name> > deployment.yaml
-
-# dry run to test:
-oc apply -f deployment.yaml --dru-run
-
-# when all good, apply the configuration:
-oc apply -f deployment.yaml
-
-# To delete objects, first check on what are there:
-oc get all -l "app=rocketchat"
-oc get all -l "app=reggie"
-
-# then delete:
-oc delete all -l "app=rocketchat"
-oc delete all -l "app=reggie"
+## GitHub Actions <a name="github-actions">
+The `.github/workflows/` directory contains GitHub Action workflows.  These are used to build and test the images, and if the build and test are successful, to update the image ID for the target environment(s).  For the migration to Argo CD, these were updated so that upon a successful build, the kustomization.yaml file for the target environment is updated with the new image ID, as described above in the Kustomize section.  This is achieved by getting the unique SHA256 ID of the new image and applying that with the 'kustomize' CLI.
 ```
+kustomize edit set image "reggie-api=<image_registry>/<image_path>@<image_ID>"
+```
+See the files in `.github/workflows/` for complete details.
+
+The workflows are started by either a push or merge (`on.push`) or manually (`on.workflow_dispatch`).
+
+
+
 
