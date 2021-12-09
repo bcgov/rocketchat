@@ -24,21 +24,21 @@ spec:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/auth-path: auth/k8s-silver
         vault.hashicorp.com/namespace: platform-services
-        vault.hashicorp.com/role: 6e2f55-prod
-        vault.hashicorp.com/agent-inject-secret-mongocreds: 6e2f55-prod/mongodb-creds
+        vault.hashicorp.com/role: 87d478-prod
+        vault.hashicorp.com/agent-inject-secret-mongocreds: 87d478-prod/mongodb-creds
         vault.hashicorp.com/agent-inject-template-mongocreds: |
-          {{ with secret "6e2f55-prod/mongodb-creds" -}}
+          {{ with secret "87d478-prod/mongodb-creds" -}}
           export MONGO_URL="mongodb://{{ .Data.data.MONGODB_USER }}:{{ .Data.data.MONGODB_PASSWORD }}@mongodb:27017/rocketdb?replicaSet=rs0"
           export MONGO_OPLOG_URL="mongodb://{{ .Data.data.MONGODB_ADMIN_USERNAME }}:{{ .Data.data.MONGODB_ADMIN_PASSWORD }}@mongodb:27017/local?authSource=admin&replicaSet=rs0"
           {{- end }}
-        vault.hashicorp.com/agent-inject-secret-servercreds: 6e2f55-prod/rocketchat-creds
+        vault.hashicorp.com/agent-inject-secret-servercreds: 87d478-prod/rocketchat-creds
         vault.hashicorp.com/agent-inject-template-servercreds: |
-          {{ with secret "6e2f55-prod/rocketchat-creds" -}}
+          {{ with secret "87d478-prod/rocketchat-creds" -}}
           export ADMIN_USERNAME="{{ .Data.data.ADMIN_USERNAME }}"
           export ADMIN_PASS="{{ .Data.data.ADMIN_PASS }}"
           {{- end }}
     spec:
-      serviceAccountName: 6e2f55-vault
+      serviceAccountName: 87d478-vault
       containers:
         - name: rocketchat
           args:

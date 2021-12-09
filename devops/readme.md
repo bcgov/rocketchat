@@ -70,18 +70,18 @@ First of all, we need to make sure the secrets are exist in the corresponding Va
 # Log in to Vault
 export VAULT_ADDR=https://vault.developer.gov.bc.ca/
 export VAULT_NAMESPACE=platform-services
-vault login -method=oidc -namespace=platform-services role=6e2f55
+vault login -method=oidc -namespace=platform-services role=87d478
 
 # Create secrets
-vault kv put 6e2f55-nonprod/mongo-db-credential MONGODB_ADMIN_PASSWORD=123 MONGODB_ADMIN_USERNAME=admin-user
+vault kv put 87d478-nonprod/mongo-db-credential MONGODB_ADMIN_PASSWORD=123 MONGODB_ADMIN_USERNAME=admin-user
 
 # Check secrets
-vault kv get 6e2f55-nonprod/mongo-db-credential
-vault kv get -format=json 6e2f55-nonprod/mongo-db-credential
+vault kv get 87d478-nonprod/mongo-db-credential
+vault kv get -format=json 87d478-nonprod/mongo-db-credential
 # (make sure Options are put before the secret name)
 
 # Delete secrets
-vault kv delete 6e2f55-nonprod/mongo-db-credential
+vault kv delete 87d478-nonprod/mongo-db-credential
 ```
 
 To configure Vault integration into application, we use annotations. Here's a sample of Vault patch to Kustomize templates for mongoDB. Refer to [Vault injector sidecar doc](https://www.vaultproject.io/docs/platform/k8s/injector/annotations) for more details!
@@ -100,13 +100,13 @@ spec:
         vault.hashicorp.com/auth-path: auth/k8s-silver
         vault.hashicorp.com/namespace: platform-services
         # specify which project in vault, prod or nonprod:
-        vault.hashicorp.com/role: 6e2f55-nonprod
+        vault.hashicorp.com/role: 87d478-nonprod
         # specify which secret to use:
-        vault.hashicorp.com/agent-inject-secret-creds: 6e2f55-nonprod/mongodb-creds-dev
+        vault.hashicorp.com/agent-inject-secret-creds: 87d478-nonprod/mongodb-creds-dev
         # this writes a file in the path /vault/secrets/creds with the following content
         # {{ .Data.data.xxx }} takes the corresponding value from secret key
         vault.hashicorp.com/agent-inject-template-creds: |
-          {{- with secret "6e2f55-nonprod/mongodb-creds-dev" }}
+          {{- with secret "87d478-nonprod/mongodb-creds-dev" }}
           export MONGODB_ADMIN_PASSWORD="{{ .Data.data.MONGODB_ADMIN_PASSWORD }}"
           export MONGODB_ADMIN_USERNAME="{{ .Data.data.MONGODB_ADMIN_USERNAME }}"
           export MONGODB_PASSWORD="{{ .Data.data.MONGODB_PASSWORD }}"
@@ -117,7 +117,7 @@ spec:
         vault.hashicorp.com/agent-inject-token: 'true'
     spec:
       # make sure to use the Vault service account for proper access:
-      serviceAccountName: 6e2f55-vault
+      serviceAccountName: 87d478-vault
       containers:
         - name: mongo-container
           args:

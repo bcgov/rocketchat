@@ -24,10 +24,10 @@ spec:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/auth-path: auth/k8s-silver
         vault.hashicorp.com/namespace: platform-services
-        vault.hashicorp.com/role: 6e2f55-prod
-        vault.hashicorp.com/agent-inject-secret-creds: 6e2f55-prod/mongodb-creds
+        vault.hashicorp.com/role: 87d478-prod
+        vault.hashicorp.com/agent-inject-secret-creds: 87d478-prod/mongodb-creds
         vault.hashicorp.com/agent-inject-template-creds: |
-          {{- with secret "6e2f55-prod/mongodb-creds" }}
+          {{- with secret "87d478-prod/mongodb-creds" }}
           export MONGODB_ADMIN_PASSWORD="{{ .Data.data.MONGODB_ADMIN_PASSWORD }}"
           export MONGODB_ADMIN_USERNAME="{{ .Data.data.MONGODB_ADMIN_USERNAME }}"
           export MONGODB_PASSWORD="{{ .Data.data.MONGODB_PASSWORD }}"
@@ -35,7 +35,7 @@ spec:
           export MONGODB_KEYFILE_VALUE="{{ .Data.data.MONGODB_KEYFILE_VALUE }}"
           {{ end }}
     spec:
-      serviceAccountName: 6e2f55-vault
+      serviceAccountName: 87d478-vault
       containers:
         - name: mongo-container
           args:

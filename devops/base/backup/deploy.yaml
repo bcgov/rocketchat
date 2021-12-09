@@ -70,7 +70,7 @@ spec:
     spec:
       containers:
         - name: mongodb-backup
-          image: image-registry.openshift-image-registry.svc:5000/6e2f55-tools/backup-container:latest
+          image: image-registry.openshift-image-registry.svc:5000/87d478-tools/backup-container:latest
           envFrom: 
             - configMapRef:
                 name: backup-env

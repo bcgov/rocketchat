@@ -24,20 +24,20 @@ spec:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/auth-path: auth/k8s-silver
         vault.hashicorp.com/namespace: platform-services
-        vault.hashicorp.com/role: 6e2f55-nonprod
-        vault.hashicorp.com/agent-inject-secret-creds: 6e2f55-nonprod/mongodb-creds-dev
+        vault.hashicorp.com/role: 87d478-nonprod
+        vault.hashicorp.com/agent-inject-secret-creds: 87d478-nonprod/mongodb-creds-dev
         vault.hashicorp.com/agent-inject-template-creds: |
-          {{- with secret "6e2f55-nonprod/mongodb-creds-dev" }}
+          {{- with secret "87d478-nonprod/mongodb-creds-dev" }}
           export DATABASE_PASSWORD="{{ .Data.data.MONGODB_PASSWORD }}"
           export DATABASE_USER="{{ .Data.data.MONGODB_USER }}"
           {{ end }}
-        vault.hashicorp.com/agent-inject-secret-webhook: 6e2f55-nonprod/backup-webhook-dev
+        vault.hashicorp.com/agent-inject-secret-webhook: 87d478-nonprod/backup-webhook-dev
         vault.hashicorp.com/agent-inject-template-webhook: |
-          {{- with secret "6e2f55-nonprod/backup-webhook-dev" }}
+          {{- with secret "87d478-nonprod/backup-webhook-dev" }}
           export WEBHOOK_URL="{{ .Data.data.WEBHOOK_URL }}"
           {{ end }}
     spec:
-      serviceAccountName: 6e2f55-vault
+      serviceAccountName: 87d478-vault
       containers:
         - name: mongodb-backup
           args:
