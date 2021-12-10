@@ -65,8 +65,8 @@ images:
   - name: image-registry.openshift-image-registry.svc:5000/87d478-tools/backup-container
     newTag: "latest"
   - name: reggie-web
-    digest: sha256:e4c420c4d55e3c2f1f68d970d4c9e359ed0777bbc7abd707fde8a99fb6ed819f
+    digest: sha256:a7d434618d2c2c016984f44f248c7a9a2c39581a3057244105d954442b0b3b02
     newName: image-registry.openshift-image-registry.svc:5000/87d478-tools/reggie-web
   - name: reggie-api
-    digest: sha256:5a49f35d3bc63c4d37d4f56f98493d42d634662a33395ea42c9f84ab109091f5
+    digest: sha256:3b3d6d6e4c6f19adc98a4ed0b1b39a8e507827f7718ee21d4f91429e26844dda
     newName: image-registry.openshift-image-registry.svc:5000/87d478-tools/reggie-api
