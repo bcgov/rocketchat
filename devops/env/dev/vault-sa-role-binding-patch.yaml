@@ -19,5 +19,5 @@ metadata:
   name: system:image-puller-vault-sa
 subjects:
 - kind: ServiceAccount
-  name: 6e2f55-vault
-  namespace: 6e2f55-dev
+  name: 87d478-vault
+  namespace: 87d478-dev
