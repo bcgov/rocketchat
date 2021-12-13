@@ -17,6 +17,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: system:image-puller-vault-sa
+  namespace: 87d478-tools
 subjects:
 - kind: ServiceAccount
   name: 87d478-vault
