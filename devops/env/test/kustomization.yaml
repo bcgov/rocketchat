@@ -22,6 +22,7 @@ bases:
   - ../../base/policy
   - ../../base/server
   - ../../base/reggie
+  - ../../base/vault
 patches:
   - mongo-replica-patch.yaml
   - mongo-pvc-patch.yaml
@@ -31,6 +32,7 @@ patches:
   - mongodb-vault-patch.yaml
   - rocketchat-vault-patch.yaml
   - reggie-api-vault-patch.yaml
+  - vault-sa-role-binding-patch.yaml
 generatorOptions:
   labels:
     app: rocketchat
