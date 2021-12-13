@@ -23,7 +23,7 @@ bases:
   - ../../base/policy
   - ../../base/server
   - ../../base/reggie
-  - ../../base/vault
+  - ../../base/sa
 patches:
   - backup-pvc-patch.yaml
   - mongodb-vault-patch.yaml
