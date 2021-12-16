@@ -40,10 +40,10 @@ spec:
         vault.hashicorp.com/agent-inject-secret-s3creds: 87d478-nonprod/rocketchat-uploads-s3-bucket-cred-dev
         vault.hashicorp.com/agent-inject-template-s3creds: |
           {{ with secret "87d478-nonprod/rocketchat-uploads-s3-bucket-cred-dev" -}}
-          export ACCESS_KEY="{{ .Data.data.ACCESS_KEY }}"
-          export BUCKET_NAME="{{ .Data.data.BUCKET_NAME }}"
-          export S3_URL="{{ .Data.data.S3_URL }}"
-          export SECRET_KEY="{{ .Data.data.SECRET_KEY }}"
+          export OVERWRITE_SETTING_FileUpload_S3_AWSAccessKeyId="{{ .Data.data.ACCESS_KEY }}"
+          export OVERWRITE_SETTING_FileUpload_S3_Bucket="{{ .Data.data.BUCKET_NAME }}"
+          export OVERWRITE_SETTING_FileUpload_S3_BucketURL="{{ .Data.data.S3_URL }}"
+          export OVERWRITE_SETTING_FileUpload_S3_AWSSecretAccessKey="{{ .Data.data.SECRET_KEY }}"
           {{- end }}
         vault.hashicorp.com/agent-inject-token: 'true'
     spec:

@@ -100,27 +100,6 @@ spec:
           envFrom: 
             - configMapRef:
                 name: rocketchat-config
-          env:
-            - name: OVERWRITE_SETTING_FileUpload_S3_AWSAccessKeyId
-              valueFrom:
-                secretKeyRef:
-                  name: rocketchat-uploads-s3-bucket
-                  key: accesskey
-            - name: OVERWRITE_SETTING_FileUpload_S3_AWSSecretAccessKey
-              valueFrom:
-                secretKeyRef:
-                  name: rocketchat-uploads-s3-bucket
-                  key: secretkey
-            - name: OVERWRITE_SETTING_FileUpload_S3_Bucket
-              valueFrom:
-                secretKeyRef:
-                  name: rocketchat-uploads-s3-bucket
-                  key: bucketname
-            - name: OVERWRITE_SETTING_FileUpload_S3_BucketURL
-              valueFrom:
-                secretKeyRef:
-                  name: rocketchat-uploads-s3-bucket
-                  key: S3_URL
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       imagePullSecrets:
