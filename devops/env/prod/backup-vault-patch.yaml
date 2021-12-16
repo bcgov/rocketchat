@@ -22,7 +22,7 @@ spec:
     metadata:
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
-        vault.hashicorp.com/auth-path: auth/k8s-silver
+        vault.hashicorp.com/auth-path: auth/k8s-gold
         vault.hashicorp.com/namespace: platform-services
         vault.hashicorp.com/role: 87d478-prod
         vault.hashicorp.com/agent-inject-secret-creds: 87d478-prod/mongodb-creds

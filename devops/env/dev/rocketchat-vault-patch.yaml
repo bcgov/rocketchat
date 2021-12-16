@@ -22,7 +22,7 @@ spec:
     metadata:
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
-        vault.hashicorp.com/auth-path: auth/k8s-silver
+        vault.hashicorp.com/auth-path: auth/k8s-gold
         vault.hashicorp.com/namespace: platform-services
         vault.hashicorp.com/role: 87d478-nonprod
         vault.hashicorp.com/agent-inject-secret-mongocreds: 87d478-nonprod/mongodb-creds-dev
@@ -36,6 +36,14 @@ spec:
           {{ with secret "87d478-nonprod/rocketchat-creds-dev" -}}
           export ADMIN_USERNAME="{{ .Data.data.ADMIN_USERNAME }}"
           export ADMIN_PASS="{{ .Data.data.ADMIN_PASS }}"
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-s3creds: 87d478-nonprod/rocketchat-uploads-s3-bucket-cred-dev
+        vault.hashicorp.com/agent-inject-template-s3creds: |
+          {{ with secret "87d478-nonprod/rocketchat-uploads-s3-bucket-cred-dev" -}}
+          export ACCESS_KEY="{{ .Data.data.ACCESS_KEY }}"
+          export BUCKET_NAME="{{ .Data.data.BUCKET_NAME }}"
+          export S3_URL="{{ .Data.data.S3_URL }}"
+          export SECRET_KEY="{{ .Data.data.SECRET_KEY }}"
           {{- end }}
         vault.hashicorp.com/agent-inject-token: 'true'
     spec:

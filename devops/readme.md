@@ -97,7 +97,7 @@ spec:
       annotations:
         # specify the vault service in use:
         vault.hashicorp.com/agent-inject: 'true'
-        vault.hashicorp.com/auth-path: auth/k8s-silver
+        vault.hashicorp.com/auth-path: auth/k8s-gold
         vault.hashicorp.com/namespace: platform-services
         # specify which project in vault, prod or nonprod:
         vault.hashicorp.com/role: 87d478-nonprod
