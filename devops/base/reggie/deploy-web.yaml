@@ -84,7 +84,7 @@ spec:
         component: web
       name: reggie
     spec:
-      serviceAccountName: 87d478-vault:
+      serviceAccountName: 87d478-vault
       containers:
         - name: reggie-web
           #image: image-registry.openshift-image-registry.svc:5000/87d478-tools/reggie-web:latest
