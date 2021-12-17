@@ -24,6 +24,9 @@ bases:
   - ../../base/server
   - ../../base/reggie
   - ../../base/sa
+resources:
+  - rolebinding_default.yaml
+  - rolebinding_edit.yaml
 patches:
   - backup-pvc-patch.yaml
   - mongodb-vault-patch.yaml
@@ -31,8 +34,6 @@ patches:
   - rocketchat-vault-patch.yaml
   - reggie-api-vault-patch.yaml
   - vault-sa-role-binding-patch.yaml
-  - rolebinding_default-patch.yaml
-  - rolebinding_edit-patch.yaml
 generatorOptions:
   labels:
     app: rocketchat
