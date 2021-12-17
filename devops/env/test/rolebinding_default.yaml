@@ -7,15 +7,6 @@ subjects:
   - kind: ServiceAccount
     name: default
     namespace: 87d478-test
-  - kind: User
-    apiGroup: rbac.authorization.k8s.io
-    name: "\_\_"
-  - kind: User
-    apiGroup: rbac.authorization.k8s.io
-    name: "\_-n"
-  - kind: User
-    apiGroup: rbac.authorization.k8s.io
-    name: 87d478-tools
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
