@@ -31,6 +31,8 @@ patches:
   - rocketchat-vault-patch.yaml
   - reggie-api-vault-patch.yaml
   - vault-sa-role-binding-patch.yaml
+  - rolebinding_default-patch.yaml
+  - rolebinding_edit-patch.yaml
 generatorOptions:
   labels:
     app: rocketchat
