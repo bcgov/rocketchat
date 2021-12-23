@@ -84,7 +84,7 @@ spec:
               cpu: 20m
               memory: 128Mi
       imagePullSecrets:
-        - name: artifactory-creds
+        - name: artifactory-push
       volumes:
         - name: config-vol
           configMap:
