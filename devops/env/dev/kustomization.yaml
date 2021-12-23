@@ -75,6 +75,6 @@ images:
   - name: reggie-api
     #digest: sha256:3b3d6d6e4c6f19adc98a4ed0b1b39a8e507827f7718ee21d4f91429e26844dda
     #digest: sha256:da676e8d7958c8205e97df40178e627c0f292eeabbe761376c1737781276646e
-    digest: latest
+    digest: ""
     #newName: image-registry.openshift-image-registry.svc:5000/87d478-tools/reggie-api
-    newName: artifacts.developer.gov.bc.ca/r6e2-reggie/reggie-api
+    newName: artifacts.developer.gov.bc.ca/r6e2-reggie/reggie-api/latest
