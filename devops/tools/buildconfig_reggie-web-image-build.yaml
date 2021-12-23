@@ -1,0 +1,46 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: reggie-web-image-build
+  namespace: 87d478-tools
+  labels:
+    app: reggie-web
+    name: reggie-web-image-build
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'reggie-web:latest'
+  resources:
+    limits:
+      cpu: '2'
+      memory: 4Gi
+    requests:
+      cpu: '1'
+      memory: 2Gi
+  successfulBuildsHistoryLimit: 3
+  failedBuildsHistoryLimit: 3
+  strategy:
+    type: Docker
+    dockerStrategy:
+      from:
+        kind: DockerImage
+        name: >-
+          image-registry.openshift-image-registry.svc:5000/87d478-tools/caddy-s2i-builder:latest
+  source:
+    type: Dockerfile
+    dockerfile: >-
+      FROM
+      image-registry.openshift-image-registry.svc:5000/87d478-tools/caddy-s2i-builder:latest
+
+      COPY build /opt/app-root/
+
+      CMD /usr/libexec/s2i/run
+    images:
+      - from:
+          kind: ImageStreamTag
+          name: 'reggie-web-artifacts:latest'
+        paths:
+          - sourcePath: /opt/app-root/src/build/
+            destinationDir: .
+  runPolicy: Serial

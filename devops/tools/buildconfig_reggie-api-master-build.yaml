@@ -1,0 +1,40 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: reggie-api-master-build
+  namespace: 87d478-tools
+  labels:
+    app: reggie-api
+    name: reggie-api-master-build
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'reggie-api:latest'
+  resources:
+    limits:
+      cpu: '2'
+      memory: 2Gi
+    requests:
+      cpu: '1'
+      memory: 2Gi
+  strategy:
+    type: Source
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        namespace: openshift
+        name: 'nodejs:10'
+      env:
+        - name: BUILD_LOGLEVEL
+          value: '5'
+      incremental: false
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/bcgov/rocketchat.git'
+      ref: master
+    contextDir: reggie/api
+  triggers:
+    - type: ConfigChange
+  runPolicy: Serial
