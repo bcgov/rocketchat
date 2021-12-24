@@ -42,7 +42,7 @@ spec:
       CMD /usr/libexec/s2i/run
     images:
       - from:
-          kind: ImageStreamTag
+          kind: DockerImage
           name: 'artifacts.developer.gov.bc.ca/r6e2-reggie/reggie-web-artifacts:latest'
         paths:
           - sourcePath: /opt/app-root/src/build/
