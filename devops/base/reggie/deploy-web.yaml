@@ -84,9 +84,10 @@ spec:
         component: web
       name: reggie
     spec:
+      imagePullSecrets:
+        - name: artifactory-rocketchat
       containers:
         - name: reggie-web
-          #image: image-registry.openshift-image-registry.svc:5000/87d478-tools/reggie-web:latest
           image: reggie-web
           startupProbe:
             httpGet:

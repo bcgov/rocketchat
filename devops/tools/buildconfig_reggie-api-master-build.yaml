@@ -12,7 +12,7 @@ spec:
       kind: DockerImage
       name: 'artifacts.developer.gov.bc.ca/r6e2-reggie/reggie-api:latest'
     pushSecret:
-      name: artifactory-push
+      name: artifactory-rocketchat
   resources:
     limits:
       cpu: '2'

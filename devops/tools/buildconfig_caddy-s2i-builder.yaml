@@ -1,0 +1,25 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: caddy-s2i-builder
+  labels:
+    name: caddy-s2i-builder
+spec:
+  output:
+    to:
+      kind: DockerImage
+      name: 'artifacts.developer.gov.bc.ca/r6e2-reggie/caddy-s2i-builder:latest'
+    pushSecret:
+      name: artifactory-rocketchat
+  strategy:
+    type: Docker
+    dockerStrategy: {}
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/bcgov/s2i-caddy-nodejs.git'
+      ref: master
+    contextDir: /
+  triggers:
+    - type: ConfigChange
+  runPolicy: Serial

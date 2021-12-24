@@ -12,7 +12,7 @@ spec:
       kind: DockerImage
       name: 'artifacts.developer.gov.bc.ca/r6e2-reggie/reggie-web:latest'
     pushSecret:
-      name: artifactory-push
+      name: artifactory-rocketchat
   resources:
     limits:
       cpu: '2'
@@ -25,15 +25,16 @@ spec:
   strategy:
     type: Docker
     dockerStrategy:
+      pullSecret: artifactory-rocketchat
       from:
         kind: DockerImage
         name: >-
-          image-registry.openshift-image-registry.svc:5000/87d478-tools/caddy-s2i-builder:latest
+          artifacts.developer.gov.bc.ca/r6e2-reggie/caddy-s2i-builder:latest
   source:
     type: Dockerfile
     dockerfile: >-
       FROM
-      image-registry.openshift-image-registry.svc:5000/87d478-tools/caddy-s2i-builder:latest
+      artifacts.developer.gov.bc.ca/r6e2-reggie/caddy-s2i-builder:latest
 
       COPY build /opt/app-root/
 
@@ -45,4 +46,5 @@ spec:
         paths:
           - sourcePath: /opt/app-root/src/build/
             destinationDir: .
+        pullSecret: artifactory-rocketchat
   runPolicy: Serial
