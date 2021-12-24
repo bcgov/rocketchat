@@ -19,7 +19,7 @@ namespace: 87d478-dev
 bases:
 #  - ./routes
   - ../../base/mongo
-  - ../../base/backup
+#  - ../../base/backup
   - ../../base/policy
   - ../../base/server
   - ../../base/reggie
