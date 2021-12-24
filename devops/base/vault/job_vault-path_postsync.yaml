@@ -3,14 +3,14 @@ apiVersion: batch/v1
 metadata:
   annotations:
     argocd.argoproj.io/hook: PostSync
-  name: set-vault-path-pre
+  name: set-vault-path-post
 spec:
   template:
     metadata:
-      name: set-vault-path-pre
+      name: set-vault-path-post
     spec:
       containers:
-        - name: set-vault-path-pre
+        - name: set-vault-path-post
           image: 'docker.io/bcgovdevops/utility-server:latest'
           env:
             - name: MYNAMESPACE
