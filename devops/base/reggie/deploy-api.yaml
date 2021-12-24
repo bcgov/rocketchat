@@ -52,6 +52,8 @@ spec:
         component: api
       name: reggie
     spec:
+      imagePullSecrets:
+        - name: artifactory-push
       containers:
         - name: reggie-api
           #image: image-registry.openshift-image-registry.svc:5000/87d478-tools/reggie-api:latest
