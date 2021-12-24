@@ -26,7 +26,7 @@ spec:
     type: Docker
     dockerStrategy:
       pullSecret:
-        - artifactory-rocketchat
+        name: artifactory-rocketchat
       from:
         kind: DockerImage
         name: >-
@@ -48,5 +48,5 @@ spec:
           - sourcePath: /opt/app-root/src/build/
             destinationDir: .
         pullSecret:
-          - artifactory-rocketchat
+          name: artifactory-rocketchat
   runPolicy: Serial
