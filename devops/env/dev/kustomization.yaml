@@ -29,7 +29,7 @@ resources:
   - rolebinding_default.yaml
   - rolebinding_edit.yaml
 patches:
-  - backup-pvc-patch.yaml
+#  - backup-pvc-patch.yaml
   - mongodb-vault-patch.yaml
   - backup-vault-patch.yaml
   - rocketchat-vault-patch.yaml
