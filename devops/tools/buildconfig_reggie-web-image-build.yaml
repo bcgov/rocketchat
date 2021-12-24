@@ -43,7 +43,7 @@ spec:
     images:
       - from:
           kind: ImageStreamTag
-          name: 'reggie-web-artifacts:latest'
+          name: 'artifacts.developer.gov.bc.ca/r6e2-reggie/reggie-web-artifacts:latest'
         paths:
           - sourcePath: /opt/app-root/src/build/
             destinationDir: .
