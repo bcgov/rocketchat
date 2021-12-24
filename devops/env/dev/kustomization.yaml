@@ -71,10 +71,8 @@ images:
   - name: image-registry.openshift-image-registry.svc:5000/87d478-tools/backup-container
     newTag: "latest"
   - name: reggie-web
-    digest: sha256:d9e4132d306b114868c811859de855da170058255dc6fb9e7dfa3107bb4aa816
-    newName: image-registry.openshift-image-registry.svc:5000/87d478-tools/reggie-web
+    digest: sha256:5bb2a56481e42778432404e74608d9774240c6279d3b0314d91c9d7080c6fdb8
+    newName: artifacts.developer.gov.bc.ca/r6e2-reggie/reggie-web
   - name: reggie-api
-    #digest: sha256:3b3d6d6e4c6f19adc98a4ed0b1b39a8e507827f7718ee21d4f91429e26844dda
-    digest: sha256:da676e8d7958c8205e97df40178e627c0f292eeabbe761376c1737781276646e
-    #newName: image-registry.openshift-image-registry.svc:5000/87d478-tools/reggie-api
+    digest: sha256:4d6567853d2d178b30dfb141cb3c45f58dac2a914fb2c430160ec2499f7317ef
     newName: artifacts.developer.gov.bc.ca/r6e2-reggie/reggie-api
