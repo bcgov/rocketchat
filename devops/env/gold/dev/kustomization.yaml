@@ -24,7 +24,6 @@ bases:
   - ../../../base/server
   - ../../../base/reggie
   - ../../../base/sa
-  - ../../../base/vault
 resources:
   - rolebinding_default.yaml
   - rolebinding_edit.yaml
