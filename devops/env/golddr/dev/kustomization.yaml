@@ -1,0 +1,78 @@
+# Copyright 2021 The Province of British Columbia
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: 87d478-dev
+bases:
+#  - ./routes
+  - ../../base/mongo
+  - ../../base/backup
+  - ../../base/policy
+  - ../../base/server
+  - ../../base/reggie
+  - ../../base/sa
+  - ../../base/vault
+resources:
+  - rolebinding_default.yaml
+  - rolebinding_edit.yaml
+patches:
+  - backup-pvc-patch.yaml
+  - mongodb-vault-patch.yaml
+  - backup-vault-patch.yaml
+  - rocketchat-vault-patch.yaml
+  - reggie-api-vault-patch.yaml
+  - vault-sa-role-binding-patch.yaml
+generatorOptions:
+  labels:
+    app: rocketchat
+    type: generated
+configMapGenerator:
+  - name: mongodb-env
+    envs:
+      - mongodb.properties
+  - name: rocketchat-backup-config
+    files:
+      - backup.conf
+  - name: backup-env
+    files:
+      - backup-env.properties
+  - name: rocketchat-config
+    envs:
+      - rocketchat.properties
+  - name: reggie-web-env
+    envs:
+      - reggie-web.properties
+  - name: reggie-api-env
+    envs:
+      - reggie-api.properties
+  - name: reggie-api-config
+    files:
+      -  config.json=reggie-api-config.json
+images:
+  - name: mongo
+    newName: image-registry.openshift-image-registry.svc:5000/bcgov/mongodb-36-ha 
+    newTag: "1"
+  - name: rocket.chat
+    newName: docker-remote.artifacts.developer.gov.bc.ca/rocket.chat
+    newTag: "3.18.2"
+  - name: image-registry.openshift-image-registry.svc:5000/87d478-tools/backup-container
+    newTag: "latest"
+  - name: reggie-web
+    digest: sha256:5bb2a56481e42778432404e74608d9774240c6279d3b0314d91c9d7080c6fdb8
+    newName: artifacts.developer.gov.bc.ca/r6e2-reggie/reggie-web
+  - name: reggie-api
+    digest: sha256:4d6567853d2d178b30dfb141cb3c45f58dac2a914fb2c430160ec2499f7317ef
+    newName: artifacts.developer.gov.bc.ca/r6e2-reggie/reggie-api

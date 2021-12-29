@@ -1,0 +1,86 @@
+# Copyright 2021 The Province of British Columbia
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: 87d478-prod
+bases:
+#  - ./routes
+  - ../../base/mongo
+  - ../../base/backup
+  - ../../base/policy
+  - ../../base/server
+  - ../../base/reggie
+  - ../../base/sa
+  - ../../base/vault
+resources:
+  - rocketchat-hpa.yaml
+  - rolebinding_default.yaml
+  - rolebinding_edit.yaml
+#   - rocketchat-pdb.yaml
+#   - mongo-pdb.yaml
+patches:
+  - backup-pvc-patch.yaml
+  - mongo-replica-patch.yaml
+  - mongo-pvc-patch.yaml
+  - mongo-resource-patch.yaml
+  - rocketchat-resource-patch.yaml
+  - rocketchat-probe-patch.yaml
+  - rocketchat-replica-patch.yaml
+  - rocketchat-pvc-patch.yaml
+  - mongodb-vault-patch.yaml
+  - backup-vault-patch.yaml
+  - rocketchat-vault-patch.yaml
+  - reggie-api-vault-patch.yaml
+  - vault-sa-role-binding-patch.yaml
+generatorOptions:
+  labels:
+    app: rocketchat
+    type: generated
+configMapGenerator:
+  - name: mongodb-env
+    envs:
+      - mongodb.properties
+  - name: rocketchat-backup-config
+    files:
+      - backup.conf
+  - name: backup-env
+    files:
+      - backup-env.properties
+  - name: rocketchat-config
+    envs:
+      - rocketchat.properties
+  - name: reggie-web-env
+    envs:
+      - reggie-web.properties
+  - name: reggie-api-env
+    envs:
+      - reggie-api.properties
+  - name: reggie-api-config
+    files:
+      -  config.json=reggie-api-config.json
+images:
+  - name: mongo
+    newName: image-registry.openshift-image-registry.svc:5000/bcgov/mongodb-36-ha
+    newTag: "1"
+  - name: rocket.chat
+    newName: docker-remote.artifacts.developer.gov.bc.ca/rocket.chat
+    newTag: "3.18.2"
+  - name: reggie-web
+    digest: sha256:e4c420c4d55e3c2f1f68d970d4c9e359ed0777bbc7abd707fde8a99fb6ed819f
+    newName: image-registry.openshift-image-registry.svc:5000/87d478-tools/reggie-web
+  - name: reggie-api
+    digest: sha256:5a49f35d3bc63c4d37d4f56f98493d42d634662a33395ea42c9f84ab109091f5
+    newName: image-registry.openshift-image-registry.svc:5000/87d478-tools/reggie-api

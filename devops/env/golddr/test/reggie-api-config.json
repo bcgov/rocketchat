@@ -1,0 +1,15 @@
+{
+  "sso": {
+    "grantType": "client_credentials",
+    "clientId": "reggie-api",
+    "callback": "/v1/auth/callback",
+    "authUrl": "https://test.oidc.gov.bc.ca/auth/realms/devhub/protocol/openid-connect/auth",
+    "tokenUrl": "https://test.oidc.gov.bc.ca/auth/realms/devhub/protocol/openid-connect/token",
+    "certsUrl": "https://test.oidc.gov.bc.ca/auth/realms/devhub/protocol/openid-connect/certs"
+  },
+  "ssoSA": {
+    "grantType": "client_credentials",
+    "username": "reggie-sa",
+    "tokenUrl": "https://test.oidc.gov.bc.ca/auth/realms/devhub/protocol/openid-connect/token"
+  }
+}
