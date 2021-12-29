@@ -18,12 +18,12 @@ kind: Kustomization
 namespace: 87d478-test
 bases:
 #  - ./routes
-  - ../../base/mongo
-  - ../../base/policy
-  - ../../base/server
-  - ../../base/reggie
-  - ../../base/sa
-  - ../../base/vault
+  - ../../../base/mongo
+  - ../../../base/policy
+  - ../../../base/server
+  - ../../../base/reggie
+  - ../../../base/sa
+  - ../../../base/vault
 resources:
   - rolebinding_default.yaml
   - rolebinding_edit.yaml

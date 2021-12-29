@@ -18,13 +18,13 @@ kind: Kustomization
 namespace: 87d478-prod
 bases:
 #  - ./routes
-  - ../../base/mongo
-  - ../../base/backup
-  - ../../base/policy
-  - ../../base/server
-  - ../../base/reggie
-  - ../../base/sa
-  - ../../base/vault
+  - ../../../base/mongo
+  - ../../../base/backup
+  - ../../../base/policy
+  - ../../../base/server
+  - ../../../base/reggie
+  - ../../../base/sa
+  - ../../../base/vault
 resources:
   - rocketchat-hpa.yaml
   - rolebinding_default.yaml
