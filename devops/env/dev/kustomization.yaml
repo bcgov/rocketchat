@@ -19,7 +19,7 @@ namespace: 87d478-dev
 bases:
 #  - ./routes
   - ../../base/mongo
-#  - ../../base/backup
+  - ../../base/backup
   - ../../base/policy
   - ../../base/server
   - ../../base/reggie
@@ -29,9 +29,9 @@ resources:
   - rolebinding_default.yaml
   - rolebinding_edit.yaml
 patches:
-#  - backup-pvc-patch.yaml
+  - backup-pvc-patch.yaml
   - mongodb-vault-patch.yaml
-#  - backup-vault-patch.yaml
+  - backup-vault-patch.yaml
   - rocketchat-vault-patch.yaml
   - reggie-api-vault-patch.yaml
   - vault-sa-role-binding-patch.yaml
