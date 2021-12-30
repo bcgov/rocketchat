@@ -1,0 +1,19 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: reggie-api
+  labels:
+    app: reggie
+    component: api
+spec:
+  host: dev-reggie.apps.gold.devops.gov.bc.ca
+  path: /api
+  to:
+    kind: Service
+    name: reggie-api
+    weight: 100
+  port:
+    targetPort: 8000-tcp
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

@@ -17,7 +17,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: 87d478-dev
 bases:
-#  - ./routes
+  - ../../../base/routes
   - ../../../base/mongo
   - ../../../base/backup
   - ../../../base/policy
@@ -34,6 +34,9 @@ patches:
   - rocketchat-vault-patch.yaml
   - reggie-api-vault-patch.yaml
   - vault-sa-role-binding-patch.yaml
+  - route_reggie-api-patch.yaml
+  - route_reggie-web-patch.yaml
+  - route_rocketchat-patch.yaml
 generatorOptions:
   labels:
     app: rocketchat
