@@ -6,3 +6,4 @@ resources:
   - buildconfig_reggie-api-master-build.yaml
   - buildconfig_reggie-web-artifact-build.yaml
   - buildconfig_reggie-web-image-build.yaml
+  - rolebinding_tools.yaml
