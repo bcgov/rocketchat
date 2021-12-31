@@ -17,20 +17,18 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: 87d478-prod
 bases:
-  - ../../../base/mongo
   - ../../../base/backup
+  - ../../../base/mongo
   - ../../../base/policy
-  - ../../../base/server
   - ../../../base/reggie
+  - ../../../base/routes
   - ../../../base/sa
+  - ../../../base/server
 resources:
   - rocketchat-hpa.yaml
   - rocketchat-pdb.yaml
   - rolebinding_default.yaml
   - rolebinding_edit.yaml
-  - route_reggie-api-patch.yaml
-  - route_reggie-web-patch.yaml
-  - route_rocketchat-patch.yaml
   - mongo-pdb.yaml
 patches:
   - backup-pvc-patch.yaml
@@ -44,6 +42,9 @@ patches:
   - rocketchat-replica-patch.yaml
   - rocketchat-resource-patch.yaml
   - rocketchat-vault-patch.yaml
+  - route_reggie-api-patch.yaml
+  - route_reggie-web-patch.yaml
+  - route_rocketchat-patch.yaml
   - vault-sa-role-binding-patch.yaml
 generatorOptions:
   labels:
