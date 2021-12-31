@@ -1,0 +1,13 @@
+# This resource is created in Gold only, not GoldDR
+# -------------------------------------------------
+apiVersion: porter.devops.gov.bc.ca/v1alpha1
+kind: TransportServerClaim
+metadata:
+  name: mongodb-transport-server
+spec:
+  monitor:
+    interval: 10
+    timeout: 10
+    type: tcp
+  service: mongodb
+  servicePort: 27017

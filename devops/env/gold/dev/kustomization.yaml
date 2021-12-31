@@ -29,14 +29,14 @@ resources:
   - rolebinding_edit.yaml
 patches:
   - backup-pvc-patch.yaml
-  - mongodb-vault-patch.yaml
   - backup-vault-patch.yaml
-  - rocketchat-vault-patch.yaml
+  - mongodb-vault-patch.yaml
   - reggie-api-vault-patch.yaml
-  - vault-sa-role-binding-patch.yaml
+  - rocketchat-vault-patch.yaml
   - route_reggie-api-patch.yaml
   - route_reggie-web-patch.yaml
   - route_rocketchat-patch.yaml
+  - vault-sa-role-binding-patch.yaml
 generatorOptions:
   labels:
     app: rocketchat
