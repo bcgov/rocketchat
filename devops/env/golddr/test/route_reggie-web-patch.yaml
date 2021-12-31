@@ -1,0 +1,6 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: reggie-web
+spec:
+  host: test-reggie.apps.golddr.devops.gov.bc.ca
