@@ -42,6 +42,21 @@ spec:
   selector:
     statefulset: mongodb
 ---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mongodb-primary
+  labels:
+    app: rocketchat
+spec:
+  ports:
+    - name: mongodb
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+  selector:
+    statefulset.kubernetes.io/pod-name: mongodb-0
+---
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
