@@ -86,7 +86,7 @@ spec:
                 - mongodb
             topologyKey: "kubernetes.io/hostname"
       imagePullSecrets:
-        - artifactory-creds
+        - name: artifactory-creds
       containers:
         - name: mongo-container
           image: mongo:3.6
