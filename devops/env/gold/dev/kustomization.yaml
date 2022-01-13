@@ -65,14 +65,12 @@ configMapGenerator:
       -  config.json=reggie-api-config.json
 images:
   - name: mongo
-    #newName: image-registry.openshift-image-registry.svc:5000/bcgov/mongodb-36-ha 
     newName: artifacts.developer.gov.bc.ca/bcgov-docker-local/mongodb-36-ha 
     newTag: "1"
   - name: rocket.chat
     newName: docker-remote.artifacts.developer.gov.bc.ca/rocket.chat
     newTag: "3.18.2"
-  #- name: image-registry.openshift-image-registry.svc:5000/87d478-tools/backup-container
-  - name: artifacts.developer.gov.bc.ca/plat-common-images/backup-container
+  - name: artifacts.developer.gov.bc.ca/bcgov-docker-local/backup-container
     newTag: "latest"
   - name: reggie-web
     digest: sha256:5bb2a56481e42778432404e74608d9774240c6279d3b0314d91c9d7080c6fdb8

@@ -68,9 +68,11 @@ spec:
         role: backup
       name: mongodb-backup
     spec:
+      imagePullSecrets:
+        - name: artifactory-creds
       containers:
         - name: mongodb-backup
-          image: image-registry.openshift-image-registry.svc:5000/87d478-tools/backup-container:latest
+          image: artifacts.developer.gov.bc.ca/bcgov-docker-local/backup-container:latest
           envFrom: 
             - configMapRef:
                 name: backup-env
