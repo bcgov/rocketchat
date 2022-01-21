@@ -2,7 +2,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - buildconfig_caddy-s2i-builder.yaml
   - buildconfig_reggie-api-master-build.yaml
   - buildconfig_reggie-web-artifact-build.yaml
   - buildconfig_reggie-web-image-build.yaml
