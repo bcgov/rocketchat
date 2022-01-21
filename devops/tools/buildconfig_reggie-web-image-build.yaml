@@ -10,7 +10,7 @@ spec:
   output:
     to:
       kind: DockerImage
-      name: 'artifacts.developer.gov.bc.ca/r6e2-reggie/reggie-web:latest'
+      name: 'artifacts.developer.gov.bc.ca/r6e2-rocketchat/reggie-web:latest'
     pushSecret:
       name: artifactory-rocketchat
   resources:
@@ -26,16 +26,16 @@ spec:
     type: Docker
     dockerStrategy:
       pullSecret:
-        name: artifactory-rocketchat
+        name: artifactory-creds
       from:
         kind: DockerImage
         name: >-
-          artifacts.developer.gov.bc.ca/r6e2-reggie/caddy-s2i-builder:latest
+          artifacts.developer.gov.bc.ca/bcgov-docker-local/caddy-s2i-builder:latest
   source:
     type: Dockerfile
     dockerfile: >-
       FROM
-      artifacts.developer.gov.bc.ca/r6e2-reggie/caddy-s2i-builder:latest
+      artifacts.developer.gov.bc.ca/bcgov-docker-local/caddy-s2i-builder:latest
 
       COPY build /opt/app-root/
 
@@ -43,7 +43,7 @@ spec:
     images:
       - from:
           kind: DockerImage
-          name: 'artifacts.developer.gov.bc.ca/r6e2-reggie/reggie-web-artifacts:latest'
+          name: 'artifacts.developer.gov.bc.ca/r6e2-rocketchat/reggie-web-artifacts:latest'
         paths:
           - sourcePath: /opt/app-root/src/build/
             destinationDir: .

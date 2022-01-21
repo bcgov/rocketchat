@@ -10,7 +10,7 @@ spec:
   output:
     to:
       kind: DockerImage
-      name: 'artifacts.developer.gov.bc.ca/r6e2-reggie/reggie-api:latest'
+      name: 'artifacts.developer.gov.bc.ca/r6e2-rocketchat/reggie-api:latest'
     pushSecret:
       name: artifactory-rocketchat
   resources:
