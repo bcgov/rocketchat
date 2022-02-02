@@ -66,7 +66,7 @@ images:
   - name: rocket.chat
     newName: docker-remote.artifacts.developer.gov.bc.ca/rocket.chat
     newTag: "3.18.2"
-  - name: artifacts.developer.gov.bc.ca/bcgov-docker-local/backup-container
+  - name: artifacts.developer.gov.bc.ca/bcgov-docker-local/backup-container-mongo
     newTag: "latest"
   - name: reggie-web
     digest: sha256:6cbbd9127ca23ae7ac0d20e77a709ce51a366e2de33aead09f512290a4195478

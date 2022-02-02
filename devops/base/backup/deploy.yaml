@@ -72,7 +72,7 @@ spec:
         - name: artifactory-creds
       containers:
         - name: mongodb-backup
-          image: artifacts.developer.gov.bc.ca/bcgov-docker-local/backup-container:latest
+          image: artifacts.developer.gov.bc.ca/bcgov-docker-local/backup-container-mongo:latest
           envFrom: 
             - configMapRef:
                 name: backup-env
