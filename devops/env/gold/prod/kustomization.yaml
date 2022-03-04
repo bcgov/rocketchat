@@ -75,7 +75,7 @@ configMapGenerator:
 images:
   - name: mongo
     newName: artifacts.developer.gov.bc.ca/bcgov-docker-local/mongodb-36-ha
-    newTag: "1"
+    newTag: "latest"
     #digest: sha256:f64561873bc4629a09ac31de16945a62021d55a0d2c5466ad59ac55a21e902a2
   - name: rocket.chat
     newName: docker-remote.artifacts.developer.gov.bc.ca/rocket.chat
