@@ -92,8 +92,10 @@ spec:
               path: /api/info
               port: server-port
               scheme: HTTP
-            failureThreshold: 54
+            failureThreshold: 20
             periodSeconds: 10
+            initialDelaySeconds: 30
+            # only putting a delay here since every other probes will run after startupProbe
           livenessProbe:
             httpGet:
               path: /api/info
