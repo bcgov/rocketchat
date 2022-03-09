@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-scripts
+data:
+  import_mongo_dump.sh: |
+    #!/bin/sh
+    echo "import_mongo_dump.sh: This is a placeholder"
+  prepare_mongo_dump.sh: |
+    #!/bin/sh
+    echo "prepare_mongo_dump.sh: This is a placeholder"
