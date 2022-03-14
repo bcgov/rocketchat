@@ -93,11 +93,11 @@ spec:
             timeoutSeconds: 5
           resources:
             limits:
-              cpu: 100m
-              memory: 896Mi
+              cpu: 400m
+              memory: 2Gi
             requests:
-              memory: 512Mi
-              cpu: 50m
+              memory: 1280Mi
+              cpu: 200m
           envFrom: 
             - configMapRef:
                 name: rocketchat-config

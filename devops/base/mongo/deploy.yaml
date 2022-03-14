@@ -114,11 +114,11 @@ spec:
                 name: mongodb-env
           resources:
             limits:
-              memory: 2048Mi
-              cpu: 100m
+              memory: 5G
+              cpu: 1000m
             requests:
-              memory: 1024Mi
-              cpu: 80m
+              memory: 3G
+              cpu: 500m
           readinessProbe:
             exec:
               command:
