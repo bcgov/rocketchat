@@ -16,13 +16,13 @@
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: mongodb
+  name: mongodb-gold
 spec:
   template:
     metadata:
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
-        vault.hashicorp.com/auth-path: auth/k8s-golddr
+        vault.hashicorp.com/auth-path: auth/k8s-golddrdr
         vault.hashicorp.com/namespace: platform-services
         vault.hashicorp.com/role: 87d478-prod
         vault.hashicorp.com/agent-inject-secret-creds: 87d478-prod/mongodb-creds

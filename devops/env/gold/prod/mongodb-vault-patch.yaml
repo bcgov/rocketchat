@@ -16,7 +16,7 @@
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: mongodb
+  name: mongodb-golddrdr
 spec:
   template:
     metadata:
