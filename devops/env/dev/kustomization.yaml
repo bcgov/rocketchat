@@ -29,7 +29,7 @@ patches:
   - backup-vault-patch.yaml
   - rocketchat-vault-patch.yaml
   - reggie-api-vault-patch.yaml
-  - vault-sa-role-binding-patch.yaml
+  #- vault-sa-role-binding-patch.yaml
 generatorOptions:
   labels:
     app: rocketchat
