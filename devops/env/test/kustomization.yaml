@@ -55,8 +55,8 @@ configMapGenerator:
 images:
   - name: mongo
     newName: image-registry.openshift-image-registry.svc:5000/bcgov/mongodb-36-ha 
-    #newTag: "1"
-    digest: sha256:f64561873bc4629a09ac31de16945a62021d55a0d2c5466ad59ac55a21e902a2
+    newTag: "1"
+    #digest: sha256:a0b9ba0dd80c9fba894b1e81a137b6bd6e3df6050f9fbcf9b5dc90101322d4d2
   - name: rocket.chat
     newName: docker-remote.artifacts.developer.gov.bc.ca/rocket.chat
     newTag: "3.18.2"
