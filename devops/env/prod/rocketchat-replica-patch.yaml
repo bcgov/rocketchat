@@ -20,4 +20,9 @@ metadata:
     app: rocketchat
   name: rocketchat
 spec:
-  replicas: 3
+  replicas: 5
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
