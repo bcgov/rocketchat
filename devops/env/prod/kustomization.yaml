@@ -23,7 +23,6 @@ bases:
   - ../../base/policy
   - ../../base/server
   - ../../base/reggie
-  - ../../base/vault
 resources:
   - rocketchat-hpa.yaml
 #   - rocketchat-pdb.yaml

@@ -22,7 +22,6 @@ bases:
   - ../../base/policy
   - ../../base/server
   - ../../base/reggie
-  - ../../base/vault
 patches:
   - mongo-replica-patch.yaml
   - mongo-pvc-patch.yaml
