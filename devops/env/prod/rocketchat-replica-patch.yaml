@@ -20,7 +20,7 @@ metadata:
     app: rocketchat
   name: rocketchat
 spec:
-  replicas: 5
+  replicas:
   strategy:
     rollingUpdate:
       maxSurge: 25%
