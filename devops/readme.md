@@ -4,6 +4,8 @@
 
 **Rocketchat has moved to the Gold cluster and uses a separate gitops repo**
 
+**Reggie is still managed in this repo**
+
 This RocketChat suite uses Argo CD and Kustomize to manage deployments.  Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.  Kustomize is a tool for efficiently managing Kubernetes resource manifests for multiple environments.  GitHub Actions constitute the CI portion of the pipeline.
 
 The purpose of this document is to describe:
