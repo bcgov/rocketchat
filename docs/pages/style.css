@@ -1,0 +1,68 @@
+.rc-old.full-page {
+    overflow: scroll;
+    display: -webkit-box !important;
+  }
+  
+  .page-home h1 {
+    font-weight: 900 !important;
+    font-size: 15px;
+  }
+  
+  .page-home h4 {
+    text-transform: capitalize !important;
+  }
+  
+  .page-home code {
+    background: #f6ddff !important;
+    border: none;
+    padding: 0 !important;
+    display: inline !important;
+  }
+  
+  .page-home ul, .page-home ol {
+    margin-bottom: 20px;
+    list-style: disc outside none;
+    margin-left: 5px;
+    padding-left: 1em;
+  }
+  
+  .page-home li {
+    padding-bottom: 10px;
+    padding-left: 1em;
+  }
+  
+  .page-home ul .page-home ul, .page-home ol .page-home ul {
+    list-style-type: circle;
+    margin: 10px 20px 0 20px;
+  }
+  
+  .login-terms ul, .login-terms ol {
+    margin-bottom: 20px;
+    list-style: disc outside none;
+    margin-left: 5px;
+    padding-left: 1em;
+  }
+  
+  .login-terms li {
+    padding-bottom: 10px;
+    padding-left: 1em;
+  }
+  
+  .login-terms ul .login-terms ul, .login-terms ol .login-terms ul {
+    list-style-type: circle;
+    margin: 10px 20px 0 20px;
+  }
+  
+  
+  .pathfinder-terms {
+    font-size: 15px !important;
+  }
+  
+  .pathfinder-terms h4 {
+    margin: 10px 0;
+  }
+  
+  .pathfinder-terms ul {
+    text-align: left;
+  }
+  
