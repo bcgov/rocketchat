@@ -14,14 +14,13 @@ WORKDIR /
 COPY mongodb-org-rhel7.repo /etc/yum.repos.d/mongodb-org.repo
 
 # Load the backup scripts into the container (must be executable).
-COPY backup.* /
-COPY webhook-template.json /
+COPY backup.* webhook-template.json /
 
 # The previously-used RedHat image with Mongo 3.6 has an executable called
 # /usr/bin/run-mongod, which is used in the backup container scripts, so we
 # need to recreate that in order to maintain the same functionality.
 COPY run-mongod /usr/bin/
-RUN chmod +x /usr/bin/run-mongod
+COPY container-scripts /usr/share/
 
 # ==============================================================================
 # Install go-crond (from https://github.com/BCDevOps/go-crond)
@@ -34,8 +33,9 @@ RUN chmod +x /usr/bin/run-mongod
 ARG SOURCE_REPO=BCDevOps
 ARG GOCROND_VERSION=0.6.3
 ADD https://github.com/$SOURCE_REPO/go-crond/releases/download/$GOCROND_VERSION/go-crond-64-linux /usr/bin/go-crond
+RUN chmod +x /usr/bin/go-crond /usr/bin/run-mongod
 
-RUN chmod +x /usr/bin/go-crond
+RUN find /usr/share/container-scripts -name "*.sh" -exec chmod +x {} \;
 RUN echo $TZ > /etc/timezone
 RUN yum -y update
 RUN yum -y install mongodb-database-tools mongodb-org-shell mongodb-mongosh
@@ -44,3 +44,4 @@ RUN curl "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/opens
 
 # Set the default CMD.
 CMD ["sleep", "infinity"]
+
