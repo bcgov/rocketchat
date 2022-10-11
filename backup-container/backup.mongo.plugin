@@ -87,7 +87,12 @@ function onStartServer(){
     MONGODB_USER=$(getUsername "${_databaseSpec}") \
     MONGODB_PASSWORD=$(getPassword "${_databaseSpec}") \
     MONGODB_ADMIN_PASSWORD=$(getPassword "${_databaseSpec}") \
-    run-mongod >/dev/null 2>&1 &
+    echo "MONGODB_DATABASE: $MONGODB_DATABASE"
+    echo "MONGODB_USER: $MONGODB_USER"
+    echo "MONGODB_PASSWORD: $MONGODB_PASSWORD"
+    echo "MONGODB_ADMIN_PASSWORD: $MONGODB_ADMIN_PASSWORD"
+    #run-mongod >/dev/null 2>&1 &
+    run-mongod &
   )
 }
 
