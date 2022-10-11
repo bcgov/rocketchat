@@ -21,7 +21,7 @@ COPY webhook-template.json /
 # /usr/bin/run-mongod, which is used in the backup container scripts, so we
 # need to recreate that in order to maintain the same functionality.
 COPY run-mongod /usr/bin/
-RUN chmod +x /usr/bin/go-crond /usr/bin/run-mongod
+RUN chmod +x /usr/bin/run-mongod
 
 # ==============================================================================
 # Install go-crond (from https://github.com/BCDevOps/go-crond)
