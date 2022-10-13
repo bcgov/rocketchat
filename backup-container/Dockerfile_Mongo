@@ -43,7 +43,7 @@ RUN chmod +x /usr/bin/go-crond /usr/bin/run-mongod
 RUN find /usr/share/container-scripts -name "*.sh" -exec chmod +x {} \;
 RUN echo $TZ > /etc/timezone
 RUN yum -y update
-RUN yum -y install gettext mongodb-database-tools mongodb-org-shell mongodb-mongosh
+RUN yum -y install gettext mongodb-database-tools mongodb-org-server mongodb-org-shell mongodb-mongosh
 RUN curl "https://dl.min.io/client/mc/release/linux-amd64/mc" -o /usr/local/bin/mc && chmod +x /usr/local/bin/mc
 RUN curl "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz" -o oc.tar.gz && tar xzf oc.tar.gz && mv oc /usr/local/bin && chmod +x /usr/local/bin/oc && rm oc.tar.gz
 
