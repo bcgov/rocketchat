@@ -25,7 +25,7 @@ COPY mongod.conf /etc/
 COPY cgroup-limits /usr/libexec/
 ADD container-scripts /usr/share/container-scripts
 RUN mkdir -p /opt/app-root/src
-RUN chmod +w /usr/share/container-scripts/mongodb/mongod.conf.template
+RUN chmod a+w /usr/share/container-scripts/mongodb/mongod.conf.template
 
 # ==============================================================================
 # Install go-crond (from https://github.com/BCDevOps/go-crond)
