@@ -19,8 +19,10 @@ COPY backup.* webhook-template.json /
 # The previously-used RedHat image with Mongo 3.6 has an executable called
 # /usr/bin/run-mongod, which is used in the backup container scripts, so we
 # need to recreate that in order to maintain the same functionality.
+# Also setting env vars in deployment: CONTAINER_SCRIPTS_PATH, APP_DATA
 COPY run-mongod /usr/bin/
 ADD container-scripts /usr/share/container-scripts
+RUN mkdir -p /opt/app-root/src
 
 # ==============================================================================
 # Install go-crond (from https://github.com/BCDevOps/go-crond)
