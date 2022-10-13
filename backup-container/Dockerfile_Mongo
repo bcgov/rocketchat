@@ -21,6 +21,7 @@ COPY backup.* webhook-template.json /
 # need to recreate that in order to maintain the same functionality.
 # Also setting env vars in deployment: CONTAINER_SCRIPTS_PATH, APP_DATA
 COPY run-mongod /usr/bin/
+COPY mongod.conf /etc/
 ADD container-scripts /usr/share/container-scripts
 RUN mkdir -p /opt/app-root/src
 
