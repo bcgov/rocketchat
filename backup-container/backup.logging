@@ -48,10 +48,10 @@ function logInfo(){
   (
     infoMsg="${1}"
     echo -e "${infoMsg}"
-    postMsgToWebhook "${ENVIRONMENT_FRIENDLY_NAME}" \
-                     "${ENVIRONMENT_NAME}" \
-                     "INFO" \
-                     "${infoMsg}"
+    #postMsgToWebhook "${ENVIRONMENT_FRIENDLY_NAME}" \
+    #                 "${ENVIRONMENT_NAME}" \
+    #                 "INFO" \
+    #                 "${infoMsg}"
   )
 }
 
