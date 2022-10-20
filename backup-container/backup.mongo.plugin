@@ -28,6 +28,7 @@ function onBackupDatabase(){
     echoGreen "Backing up '${_hostname}${_port:+:${_port}}${_database:+/${_database}}' to '${_backupFile}' ..."
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
+    echoGreen "mongodump -h ${_hostname} -d ${_database} ${_authDbArg} ${_portArg} -u ${_username} -p ${_password} --quiet --gzip --archive=${_backupFile}"
     mongodump -h "${_hostname}" -d "${_database}" ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --quiet --gzip --archive=${_backupFile}
     return ${?}
   )
