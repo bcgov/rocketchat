@@ -118,10 +118,9 @@ function onStopServer(){
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
     echoGreen "Server shutdown command: "
-    echoGreen "mongo admin ${_authDbArg} ${_portArg} -u ${_username} -p ${_password} --quiet --eval db.shutdownServer()"
-    echoGreen "mongo 127.0.0.1 ${_authDbArg} ${_portArg} -u admin -p ${MONGODB_ADMIN_PASSWORD} --quiet --eval='db.shutdownServer()'"
     #mongo admin ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --quiet --eval "db.shutdownServer()"
-    mongo 127.0.0.1 ${_authDbArg} ${_portArg} -u admin -p "${MONGODB_ADMIN_PASSWORD}" --quiet --eval="db.shutdownServer()"
+    echoGreen "mongo 127.0.0.1 -u admin -p ${MONGODB_ADMIN_PASSWORD} --quiet --eval='db.shutdownServer()'"
+    mongo 127.0.0.1 -u admin -p "${MONGODB_ADMIN_PASSWORD}" --quiet --eval="db.shutdownServer()"
 
     # Wait for server to stop ...
     local startTime=${SECONDS}
@@ -174,8 +173,9 @@ function onPingDbServer(){
 
     _dbAddressArg=${_hostname}${_port:+:${_port}}${_database:+/${_database}}
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
-    echo "Debug onPingDbServer: mongo ${_dbAddressArg} ${_authDbArg} -u ${_username} -p ${_password}"
-    if mongo ${_dbAddressArg} ${_authDbArg} -u "${_username}" -p "${_password}" --quiet --eval='quit()' >/dev/null 2>&1; then
+    #if mongo ${_dbAddressArg} ${_authDbArg} -u "${_username}" -p "${_password}" --quiet --eval='quit()' >/dev/null 2>&1; then
+    echo "Debug onPingDbServer: mongo 127.0.0.1 ${_authDbArg} -u admin -p $MONGODB_ADMIN_PASSWORD --quiet --eval='quit()'"
+    if mongo 127.0.0.1 -u admin -p $MONGODB_ADMIN_PASSWORD --quiet --eval='quit()' >/dev/null 2>&1; then
       return 0
     else
       return 1
