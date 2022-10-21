@@ -266,6 +266,7 @@ function verifyBackup(){
 
     # Stop the database server and clean up ...
     logInfo "Debug: calling stopServer..."
+    logInfo "stopServer _databaseSpec: ${_databaseSpec}"
     stopServer "${_databaseSpec}"
     logInfo "Debug: calling cleanUp..."
     cleanUp

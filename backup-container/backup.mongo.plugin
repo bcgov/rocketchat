@@ -117,7 +117,9 @@ function onStopServer(){
     _password=$(getPassword ${_databaseSpec})
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
-    mongo admin ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --quiet --eval "db.shutdownServer()"
+    echoGreen "Server shutdown command: "
+    echoGreen "mongo admin ${_authDbArg} ${_portArg} -u ${_username} -p ${_password} --quiet --eval db.shutdownServer()"
+    #mongo admin ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --quiet --eval "db.shutdownServer()"
 
     # Wait for server to stop ...
     local startTime=${SECONDS}
