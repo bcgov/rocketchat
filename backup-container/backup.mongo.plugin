@@ -85,10 +85,10 @@ function onStartServer(){
     echo "_databaseSpec: ${_databaseSpec}"
 
     # Start a local MongoDb instance
-    MONGODB_DATABASE=$(getDatabaseName "${_databaseSpec}") \
-    MONGODB_USER=$(getUsername "${_databaseSpec}") \
-    MONGODB_PASSWORD=$(getPassword "${_databaseSpec}") \
-    MONGODB_ADMIN_PASSWORD=$(getPassword "${_databaseSpec}") \
+    #MONGODB_DATABASE=$(getDatabaseName "${_databaseSpec}") \
+    #MONGODB_USER=$(getUsername "${_databaseSpec}") \
+    #MONGODB_PASSWORD=$(getPassword "${_databaseSpec}") \
+    #MONGODB_ADMIN_PASSWORD=$(getPassword "${_databaseSpec}") \
     echo "MONGODB_DATABASE: $MONGODB_DATABASE"
     echo "MONGODB_USER: $MONGODB_USER"
     echo "MONGODB_PASSWORD: $MONGODB_PASSWORD"
@@ -119,7 +119,9 @@ function onStopServer(){
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
     echoGreen "Server shutdown command: "
     echoGreen "mongo admin ${_authDbArg} ${_portArg} -u ${_username} -p ${_password} --quiet --eval db.shutdownServer()"
+    echoGreen "mongo 127.0.0.1 ${_authDbArg} ${_portArg} -u admin -p ${MONGODB_ADMIN_PASSWORD} --quiet --eval='db.shutdownServer()'"
     #mongo admin ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --quiet --eval "db.shutdownServer()"
+    mongo 127.0.0.1 ${_authDbArg} ${_portArg} -u admin -p "${MONGODB_ADMIN_PASSWORD}" --quiet --eval="db.shutdownServer()"
 
     # Wait for server to stop ...
     local startTime=${SECONDS}
