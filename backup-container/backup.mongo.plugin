@@ -83,19 +83,13 @@ function onStartServer(){
     shift $((OPTIND-1))
 
     _databaseSpec=${1}
-    echo "_databaseSpec: ${_databaseSpec}"
 
     # Start a local MongoDb instance
-    #MONGODB_DATABASE=$(getDatabaseName "${_databaseSpec}") \
-    #MONGODB_USER=$(getUsername "${_databaseSpec}") \
-    #MONGODB_PASSWORD=$(getPassword "${_databaseSpec}") \
-    #MONGODB_ADMIN_PASSWORD=$(getPassword "${_databaseSpec}") \
-    echo "MONGODB_DATABASE: $MONGODB_DATABASE"
-    echo "MONGODB_USER: $MONGODB_USER"
-    echo "MONGODB_PASSWORD: $MONGODB_PASSWORD"
-    echo "MONGODB_ADMIN_PASSWORD: $MONGODB_ADMIN_PASSWORD"
+    MONGODB_DATABASE=$(getDatabaseName "${_databaseSpec}") \
+    MONGODB_USER=$(getUsername "${_databaseSpec}") \
+    MONGODB_PASSWORD=$(getPassword "${_databaseSpec}") \
+    MONGODB_ADMIN_PASSWORD=$(getPassword "${_databaseSpec}") \
     run-mongod >/dev/null 2>&1 &
-    #run-mongod &
   )
 }
 
@@ -118,10 +112,7 @@ function onStopServer(){
     _password=$(getPassword ${_databaseSpec})
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
-    echoGreen "Server shutdown command: "
-    #mongo admin ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --quiet --eval "db.shutdownServer()"
-    echoGreen "mongo -u admin -p ${MONGODB_ADMIN_PASSWORD} --quiet --eval='db.shutdownServer()'"
-    mongo -u admin -p "${MONGODB_ADMIN_PASSWORD}" --quiet --eval="db.shutdownServer()"
+    mongo admin ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --quiet --eval "db.shutdownServer()"
 
     # Wait for server to stop ...
     local startTime=${SECONDS}
@@ -174,9 +165,7 @@ function onPingDbServer(){
 
     _dbAddressArg=${_hostname}${_port:+:${_port}}${_database:+/${_database}}
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
-    #if mongo ${_dbAddressArg} ${_authDbArg} -u "${_username}" -p "${_password}" --quiet --eval='quit()' >/dev/null 2>&1; then
-    echo "Debug onPingDbServer: mongo -u admin -p $MONGODB_ADMIN_PASSWORD --quiet --eval='quit()'"
-    if mongo -u admin -p $MONGODB_ADMIN_PASSWORD --quiet --eval='quit()' >/dev/null 2>&1; then
+    if mongo ${_dbAddressArg} ${_authDbArg} -u "${_username}" -p "${_password}" --quiet --eval='quit()' >/dev/null 2>&1; then
       return 0
     else
       return 1

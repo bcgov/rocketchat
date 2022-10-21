@@ -232,28 +232,23 @@ function verifyBackup(){
     local startTime=${SECONDS}
     startServer -l "${_databaseSpec}"
     rtnCd=${?}
-    logInfo "Debug: startServer rtnCd = ${rtnCd}"
 
     # Restore the database
     if (( ${rtnCd} == 0 )); then
       if [ -z "${quiet}" ]; then
         restoreDatabase -ql "${_databaseSpec}" "${_fileName}"
         rtnCd=${?}
-        logInfo "Debug: restoreDatabase rtnCd = ${rtnCd}"
       else
         # Filter out stdout, keep stderr
         echo "Restoring from backup ..."
         restoreLog=$(restoreDatabase -ql "${_databaseSpec}" "${_fileName}" 2>&1 >/dev/null)
         rtnCd=${?}
-        logInfo "Debug: restoreDatabase quiet rtnCd = ${rtnCd}"
 
         if [ ! -z "${restoreLog}" ] && (( ${rtnCd} == 0 )); then
           echo ${restoreLog}
           unset restoreLog
-          logInfo "Debug: restoreLog unset"
         elif [ ! -z "${restoreLog}" ] && (( ${rtnCd} != 0 )); then
           restoreLog="\n\nThe following issues were encountered during backup verification;\n${restoreLog}"
-          logInfo "Debug: restoreLog = ${restoreLog}"
         fi
       fi
     fi
@@ -265,10 +260,7 @@ function verifyBackup(){
     fi
 
     # Stop the database server and clean up ...
-    logInfo "Debug: calling stopServer..."
-    logInfo "stopServer _databaseSpec: ${_databaseSpec}"
     stopServer "${_databaseSpec}"
-    logInfo "Debug: calling cleanUp..."
     cleanUp
 
     local endTime=${SECONDS}
