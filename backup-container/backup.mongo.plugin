@@ -65,6 +65,7 @@ function onRestoreDatabase(){
     #   Ref: https://stackoverflow.com/questions/36321899/mongorestore-to-a-different-database
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
+    echoGreen "mongorestore --drop -h ${_hostname} -d ${_database} ${_authDbArg} ${_portArg} -u ${_username} -p ${_password} --gzip --archive=${_fileName} --nsInclude='*'"
     mongorestore --drop -h ${_hostname} -d "${_database}" ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --gzip --archive=${_fileName} --nsInclude="*"
     return ${?}
   )
@@ -174,7 +175,7 @@ function onPingDbServer(){
     _dbAddressArg=${_hostname}${_port:+:${_port}}${_database:+/${_database}}
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
     #if mongo ${_dbAddressArg} ${_authDbArg} -u "${_username}" -p "${_password}" --quiet --eval='quit()' >/dev/null 2>&1; then
-    echo "Debug onPingDbServer: mongo ${_authDbArg} -u admin -p $MONGODB_ADMIN_PASSWORD --quiet --eval='quit()'"
+    echo "Debug onPingDbServer: mongo -u admin -p $MONGODB_ADMIN_PASSWORD --quiet --eval='quit()'"
     if mongo -u admin -p $MONGODB_ADMIN_PASSWORD --quiet --eval='quit()' >/dev/null 2>&1; then
       return 0
     else
