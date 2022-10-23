@@ -28,7 +28,7 @@ function onBackupDatabase(){
     echoGreen "Backing up '${_hostname}${_port:+:${_port}}${_database:+/${_database}}' to '${_backupFile}' ..."
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
-    echoGreen "mongodump -h ${_hostname} -d ${_database} ${_authDbArg} ${_portArg} -u ${_username} -p ${_password} --quiet --gzip --archive=${_backupFile}"
+    echoGreen "Debug: mongodump -h ${_hostname} -d ${_database} ${_authDbArg} ${_portArg} -u ${_username} -p ${_password} --quiet --gzip --archive=${_backupFile}"
     mongodump -h "${_hostname}" -d "${_database}" ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --quiet --gzip --archive=${_backupFile}
     return ${?}
   )
@@ -65,7 +65,7 @@ function onRestoreDatabase(){
     #   Ref: https://stackoverflow.com/questions/36321899/mongorestore-to-a-different-database
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
-    echoGreen "mongorestore --drop -h ${_hostname} -d ${_database} ${_authDbArg} ${_portArg} -u ${_username} -p ${_password} --gzip --archive=${_fileName} --nsInclude='*'"
+    echoGreen "Debug: mongorestore --drop -h ${_hostname} -d ${_database} ${_authDbArg} ${_portArg} -u ${_username} -p ${_password} --gzip --archive=${_fileName} --nsInclude='*'"
     mongorestore --drop -h ${_hostname} -d "${_database}" ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --gzip --archive=${_fileName} --nsInclude="*"
     return ${?}
   )
@@ -89,6 +89,7 @@ function onStartServer(){
     MONGODB_USER=$(getUsername "${_databaseSpec}") \
     MONGODB_PASSWORD=$(getPassword "${_databaseSpec}") \
     MONGODB_ADMIN_PASSWORD=$(getPassword "${_databaseSpec}") \
+    echoGreen "Debug: calling run-mongod..."
     run-mongod >/dev/null 2>&1 &
   )
 }
@@ -112,6 +113,7 @@ function onStopServer(){
     _password=$(getPassword ${_databaseSpec})
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
+    echoGreen "Debug: mongo admin ${_authDbArg} ${_portArg} -u ${_username} -p ${_password} --quiet --eval db.shutdownServer()"
     mongo admin ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --quiet --eval "db.shutdownServer()"
 
     # Wait for server to stop ...
@@ -165,6 +167,7 @@ function onPingDbServer(){
 
     _dbAddressArg=${_hostname}${_port:+:${_port}}${_database:+/${_database}}
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
+    echoGreen "Debug: mongo ${_dbAddressArg} ${_authDbArg} -u ${_username} -p ${_password} --quiet --eval='quit()' >/dev/null 2>&1"
     if mongo ${_dbAddressArg} ${_authDbArg} -u "${_username}" -p "${_password}" --quiet --eval='quit()' >/dev/null 2>&1; then
       return 0
     else
@@ -195,6 +198,7 @@ function onVerifyBackup(){
 
     _dbAddressArg=${_hostname}${_port:+:${_port}}${_database:+/${_database}}
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
+    echoGreen "Debug: collections=$(mongo ${_dbAddressArg} ${_authDbArg} -u ${_username} -p ${_password} --quiet --eval 'var dbs = [];dbs = db.getCollectionNames();for (i in dbs){ print(db.dbs[i]);}';)"
     collections=$(mongo ${_dbAddressArg} ${_authDbArg} -u "${_username}" -p "${_password}" --quiet --eval 'var dbs = [];dbs = db.getCollectionNames();for (i in dbs){ print(db.dbs[i]);}';)
     rtnCd=${?}
 
@@ -202,6 +206,8 @@ function onVerifyBackup(){
     if (( ${rtnCd} == 0 )); then
       size=$(getDbSize -l "${_databaseSpec}")
       rtnCd=${?}
+    else
+      echoRed "Debug: collections rtnCd is not zero"
     fi
 
     if (( ${rtnCd} == 0 )); then
@@ -243,8 +249,10 @@ function onGetDbSize(){
 
     _dbAddressArg=${_hostname}${_port:+:${_port}}${_database:+/${_database}}
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
+    echoGreen "Debug: size=$(mongo ${_dbAddressArg} ${_authDbArg} -u ${_username} -p ${_password} --quiet --eval 'printjson(db.stats().fsTotalSize)')"
     size=$(mongo ${_dbAddressArg} ${_authDbArg} -u "${_username}" -p "${_password}" --quiet --eval 'printjson(db.stats().fsTotalSize)')
     rtnCd=${?}
+    echoGreen "Debug: size rtnCd = ${rtnCd}"
 
     echo ${size}
     return ${rtnCd}
