@@ -23,6 +23,7 @@ readonly SLEEP_TIME=1
 # - to be able to change shell params in all scripts
 # for example to use SSL certificate
 function mongo_cmd() {
+  echo "Debug, mongo_cmd: mongo ${shell_args:-} $@"
   mongo ${shell_args:-} $@;
 }
 
