@@ -26,7 +26,7 @@ ADD https://github.com/$SOURCE_REPO/go-crond/releases/download/$GOCROND_VERSION/
 
 USER root
 
-RUN chmod +x /usr/bin/go-crond && chmod g+w /backup*
+RUN chmod +x /usr/bin/go-crond
 # ========================================================================================================
 
 # ========================================================================================================
