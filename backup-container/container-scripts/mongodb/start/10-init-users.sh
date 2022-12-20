@@ -4,6 +4,7 @@
 function mongo_create_admin() {
   if [[ -z "${MONGODB_ADMIN_PASSWORD:-}" ]]; then
     echo >&2 "=> MONGODB_ADMIN_PASSWORD is not set. Authentication can not be set up."
+    echo "=> MONGODB_ADMIN_PASSWORD is not set. Authentication can not be set up."
     exit 1
   fi
 
@@ -12,6 +13,7 @@ function mongo_create_admin() {
 
   if ! mongo_cmd --host "localhost" admin ${1:-} <<<"$js_command"; then
     echo >&2 "=> Failed to create MongoDB admin user."
+    echo "=> Failed to create MongoDB admin user."
     exit 1
   fi
 }
@@ -24,6 +26,7 @@ function mongo_create_user() {
   # Ensure input variables exists
   if [[ -z "${MONGODB_USER:-}" ]]; then
     echo >&2 "=> MONGODB_USER is not set. Failed to create MongoDB user"
+    echo "=> MONGODB_USER is not set. Failed to create MongoDB user"
     exit 1
   fi
   if [[ -z "${MONGODB_PASSWORD:-}" ]]; then
@@ -32,6 +35,7 @@ function mongo_create_user() {
   fi
   if [[ -z "${MONGODB_DATABASE:-}" ]]; then
     echo >&2 "=> MONGODB_DATABASE is not set. Failed to create MongoDB user: ${MONGODB_USER}"
+    echo "=> MONGODB_DATABASE is not set. Failed to create MongoDB user: ${MONGODB_USER}"
     exit 1
   fi
 
@@ -40,6 +44,7 @@ function mongo_create_user() {
 
   if ! mongo_cmd --host "localhost" admin ${1:-} <<<"$js_command"; then
     echo >&2 "=> Failed to create MongoDB user: ${MONGODB_USER}"
+    echo "=> Failed to create MongoDB user: ${MONGODB_USER}"
     exit 1
   fi
 }
@@ -50,6 +55,7 @@ function mongo_reset_user() {
     local js_command="db.changeUserPassword('${MONGODB_USER}', '${MONGODB_PASSWORD}')"
     if ! mongo_cmd --host localhost ${MONGODB_DATABASE} <<<"${js_command}"; then
       echo >&2 "=> Failed to reset password of MongoDB user: ${MONGODB_USER}"
+      echo "=> Failed to reset password of MongoDB user: ${MONGODB_USER}"
       exit 1
     fi
   fi
@@ -61,6 +67,7 @@ function mongo_reset_admin() {
     local js_command="db.changeUserPassword('admin', '${MONGODB_ADMIN_PASSWORD}')"
     if ! mongo_cmd --host localhost admin <<<"${js_command}"; then
       echo >&2 "=> Failed to reset password of MongoDB user: ${MONGODB_USER}"
+      echo "=> Failed to reset password of MongoDB user: ${MONGODB_USER}"
       exit 1
     fi
   fi
@@ -73,18 +80,22 @@ function update_users() {
   js_command="db.system.users.count({'user':'admin', 'db':'admin'})"
   if [ "$(mongo_cmd --host localhost admin --quiet <<<$js_command)" == "1" ]; then
     info "Admin user is already created. Resetting password ..."
+    echo "Admin user is already created. Resetting password ..."
     mongo_reset_admin
   else
     info "Creating MongoDB admin user ..."
+    echo "Creating MongoDB admin user ..."
     mongo_create_admin
   fi
   if [[ -v CREATE_USER ]]; then
     js_command="db.system.users.count({'user':'${MONGODB_USER}', 'db':'${MONGODB_DATABASE}'})"
     if [ "$(mongo_cmd --host localhost admin --quiet <<<$js_command)" == "1" ]; then
       info "MONGODB_USER user is already created. Resetting password ..."
+      echo "MONGODB_USER user is already created. Resetting password ..."
       mongo_reset_user
     else
       info "Creating MongoDB $MONGODB_USER user ..."
+      echo "Creating MongoDB $MONGODB_USER user ..."
       mongo_create_user
     fi
   fi
@@ -95,6 +106,7 @@ if ! [[ -v MEMBER_ID ]]; then
 else
   if [ "${MEMBER_ID}" -eq 0 ]; then
     info "Creating MongoDB users ..."
+    echo "Creating MongoDB users ..."
     mongo_create_admin
     [[ -v CREATE_USER ]] && mongo_create_user "-u admin -p${MONGODB_ADMIN_PASSWORD}"
   fi
