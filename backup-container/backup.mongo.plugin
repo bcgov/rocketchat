@@ -65,7 +65,8 @@ function onRestoreDatabase(){
     #   Ref: https://stackoverflow.com/questions/36321899/mongorestore-to-a-different-database
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
-    echoGreen "Debug: mongorestore --drop -h ${_hostname} -d ${_database} ${_authDbArg} ${_portArg} -u ${_username} -p ${_password} --gzip --archive=${_fileName} --nsInclude='*'"
+    # Was getting connection errors until a short sleep was added here
+    sleep 5
     mongorestore --drop -h ${_hostname} -d "${_database}" ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --gzip --archive=${_fileName} --nsInclude="*"
     return ${?}
   )
