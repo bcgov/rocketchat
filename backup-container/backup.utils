@@ -238,13 +238,13 @@ function verifyBackup(){
       if [ -z "${quiet}" ]; then
         restoreDatabase -ql "${_databaseSpec}" "${_fileName}"
         rtnCd=${?}
-        echo "Debug: backup.utils verifyBackup not quiet: restoreDatabase rtnCd = ${rtnCd}"
+        #echo "Debug: backup.utils verifyBackup not quiet: restoreDatabase rtnCd = ${rtnCd}"
       else
         # Filter out stdout, keep stderr
         echo "Restoring from backup ..."
         restoreLog=$(restoreDatabase -ql "${_databaseSpec}" "${_fileName}" 2>&1 >/dev/null)
         rtnCd=${?}
-        echo "Debug: backup.utils verifyBackup: restoreDatabase rtnCd = ${rtnCd}"
+        #echo "Debug: backup.utils verifyBackup: restoreDatabase rtnCd = ${rtnCd}"
 
         if [ ! -z "${restoreLog}" ] && (( ${rtnCd} == 0 )); then
           echo ${restoreLog}
@@ -259,9 +259,6 @@ function verifyBackup(){
     if (( ${rtnCd} == 0 )); then
       verificationLog=$(onVerifyBackup "${_databaseSpec}")
       rtnCd=${?}
-      echo "Debug: backup.utils rtnCd = zero"
-    else
-      echo "Debug: backup.utils rtnCd = ${rtnCd}"
     fi
 
     # Stop the database server and clean up ...
