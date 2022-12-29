@@ -181,7 +181,7 @@ function onPingDbServer(){
     if ps -ef | grep noauth | grep -v grep >/dev/null 2>&1; then
       authArg=""
     else
-      authArg="-u ${_username} -p {_password}"
+      authArg="-u ${_username} -p ${_password}"
     fi
 
     _dbAddressArg=${_hostname}${_port:+:${_port}}${_database:+/${_database}}
