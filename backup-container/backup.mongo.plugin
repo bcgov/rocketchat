@@ -90,7 +90,6 @@ function onStartServer(){
     MONGODB_USER=$(getUsername "${_databaseSpec}") \
     MONGODB_PASSWORD=$(getPassword "${_databaseSpec}") \
     MONGODB_ADMIN_PASSWORD=$(getPassword "${_databaseSpec}") \
-    #echoGreen "Debug: calling run-mongod..."
     run-mongod >/dev/null 2>&1 &
   )
 }
@@ -126,10 +125,9 @@ function onStopServer(){
     echo "quit()" >> /tmp/shutdown.js
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
-    #mongo admin ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --quiet --eval "db.shutdownServer()"
     echo -e "\n" >&2
-    mongo ${_authDbArg} ${_portArg} $authArg --verbose < /tmp/shutdown.js
-    echo -e "\n" >&2
+    echo -e "Calling shutdown...\n"
+    mongo ${authArg} --quiet < /tmp/shutdown.js
 
     # Wait for server to stop ...
     local startTime=${SECONDS}
