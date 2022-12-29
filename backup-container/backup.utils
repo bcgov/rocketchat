@@ -263,7 +263,7 @@ function verifyBackup(){
 
     # Stop the database server and clean up ...
     echo "Stopping DB..."
-    stopServer "${_databaseSpec}"
+    stopServer -l "${_databaseSpec}"
     cleanUp
 
     local endTime=${SECONDS}
