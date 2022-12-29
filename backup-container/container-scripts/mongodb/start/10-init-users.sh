@@ -40,7 +40,7 @@ function mongo_create_user() {
   fi
 
   # Create database user
-  local js_command="db.getSiblingDB('${MONGODB_DATABASE}').createUser({user: '${MONGODB_USER}', pwd: '${MONGODB_PASSWORD}', roles: [ 'readWrite', 'hostManager' ]});"
+  local js_command="db.getSiblingDB('${MONGODB_DATABASE}').createUser({user: '${MONGODB_USER}', pwd: '${MONGODB_PASSWORD}', roles: [ 'readWrite' ]});"
 
   if ! mongo_cmd --host "localhost" admin ${1:-} <<<"$js_command"; then
     echo >&2 "=> Failed to create MongoDB user: ${MONGODB_USER}"
