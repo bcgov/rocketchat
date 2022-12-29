@@ -120,6 +120,7 @@ function startServer(){
   (
     # Start a local server instance ...
     onStartServer ${@}
+    sleep 15
 
     # Wait for server to start ...
     local startTime=${SECONDS}
@@ -136,7 +137,8 @@ function startServer(){
       sleep 1
     done
 
-    echoBlue "\nThe server started in $(getElapsedTimeFromDuration ${duration}).\n"
+    #echoBlue "\nThe server started in $(getElapsedTimeFromDuration ${duration}).\n"
+    echoBlue "\nThe server has started.\n"
     echo
     return ${rtnCd}
   )
