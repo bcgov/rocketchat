@@ -1,8 +1,7 @@
 #!/bin/bash
-# sample:
-#./rc-api.sh <app_url> <admin_username> <admin_password>
-# usage:
-# uncomment sections to use the scripts
+# sample: ./rc-api.sh <app_url> <admin_username> <admin_password>
+# usage: uncomment sections to use the scripts
+# reference: https://developer.rocket.chat/reference/api/rest-api
 set -e
 if [ "$1" == "" ]; then
     echo "Error: Missing Arguments"
