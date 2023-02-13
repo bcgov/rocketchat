@@ -77,7 +77,7 @@ token=$(curl $rocketurl/api/v1/login -d "user=$user&password=$pass" | jq '.data.
 # comm -23 output/inactive-users.txt output/channel-owner.txt > output/delete-users.txt
 
 # # uncomment to delete users:
-# # while read user; do
-# #   echo "delete user $user"
-# #   curl -H "X-Auth-Token: $token" -H "X-User-Id: $userid" -H "Content-type: application/json" $rocketurl/api/v1/users.delete -d '{ "userId": "$user" }'
-# # done <output/delete-users.txt
+# while read user; do
+#   echo "delete user $user \n"
+#   curl -H "X-Auth-Token: $token" -H "X-User-Id: $userid" -H "Content-type: application/json" $rocketurl/api/v1/users.delete -d '{ "userId": "'$user'" }'
+# done <output/delete-users.txt
