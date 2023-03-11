@@ -1,3 +1,4 @@
+[![Lifecycle:Stable](https://img.shields.io/badge/Lifecycle-Stable-97ca00)]()
 ## TL;DR
 
 The Rocket.Chat application is the primary communication tool for Platform Services and projects using either the [BCDevExchange Lab](https://bcdevexchange.org) or OpenShift Container Platform. This repo contains all the components for deploying the Rocket.Chat application. See the following documents for more information:
