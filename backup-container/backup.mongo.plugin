@@ -28,7 +28,6 @@ function onBackupDatabase(){
     echoGreen "Backing up '${_hostname}${_port:+:${_port}}${_database:+/${_database}}' to '${_backupFile}' ..."
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
-    #echoGreen "Debug: mongodump -h ${_hostname} -d ${_database} ${_authDbArg} ${_portArg} -u ${_username} -p ${_password} --quiet --gzip --archive=${_backupFile}"
     mongodump -h "${_hostname}" -d "${_database}" ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --quiet --gzip --archive=${_backupFile}
     return ${?}
   )
@@ -65,8 +64,6 @@ function onRestoreDatabase(){
     #   Ref: https://stackoverflow.com/questions/36321899/mongorestore-to-a-different-database
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
-    # Was getting connection errors until a short sleep was added here
-    sleep 5
     mongorestore --drop -h ${_hostname} -d "${_database}" ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --gzip --archive=${_fileName} --nsInclude="*"
     return ${?}
   )
@@ -86,12 +83,11 @@ function onStartServer(){
     _databaseSpec=${1}
 
     # Start a local MongoDb instance
-    #MONGODB_DATABASE=$(getDatabaseName "${_databaseSpec}") \
-    #MONGODB_USER=$(getUsername "${_databaseSpec}") \
-    #MONGODB_PASSWORD=$(getPassword "${_databaseSpec}") \
-    #MONGODB_ADMIN_PASSWORD=$(getPassword "${_databaseSpec}") \
-    #run-mongod >/dev/null 2>&1 &
-    run-mongod >/tmp/run-mongod.log 2>&1 &
+    MONGODB_DATABASE=$(getDatabaseName "${_databaseSpec}") \
+    MONGODB_USER=$(getUsername "${_databaseSpec}") \
+    MONGODB_PASSWORD=$(getPassword "${_databaseSpec}") \
+    MONGODB_ADMIN_PASSWORD=$(getPassword "${_databaseSpec}") \
+    run-mongod >/dev/null 2>&1 &
   )
 }
 
@@ -110,31 +106,16 @@ function onStopServer(){
 
     _port=$(getPort ${_databaseSpec})
     _portArg=${_port:+"--port ${_port}"}
-    #_username=$(getUsername ${_databaseSpec})
-    #_password=$(getPassword ${_databaseSpec})
     _username=admin
-    _password=$MONGODB_ADMIN_PASSWORD
-
-    if ps -ef | grep noauth | grep -v grep >/dev/null 2>&1; then
-      authArg=""
-    else
-      authArg="-u ${_username} -p ${_password}"
-    fi
-
-    echo "use admin" > /tmp/shutdown.js
-    echo "db.shutdownServer()" >> /tmp/shutdown.js
-    echo "quit()" >> /tmp/shutdown.js
+    _password=$(getPassword ${_databaseSpec})
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
-    echo -e "\n" >&2
-    echo -e "Calling shutdown...\n" >&2
-    #echo -e "-----> mongo ${authArg} --quiet < /tmp/shutdown.js\n"
-    mongo ${authArg} --quiet < /tmp/shutdown.js
+    mongo admin ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --quiet --eval "db.shutdownServer()"
 
     # Wait for server to stop ...
     local startTime=${SECONDS}
     printf "waiting for server to stop"
-    while onPingDbServer -l ${@}; do
+    while onPingDbServer ${@}; do
       printf "."
       local duration=$(($SECONDS - $startTime))
       if (( ${duration} >= ${DATABASE_SERVER_TIMEOUT} )); then
@@ -152,10 +133,10 @@ function onCleanup(){
   (
     if ! dirIsEmpty ${serverDataDirectory}; then
       # Delete the database files and configuration
-      echo -e "\nCleaning up ...\n" >&2
+      echo -e "Cleaning up ...\n" >&2
       rm -rf ${serverDataDirectory}/*
     else
-      echo -e "\nAlready clean ...\n" >&2
+      echo -e "Already clean ...\n" >&2
     fi
   )
 }
@@ -180,16 +161,9 @@ function onPingDbServer(){
     _username=$(getUsername ${_databaseSpec})
     _password=$(getPassword ${_databaseSpec})
 
-    if ps -ef | grep noauth | grep -v grep >/dev/null 2>&1; then
-      authArg=""
-    else
-      authArg="-u ${_username} -p ${_password}"
-    fi
-
     _dbAddressArg=${_hostname}${_port:+:${_port}}${_database:+/${_database}}
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
-    #echo "mongo ${_dbAddressArg} ${_authDbArg} $authArg --quiet --eval='quit()'" > /tmp/db.ping
-    if mongo ${_dbAddressArg} ${_authDbArg} $authArg --quiet --eval='quit()' >/dev/null 2>&1; then
+    if mongo ${_dbAddressArg} ${_authDbArg} -u "${_username}" -p "${_password}" --quiet --eval='quit()' >/dev/null 2>&1; then
       return 0
     else
       return 1
@@ -219,9 +193,6 @@ function onVerifyBackup(){
 
     _dbAddressArg=${_hostname}${_port:+:${_port}}${_database:+/${_database}}
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
-    #echoGreen "Debug: collections=$(mongo ${_dbAddressArg} ${_authDbArg} -u ${_username} -p ${_password} --quiet --eval 'var dbs = [];dbs = db.getCollectionNames();for (i in dbs){ print(db.dbs[i]);}';)"
-    #echoGreen "Debug: onVerifyBackup: mongo ${_dbAddressArg} ${_authDbArg} -u ${_username} -p ${_password}"
-    #echoGreen "Debug: collections=$(mongo --quiet --eval 'var dbs = [];dbs = db.getCollectionNames();for (i in dbs){ print(db.dbs[i]);}';)"
     collections=$(mongo ${_dbAddressArg} ${_authDbArg} -u "${_username}" -p "${_password}" --quiet --eval 'var dbs = [];dbs = db.getCollectionNames();for (i in dbs){ print(db.dbs[i]);}';)
     rtnCd=${?}
 

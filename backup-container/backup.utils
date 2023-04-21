@@ -120,7 +120,6 @@ function startServer(){
   (
     # Start a local server instance ...
     onStartServer ${@}
-    sleep 15
 
     # Wait for server to start ...
     local startTime=${SECONDS}
@@ -137,8 +136,7 @@ function startServer(){
       sleep 1
     done
 
-    #echoBlue "\nThe server started in $(getElapsedTimeFromDuration ${duration}).\n"
-    echoBlue "\nThe server has started.\n"
+    echoBlue "\nThe server started in $(getElapsedTimeFromDuration ${duration}).\n"
     echo
     return ${rtnCd}
   )
@@ -240,13 +238,11 @@ function verifyBackup(){
       if [ -z "${quiet}" ]; then
         restoreDatabase -ql "${_databaseSpec}" "${_fileName}"
         rtnCd=${?}
-        #echo "Debug: backup.utils verifyBackup not quiet: restoreDatabase rtnCd = ${rtnCd}"
       else
         # Filter out stdout, keep stderr
         echo "Restoring from backup ..."
         restoreLog=$(restoreDatabase -ql "${_databaseSpec}" "${_fileName}" 2>&1 >/dev/null)
         rtnCd=${?}
-        #echo "Debug: backup.utils verifyBackup: restoreDatabase rtnCd = ${rtnCd}"
 
         if [ ! -z "${restoreLog}" ] && (( ${rtnCd} == 0 )); then
           echo ${restoreLog}
@@ -264,8 +260,7 @@ function verifyBackup(){
     fi
 
     # Stop the database server and clean up ...
-    echo "Stopping DB..."
-    stopServer -l "${_databaseSpec}"
+    stopServer "${_databaseSpec}"
     cleanUp
 
     local endTime=${SECONDS}
