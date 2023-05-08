@@ -25,6 +25,7 @@ WORKDIR /
 COPY ./etc-pki-entitlement /etc/pki/entitlement
 COPY ./rhsm-conf /etc/rhsm
 COPY ./rhsm-ca /etc/rhsm/ca
+COPY scripts/add-mongodb-repo /opt/bin/add-mongodb-repo
 
 # ==============================================================================
 # Install go-crond (from https://github.com/BCDevOps/go-crond)
@@ -50,7 +51,6 @@ RUN rm /etc/rhsm-host && \
     rm -rf /var/cache/yum
 
 # Load the mongo repo config and backup scripts
-COPY scripts/add-mongodb-repo /opt/bin/add-mongodb-repo
 COPY backup.* webhook-template.json /
 
 # The previously-used RedHat image with Mongo 3.6 has an executable called
