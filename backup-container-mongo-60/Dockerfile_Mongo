@@ -1,0 +1,77 @@
+# The mongodb backup container for 3.6 used a RedHat image, but they don't 
+#   maintain images for mongodb 4.x, so we make our own based on a RH UBI image.
+# Using RHEL7, because the 'go-crond' package is not compatible with RHEL8 at
+#   this time.
+FROM registry.access.redhat.com/rhel8/ubi
+
+ARG USERNAME=backup
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
+USER $USERNAME
+
+# Change timezone to PST for convenience
+ENV TZ=PST8PDT \
+    MONGODB_VERSION=6.0 \
+    HOME=/var/lib/mongo \
+    SCRIPTS_PATH=/opt/bin
+ENV PATH=$SCRIPTS_PATH:$PATH
+
+# Set the workdir to be root
+WORKDIR /
+
+# Copy entitlements and subscription manager configurations
+COPY ./etc-pki-entitlement /etc/pki/entitlement
+COPY ./rhsm-conf /etc/rhsm
+COPY ./rhsm-ca /etc/rhsm/ca
+COPY scripts/add-mongodb-repo /opt/bin/add-mongodb-repo
+
+# ==============================================================================
+# Install go-crond (from https://github.com/BCDevOps/go-crond)
+#  - Adds some additional logging enhancements on top of the upstream project; 
+#    https://github.com/webdevops/go-crond
+#
+# CRON Jobs in OpenShift:
+#  - https://blog.danman.eu/cron-jobs-in-openshift/
+# ------------------------------------------------------------------------------
+ARG SOURCE_REPO=webdevops
+ARG GOCROND_VERSION=23.2.0
+ADD https://github.com/$SOURCE_REPO/go-crond/releases/download/$GOCROND_VERSION/go-crond.linux.amd64 /usr/bin/go-crond
+
+USER root
+RUN rm /etc/rhsm-host && \
+    yum repolist --disablerepo=* && \
+    add-mongodb-repo && \
+    yum -y update && \
+    yum -y upgrade && \
+    subscription-manager repos --enable "rhel-8-for-x86_64-baseos-rpms" && \
+    yum install -y --setopt=tsflags=nodocs bind-utils gettext mongodb-org && \
+    yum clean all -y && \
+    rm -rf /var/cache/yum
+
+# Load the mongo repo config and backup scripts
+COPY backup.* webhook-template.json /
+
+# The previously-used RedHat image with Mongo 3.6 has an executable called
+# /usr/bin/run-mongod, which is used in the backup container scripts, so we
+# need to recreate that in order to maintain the same functionality.
+# Also setting env vars in deployment: CONTAINER_SCRIPTS_PATH, APP_DATA
+COPY run-mongod /usr/bin/
+COPY mongod.conf /etc/
+COPY cgroup-limits /usr/libexec/
+ADD container-scripts /usr/share/container-scripts
+
+RUN chmod +x /usr/bin/go-crond /usr/bin/run-mongod && mkdir -p /opt/app-root/src && chmod a+w /usr/share/container-scripts/mongodb/mongod.conf.template && chmod a+w /etc/mongod.conf && touch /.dbshell && chmod a+w /.dbshell && chmod g+w /backup*
+
+RUN find /usr/share/container-scripts -name "*.sh" -exec chmod +x {} \;
+RUN echo $TZ > /etc/timezone
+#RUN add-mongodb-repo && yum -y update && yum -y install bind-utils gettext mongodb-org
+RUN curl "https://dl.min.io/client/mc/release/linux-amd64/mc" -o /usr/local/bin/mc && chmod +x /usr/local/bin/mc
+RUN curl "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz" -o oc.tar.gz && tar xzf oc.tar.gz && mv oc /usr/local/bin && chmod +x /usr/local/bin/oc && rm oc.tar.gz
+
+USER $USERNAME
+
+# Set the default CMD.
+CMD ["sleep", "infinity"]
+
