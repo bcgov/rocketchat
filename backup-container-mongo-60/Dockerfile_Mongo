@@ -7,14 +7,15 @@ FROM registry.access.redhat.com/rhel8/ubi
 ARG USERNAME=backup
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
-RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
+RUN groupadd --gid $USER_GID $USERNAME && \
+    useradd --uid $USER_UID --gid $USER_GID -m $USERNAME && \
+    usermod -G $USER_GID 1000880000
 USER $USERNAME
 
 # Change timezone to PST for convenience
 ENV TZ=PST8PDT \
     MONGODB_VERSION=6.0 \
-    HOME=/var/lib/mongo \
+    HOME=/home/backup \
     SCRIPTS_PATH=/opt/bin
 ENV PATH=$SCRIPTS_PATH:$PATH
 
