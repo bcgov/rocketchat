@@ -9,7 +9,7 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 RUN groupadd --gid $USER_GID $USERNAME && \
     useradd --uid $USER_UID --gid $USER_GID -m $USERNAME && \
-    usermod -G $USER_GID 1000880000
+    chmod 777 /home/backup
 USER $USERNAME
 
 # Change timezone to PST for convenience
