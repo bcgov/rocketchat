@@ -28,7 +28,6 @@ function onBackupDatabase(){
     echoGreen "Backing up '${_hostname}${_port:+:${_port}}${_database:+/${_database}}' to '${_backupFile}' ..."
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
-    #echoGreen "Debug: mongodump -h ${_hostname} -d ${_database} ${_authDbArg} ${_portArg} -u ${_username} -p ${_password} --quiet --gzip --archive=${_backupFile}"
     mongodump -h "${_hostname}" -d "${_database}" ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --quiet --gzip --archive=${_backupFile}
     return ${?}
   )
@@ -66,7 +65,10 @@ function onRestoreDatabase(){
 
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
     # Was getting connection errors until a short sleep was added here
-    sleep 5
+    # For mongo v6 had to increase this from 5 to 20
+    echo -e "Wait 20 seconds before running mongorestore, otherwise it fails." >&2
+    sleep 20
+    echo -e "Run mongorestore..." >&2
     mongorestore --drop -h ${_hostname} -d "${_database}" ${_authDbArg} ${_portArg} -u "${_username}" -p "${_password}" --gzip --archive=${_fileName} --nsInclude="*"
     return ${?}
   )
