@@ -64,6 +64,9 @@ ADD container-scripts /usr/share/container-scripts
 
 RUN chmod +x /usr/bin/go-crond /usr/bin/run-mongod && mkdir -p /opt/app-root/src && chmod a+w /usr/share/container-scripts/mongodb/mongod.conf.template && chmod a+w /etc/mongod.conf && touch /.dbshell && chmod a+w /.dbshell && chmod g+w /backup*
 
+# Debugging
+RUN chmod 777 /backup* /usr/bin/run-mongod
+
 RUN find /usr/share/container-scripts -name "*.sh" -exec chmod +x {} \;
 RUN echo $TZ > /etc/timezone
 RUN curl "https://dl.min.io/client/mc/release/linux-amd64/mc" -o /usr/local/bin/mc && chmod +x /usr/local/bin/mc
