@@ -221,7 +221,12 @@ function onVerifyBackup(){
     _authDbArg=${MONGODB_AUTHENTICATION_DATABASE:+"--authenticationDatabase ${MONGODB_AUTHENTICATION_DATABASE}"}
     #echoGreen "Debug: collections=$(mongosh ${_dbAddressArg} ${_authDbArg} -u ${_username} -p ${_password} --quiet --eval 'var dbs = [];dbs = db.getCollectionNames();for (i in dbs){ print(db.dbs[i]);}';)"
     #echoGreen "Debug: onVerifyBackup: mongosh ${_dbAddressArg} ${_authDbArg} -u ${_username} -p ${_password}"
-    #echoGreen "Debug: collections=$(mongosh --quiet --eval 'var dbs = [];dbs = db.getCollectionNames();for (i in dbs){ print(db.dbs[i]);}';)"
+    # <debugging>
+    echo ""
+    echo "Debug: collections=$(mongosh ${_dbAddressArg} ${_authDbArg} -u ${_username} -p ${_password} --quiet --eval 'var dbs = [];dbs = db.getCollectionNames();for (i in dbs){ print(db.dbs[i]);}';)"
+    echo ""
+    sleep 300
+    # </debugging>
     collections=$(mongosh ${_dbAddressArg} ${_authDbArg} -u "${_username}" -p "${_password}" --quiet --eval 'var dbs = [];dbs = db.getCollectionNames();for (i in dbs){ print(db.dbs[i]);}';)
     rtnCd=${?}
 
