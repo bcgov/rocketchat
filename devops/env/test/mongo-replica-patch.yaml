@@ -1,7 +1,0 @@
----
-kind: StatefulSet
-apiVersion: apps/v1
-metadata:
-  name: mongodb
-spec:
-  replicas: 2
