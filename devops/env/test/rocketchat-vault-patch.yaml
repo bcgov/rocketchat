@@ -28,7 +28,7 @@ spec:
         vault.hashicorp.com/agent-inject-secret-mongocreds: 6e2f55-nonprod/mongodb-creds-test
         vault.hashicorp.com/agent-inject-template-mongocreds: |
           {{ with secret "6e2f55-nonprod/mongodb-creds-test" -}}
-          export MONGO_URL="mongodb://{{ .Data.data.MONGODB_USER }}:{{ .Data.data.MONGODB_PASSWORD }}@mongodb:27017/rocketdb?replicaSet=rs0"
+          export MONGO_URL="mongodb://{{ .Data.data.MONGODB_USER }}:{{ .Data.data.MONGODB_PASSWORD }}@mongodb:27017/rocketdb?authSource=admin&replicaSet=rs0"
           export MONGO_OPLOG_URL="mongodb://{{ .Data.data.MONGODB_ADMIN_USERNAME }}:{{ .Data.data.MONGODB_ADMIN_PASSWORD }}@mongodb:27017/local?authSource=admin&replicaSet=rs0"
           {{- end }}
         vault.hashicorp.com/agent-inject-secret-servercreds: 6e2f55-nonprod/rocketchat-creds-test
